@@ -2,6 +2,7 @@
 
 from neuroq.solvers.base import Solver
 from neuroq.solvers.exact import ExactSolver
+from neuroq.solvers.greedy import GreedyPhaser
 from neuroq.solvers.qaoa import QAOASolver
 
-__all__ = ["ExactSolver", "QAOASolver", "Solver"]
+__all__ = ["ExactSolver", "GreedyPhaser", "QAOASolver", "Solver"]
