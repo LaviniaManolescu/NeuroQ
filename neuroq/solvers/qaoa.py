@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import itertools
+from typing import Callable, Optional
 
 import numpy as np
 from qiskit import QuantumCircuit
@@ -15,6 +16,10 @@ from neuroq.execution import Executor
 from neuroq.solvers.base import Solver
 
 N_STARTS = 2
+TOP_SAMPLES = 10
+
+# callback(start, iteration, cost): apelat la fiecare evaluare COBYLA, ca să se vadă live
+CostCallback = Callable[[int, int, float], None]
 
 
 # din notebook-ul organizatorilor (extins cu porți rz pentru câmpurile h)
@@ -61,9 +66,11 @@ class QAOASolver(Solver):
     """Antrenează unghiurile pe statevector exact, apoi eșantionează prin Executor."""
 
     def __init__(
-        self, executor: Executor, p: int = 1, shots: int = 2048, seed: int = 71, maxiter: int = 90
+        self, executor: Executor, p: int = 1, shots: int = 2048, seed: int = 71, maxiter: int = 90,
+        callback: Optional[CostCallback] = None,
     ) -> None:
         self.executor = executor
+        self.callback = callback
         self.p = p
         self.shots = shots
         self.seed = seed
@@ -82,13 +89,24 @@ class QAOASolver(Solver):
             probabilities = statevector_probabilities(bind(values), simulator)
             return float(np.dot(probabilities, energies))
 
+        histories: list[list[float]] = []
+
+        def recorded(values: np.ndarray) -> float:
+            cost = expected_energy(values)
+            histories[-1].append(cost)
+            if self.callback is not None:
+                self.callback(len(histories) - 1, len(histories[-1]), cost)
+            return cost
+
         rng = np.random.default_rng(self.seed)
         starts = [rng.uniform(0, np.pi, 2 * self.p) for _ in range(N_STARTS)]
-        trials = [
-            minimize(expected_energy, start, method="COBYLA", options={"maxiter": self.maxiter})
-            for start in starts
-        ]
-        trained = min(trials, key=lambda result: result.fun)
+        trials = []
+        for start in starts:
+            histories.append([])
+            trials.append(minimize(recorded, start, method="COBYLA",
+                                   options={"maxiter": self.maxiter}))
+        best_start = min(range(len(trials)), key=lambda s: trials[s].fun)
+        trained = trials[best_start]
 
         measured = bind(trained.x)
         measured.measure_all()
@@ -96,6 +114,7 @@ class QAOASolver(Solver):
 
         scored = {bits: problem.energy(bits) for bits in counts}
         best = min(scored, key=lambda bits: (scored[bits], -counts[bits], bits))
+        ranked = sorted(counts, key=lambda bits: (-counts[bits], bits))[:TOP_SAMPLES]
         return Solution(
             bitstring=best,
             energy=scored[best],
@@ -108,5 +127,10 @@ class QAOASolver(Solver):
                 "nfev": int(sum(t.nfev for t in trials)),
                 "scale": scale,
                 "seed": self.seed,
+                "cost_history": histories,
+                "best_start": best_start,
+                "top_samples": [
+                    {"bitstring": b, "count": int(counts[b]), "energy": scored[b]} for b in ranked
+                ],
             },
         )

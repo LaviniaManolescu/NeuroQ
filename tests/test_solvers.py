@@ -85,3 +85,17 @@ def test_aer_statevector_matches_quantum_info():
     bound = qc.assign_parameters([0.7, 0.4])
     aer = statevector_probabilities(bound, AerSimulator(method="statevector"))
     assert np.allclose(aer, Statevector.from_instruction(bound).probabilities())
+
+
+def test_qaoa_records_cost_history_top_samples_and_calls_back():
+    calls = []
+    solution = QAOASolver(IdealSimulator(), callback=lambda s, i, c: calls.append((s, i, c))).solve(
+        notebook_problem())
+    meta = solution.metadata
+    assert len(meta["cost_history"]) == 2
+    assert sum(len(h) for h in meta["cost_history"]) == meta["nfev"] == len(calls)
+    assert min(meta["cost_history"][meta["best_start"]]) == pytest.approx(meta["expected_energy"])
+    top = meta["top_samples"]
+    assert len(top) == 10 and [t["count"] for t in top] == sorted((t["count"] for t in top), reverse=True)
+    assert all(t["energy"] == pytest.approx(notebook_problem().energy(t["bitstring"])) for t in top)
+    assert solution.energy == pytest.approx(1.0)
