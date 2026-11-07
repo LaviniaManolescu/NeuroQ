@@ -107,8 +107,8 @@
     }
     var table = S.html('table', { class: 'nq-table' }, container);
     var head = S.html('tr', {}, S.html('thead', {}, table));
-    ['Metoda', 'Codificarea', 'Transformări', 'Cost', 'Acuratețe', 'Timp QAOA'].forEach(function (h) {
-      S.html('th', {}, head, h);
+    ['Metoda', 'Codificarea', 'Transformări', 'Cost', 'Acuratețe', 'Timp QAOA'].forEach(function (h, i) {
+      S.html('th', i >= 3 ? { class: 'num' } : {}, head, h);
     });
     var body = S.html('tbody', {}, table);
     rows.forEach(function (r) {

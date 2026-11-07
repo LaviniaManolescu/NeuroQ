@@ -3,7 +3,7 @@
   var NeuroQ = window.NeuroQ = window.NeuroQ || {};
   NeuroQ.views = NeuroQ.views || {};
   var S = NeuroQ.svg, C = NeuroQ.colors;
-  var W = 640, H = 380, PAD = { l: 70, r: 20, t: 20, b: 56 };
+  var W = 640, H = 380, PAD = { l: 92, r: 20, t: 20, b: 56 };
   var START_COLORS = ['var(--accent)', 'var(--accent2)', 'var(--muted)'];
 
   function costChart(container, stage, startAtEnd) {
@@ -25,7 +25,9 @@
     }
     S.text(svg, (PAD.l + W - PAD.r) / 2, H - 14, 'evaluarea COBYLA', { 'font-size': 15,
            'text-anchor': 'middle', class: 'muted' });
-    S.text(svg, 16, (PAD.t + H - PAD.b) / 2, '⟨H⟩', { 'font-size': 16, 'text-anchor': 'middle' });
+    var midY = (PAD.t + H - PAD.b) / 2;
+    S.text(svg, 20, midY, 'energia medie ⟨H⟩', { 'font-size': 15, 'text-anchor': 'middle',
+           class: 'muted', transform: 'rotate(-90 20 ' + midY + ')' });
     var target = y(stage.result.energy);
     S.el('line', { x1: PAD.l, x2: W - PAD.r, y1: target, y2: target, stroke: C.ink,
                    'stroke-dasharray': '6 5' }, svg);

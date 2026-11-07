@@ -16,11 +16,13 @@
     return node;
   }
 
+  // Figurile mici pot crește până la 1,6× (pentru proiector), dar nu peste 760 px.
   function root(width, height, label) {
+    var maxWidth = Math.max(width, Math.min(width * 1.6, 760));
     return el('svg', {
       viewBox: '0 0 ' + width + ' ' + height, class: 'nq-fig', role: 'img',
       'aria-label': label || '', preserveAspectRatio: 'xMinYMin meet',
-      style: 'max-width:' + width + 'px'
+      style: 'max-width:' + maxWidth + 'px'
     });
   }
 

@@ -17,6 +17,9 @@
   --nq-suspect:#6d7c8b; --nq-panel:rgba(8,20,34,.92);
 }
 
+/* stilul paginii pune main{display:flex}, care altfel ar anula atributul hidden */
+main[hidden]{display:none}
+
 #nq-app{
   position:relative; z-index:1; min-height:100vh;
   display:flex; flex-direction:column; gap:20px;
@@ -78,7 +81,7 @@
 
 .nq-table{border-collapse:collapse; font-size:1rem; font-variant-numeric:tabular-nums}
 .nq-table th,.nq-table td{padding:6px 14px; border-bottom:1px solid var(--line); text-align:left}
-.nq-table td.num{text-align:right}
+.nq-table .num{text-align:right}
 .nq-table th{color:var(--muted); font-weight:600}
 
 .nq-message{
