@@ -19,3 +19,6 @@ qiskit-ibm-runtime>=0.40,<0.46
 
 # doar pentru teste
 pytest>=8,<9
+
+# doar pentru desenul circuitelor (draw("mpl") din Qiskit)
+pylatexenc>=2.10,<3

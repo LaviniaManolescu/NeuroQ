@@ -94,3 +94,12 @@ def test_best_matches_exact_solver_on_20_random_instances():
         problem = PositionEncoding().encode(matrix_from(_random_reads(rng)))
         found = ClassicalSolver("best", seed=t, restarts=10, steps=2000).solve(problem)
         assert found.energy == pytest.approx(ExactSolver().solve(problem).energy), f"instanța {t}"
+
+
+@pytest.mark.parametrize("encoding", ENCODINGS, ids=["position", "read"])
+@pytest.mark.parametrize("matrix", [notebook_matrix, xy_matrix], ids=["notebook", "xy"])
+def test_exact_strategy_matches_exact_solver(encoding, matrix):
+    problem = encoding.encode(matrix())
+    found = ClassicalSolver("exact").solve(problem)
+    assert found.energy == pytest.approx(ExactSolver().solve(problem).energy)
+    assert found.metadata["exact_backend"] == "exact_vectorized"

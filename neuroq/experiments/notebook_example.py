@@ -71,12 +71,15 @@ def run_notebook_example() -> list[ResultRow]:
     ]
 
 
-def write_results(rows: list[ResultRow], path: Path, is_sample: bool = False) -> None:
+def write_results(
+    rows: list[ResultRow], path: Path, is_sample: bool = False,
+    note: str = "Faza 1: exemplul din notebook, codificare pe poziții, simulator ideal.",
+) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {
         "schema_version": SCHEMA_VERSION,
         "is_sample": is_sample,
-        "note": "Faza 1: exemplul din notebook, codificare pe poziții, simulator ideal.",
+        "note": note,
         "rows": [row.to_dict() for row in rows],
     }
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
