@@ -1,18 +1,17 @@
 {
   "schema_version": "0.1",
   "is_sample": false,
-  "note": "Faza 2: ferestre mici (<= 16 qubiți), ambele codificări, toți solverii, simulator ideal.",
+  "note": "Faza 2: notebook (ambele codificări), Illumina (10 SNP-uri, 24 citiri; solveri pe poziții, resurse pe citiri) și Nanopore (18 SNP-uri, 9 citiri; solveri pe citiri, resurse pe poziții), simulator ideal.",
   "rows": [
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -45,14 +44,13 @@
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -81,19 +79,19 @@
             1,
             -1
           ]
-        }
+        },
+        "exact_backend": "ExactSolver"
       }
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -128,14 +126,13 @@
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -148,7 +145,8 @@
         "accuracy": 1.0,
         "switch_errors": 0,
         "mean_sample_cost": 7.83056640625,
-        "optimum_frequency": 0.42822265625
+        "optimum_frequency": 0.42822265625,
+        "qaoa_seconds": 0.08
       },
       "resources": {
         "n_qubits": 5,
@@ -200,14 +198,13 @@
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -222,7 +219,8 @@
         "accuracy": 1.0,
         "switch_errors": 0,
         "mean_sample_cost": 9.35888671875,
-        "optimum_frequency": 0.087890625
+        "optimum_frequency": 0.087890625,
+        "qaoa_seconds": 0.09
       },
       "resources": {
         "n_qubits": 4,
@@ -274,14 +272,13 @@
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -310,19 +307,19 @@
             1,
             0
           ]
-        }
+        },
+        "exact_backend": "ExactSolver"
       }
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -357,14 +354,13 @@
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -377,7 +373,8 @@
         "accuracy": 1.0,
         "switch_errors": 0,
         "mean_sample_cost": 23.73876953125,
-        "optimum_frequency": 0.06689453125
+        "optimum_frequency": 0.06689453125,
+        "qaoa_seconds": 0.16
       },
       "resources": {
         "n_qubits": 9,
@@ -429,14 +426,13 @@
     },
     {
       "instance": {
-        "id": "notebook-5snp",
+        "id": "notebook",
         "source": "synthetic",
         "technology": "notebook",
         "profile": null,
         "first_snp": 0,
         "n_snps": 5,
         "n_reads": 9,
-        "downsampled_to": null,
         "error_rate": null,
         "seed": 71
       },
@@ -451,7 +447,8 @@
         "accuracy": 1.0,
         "switch_errors": 0,
         "mean_sample_cost": 24.6298828125,
-        "optimum_frequency": 0.06201171875
+        "optimum_frequency": 0.06201171875,
+        "qaoa_seconds": 0.1
       },
       "resources": {
         "n_qubits": 8,
@@ -503,14 +500,13 @@
     },
     {
       "instance": {
-        "id": "illumina-small",
+        "id": "illumina",
         "source": "synthetic",
         "technology": "illumina",
         "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
         "error_rate": 0.001,
         "seed": 71
       },
@@ -525,10 +521,18 @@
       "resources": null,
       "details": {
         "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
+          "copy_a": "0011001010",
+          "copy_b": "1100110101",
           "read_assignment": [
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -537,8 +541,8 @@
             1,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
             0,
             1,
             1,
@@ -550,14 +554,13 @@
     },
     {
       "instance": {
-        "id": "illumina-small",
+        "id": "illumina",
         "source": "synthetic",
         "technology": "illumina",
         "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
         "error_rate": 0.001,
         "seed": 71
       },
@@ -573,10 +576,18 @@
       "resources": null,
       "details": {
         "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
+          "copy_a": "0011001010",
+          "copy_b": "1100110101",
           "read_assignment": [
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -585,27 +596,27 @@
             1,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
             0,
             1,
             1,
             0,
             0
           ]
-        }
+        },
+        "exact_backend": "ExactSolver"
       }
     },
     {
       "instance": {
-        "id": "illumina-small",
+        "id": "illumina",
         "source": "synthetic",
         "technology": "illumina",
         "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
         "error_rate": 0.001,
         "seed": 71
       },
@@ -622,10 +633,18 @@
       "resources": null,
       "details": {
         "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
+          "copy_a": "0011001010",
+          "copy_b": "1100110101",
           "read_assignment": [
             0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
             0,
             0,
             0,
@@ -634,8 +653,8 @@
             1,
             1,
             0,
-            0,
-            0,
+            1,
+            1,
             0,
             1,
             1,
@@ -647,14 +666,13 @@
     },
     {
       "instance": {
-        "id": "illumina-small",
+        "id": "illumina",
         "source": "synthetic",
         "technology": "illumina",
         "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
         "error_rate": 0.001,
         "seed": 71
       },
@@ -666,23 +684,32 @@
         "mec_cost": 0,
         "accuracy": 1.0,
         "switch_errors": 0,
-        "mean_sample_cost": 5.71875,
-        "optimum_frequency": 0.3408203125
+        "mean_sample_cost": 21.47998046875,
+        "optimum_frequency": 0.00537109375,
+        "qaoa_seconds": 0.09
       },
       "resources": {
-        "n_qubits": 4,
-        "two_qubit_gates_before": 4,
-        "two_qubit_gates_after": 4,
-        "depth": 7,
+        "n_qubits": 10,
+        "two_qubit_gates_before": 15,
+        "two_qubit_gates_after": 15,
+        "depth": 18,
         "backend_name": "aer_simulator",
         "job_id": null
       },
       "details": {
         "haplotypes": {
-          "copy_a": "1000",
-          "copy_b": "0111",
+          "copy_a": "1100110101",
+          "copy_b": "0011001010",
           "read_assignment": [
             1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
             1,
             1,
             1,
@@ -691,8 +718,8 @@
             0,
             0,
             1,
-            1,
-            1,
+            0,
+            0,
             1,
             0,
             0,
@@ -702,361 +729,23 @@
         },
         "top_samples": [
           {
-            "bitstring": "1000",
-            "count": 375
+            "bitstring": "0010110111",
+            "count": 28
           },
           {
-            "bitstring": "1111",
-            "count": 338
+            "bitstring": "1101001000",
+            "count": 22
           },
           {
-            "bitstring": "0111",
-            "count": 323
-          },
-          {
-            "bitstring": "0000",
-            "count": 319
-          },
-          {
-            "bitstring": "0001",
-            "count": 144
-          }
-        ]
-      }
-    },
-    {
-      "instance": {
-        "id": "illumina-small",
-        "source": "synthetic",
-        "technology": "illumina",
-        "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
-        "error_rate": 0.001,
-        "seed": 71
-      },
-      "method": "qaoa",
-      "encoding": "position",
-      "transforms": [
-        "fix_variable"
-      ],
-      "metrics": {
-        "pair_cost": 0.0,
-        "mec_cost": 0,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "mean_sample_cost": 5.51904296875,
-        "optimum_frequency": 0.3251953125
-      },
-      "resources": {
-        "n_qubits": 3,
-        "two_qubit_gates_before": 3,
-        "two_qubit_gates_after": 3,
-        "depth": 7,
-        "backend_name": "aer_simulator",
-        "job_id": null
-      },
-      "details": {
-        "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
-          "read_assignment": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        },
-        "top_samples": [
-          {
-            "bitstring": "111",
-            "count": 666
-          },
-          {
-            "bitstring": "000",
-            "count": 502
-          },
-          {
-            "bitstring": "110",
-            "count": 284
-          },
-          {
-            "bitstring": "101",
-            "count": 223
-          },
-          {
-            "bitstring": "100",
-            "count": 198
-          }
-        ]
-      }
-    },
-    {
-      "instance": {
-        "id": "illumina-small",
-        "source": "synthetic",
-        "technology": "illumina",
-        "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
-        "error_rate": 0.001,
-        "seed": 71
-      },
-      "method": "exact",
-      "encoding": "read",
-      "transforms": [],
-      "metrics": {
-        "pair_cost": 0.0,
-        "mec_cost": 0,
-        "accuracy": 1.0,
-        "switch_errors": 0
-      },
-      "resources": null,
-      "details": {
-        "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
-          "read_assignment": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        }
-      }
-    },
-    {
-      "instance": {
-        "id": "illumina-small",
-        "source": "synthetic",
-        "technology": "illumina",
-        "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
-        "error_rate": 0.001,
-        "seed": 71
-      },
-      "method": "classical",
-      "encoding": "read",
-      "transforms": [],
-      "metrics": {
-        "pair_cost": 0.0,
-        "mec_cost": 0,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "components": 1
-      },
-      "resources": null,
-      "details": {
-        "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
-          "read_assignment": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        }
-      }
-    },
-    {
-      "instance": {
-        "id": "illumina-small",
-        "source": "synthetic",
-        "technology": "illumina",
-        "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
-        "error_rate": 0.001,
-        "seed": 71
-      },
-      "method": "qaoa",
-      "encoding": "read",
-      "transforms": [],
-      "metrics": {
-        "pair_cost": 0.0,
-        "mec_cost": 0,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "mean_sample_cost": 46.51513671875,
-        "optimum_frequency": 0.00146484375
-      },
-      "resources": {
-        "n_qubits": 16,
-        "two_qubit_gates_before": 84,
-        "two_qubit_gates_after": 84,
-        "depth": 31,
-        "backend_name": "aer_simulator",
-        "job_id": null
-      },
-      "details": {
-        "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
-          "read_assignment": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        },
-        "top_samples": [
-          {
-            "bitstring": "0100000001010100",
-            "count": 40
-          },
-          {
-            "bitstring": "1111000111110000",
-            "count": 36
-          },
-          {
-            "bitstring": "1011111110101011",
-            "count": 35
-          },
-          {
-            "bitstring": "0000111000001111",
-            "count": 30
-          },
-          {
-            "bitstring": "1011011110101000",
-            "count": 27
-          }
-        ]
-      }
-    },
-    {
-      "instance": {
-        "id": "illumina-small",
-        "source": "synthetic",
-        "technology": "illumina",
-        "profile": "illumina",
-        "first_snp": 10,
-        "n_snps": 4,
-        "n_reads": 16,
-        "downsampled_to": 16,
-        "error_rate": 0.001,
-        "seed": 71
-      },
-      "method": "qaoa",
-      "encoding": "read",
-      "transforms": [
-        "fix_variable"
-      ],
-      "metrics": {
-        "pair_cost": 0.0,
-        "mec_cost": 0,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "mean_sample_cost": 48.18212890625,
-        "optimum_frequency": 0.0048828125
-      },
-      "resources": {
-        "n_qubits": 15,
-        "two_qubit_gates_before": 75,
-        "two_qubit_gates_after": 75,
-        "depth": 29,
-        "backend_name": "aer_simulator",
-        "job_id": null
-      },
-      "details": {
-        "haplotypes": {
-          "copy_a": "0111",
-          "copy_b": "1000",
-          "read_assignment": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            1,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        },
-        "top_samples": [
-          {
-            "bitstring": "100000101010100",
-            "count": 149
-          },
-          {
-            "bitstring": "000111000001111",
-            "count": 39
-          },
-          {
-            "bitstring": "011111010101011",
-            "count": 39
-          },
-          {
-            "bitstring": "100000001010100",
+            "bitstring": "1101000010",
             "count": 21
           },
           {
-            "bitstring": "100000101000100",
+            "bitstring": "1101110000",
+            "count": 20
+          },
+          {
+            "bitstring": "0001001000",
             "count": 19
           }
         ]
@@ -1064,14 +753,141 @@
     },
     {
       "instance": {
-        "id": "nanopore-small",
+        "id": "illumina",
+        "source": "synthetic",
+        "technology": "illumina",
+        "profile": "illumina",
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
+        "error_rate": 0.001,
+        "seed": 71
+      },
+      "method": "qaoa",
+      "encoding": "position",
+      "transforms": [
+        "fix_variable"
+      ],
+      "metrics": {
+        "pair_cost": 0.0,
+        "mec_cost": 0,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "mean_sample_cost": 22.3173828125,
+        "optimum_frequency": 0.00390625,
+        "qaoa_seconds": 0.09
+      },
+      "resources": {
+        "n_qubits": 9,
+        "two_qubit_gates_before": 13,
+        "two_qubit_gates_after": 13,
+        "depth": 17,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "0011001010",
+          "copy_b": "1100110101",
+          "read_assignment": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        "top_samples": [
+          {
+            "bitstring": "011111101",
+            "count": 37
+          },
+          {
+            "bitstring": "100000001",
+            "count": 32
+          },
+          {
+            "bitstring": "010000001",
+            "count": 25
+          },
+          {
+            "bitstring": "010011101",
+            "count": 24
+          },
+          {
+            "bitstring": "100000010",
+            "count": 24
+          }
+        ]
+      }
+    },
+    {
+      "instance": {
+        "id": "illumina",
+        "source": "synthetic",
+        "technology": "illumina",
+        "profile": "illumina",
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
+        "error_rate": 0.001,
+        "seed": 71
+      },
+      "method": "resources",
+      "encoding": "read",
+      "transforms": [],
+      "metrics": {
+        "n_variables": 24,
+        "n_couplings": 129,
+        "rzz_per_layer": 129
+      },
+      "resources": {
+        "n_qubits": 24,
+        "two_qubit_gates_before": 129,
+        "two_qubit_gates_after": null,
+        "depth": null,
+        "backend_name": "logical (necompilat)",
+        "job_id": null
+      },
+      "details": {
+        "skipped_reason": "codificarea pe citiri ar necesita 24 de qubiți; QAOA măsurat într-o rulare anterioară a durat 1246 s",
+        "previous_measurement": {
+          "method": "qaoa",
+          "n_qubits": 24,
+          "transforms": [],
+          "qaoa_seconds": 1246,
+          "status": "rulare anterioară întreruptă; un singur punct măsurat, fără cost sau acuratețe"
+        }
+      }
+    },
+    {
+      "instance": {
+        "id": "nanopore",
         "source": "synthetic",
         "technology": "nanopore",
         "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
         "error_rate": 0.05,
         "seed": 71
       },
@@ -1079,27 +895,24 @@
       "encoding": null,
       "transforms": [],
       "metrics": {
-        "mec_cost": 3,
+        "mec_cost": 2,
         "accuracy": 1.0,
         "switch_errors": 0
       },
       "resources": null,
       "details": {
         "haplotypes": {
-          "copy_a": "011101011010",
-          "copy_b": "100010100101",
+          "copy_a": "100111101100001111",
+          "copy_b": "011000010011110000",
           "read_assignment": [
-            1,
             0,
             1,
             0,
             0,
-            1,
             0,
             1,
             0,
             0,
-            1,
             1
           ]
         }
@@ -1107,67 +920,95 @@
     },
     {
       "instance": {
-        "id": "nanopore-small",
+        "id": "nanopore",
         "source": "synthetic",
         "technology": "nanopore",
         "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
+        "error_rate": 0.05,
+        "seed": 71
+      },
+      "method": "resources",
+      "encoding": "position",
+      "transforms": [],
+      "metrics": {
+        "n_variables": 18,
+        "n_couplings": 149,
+        "rzz_per_layer": 149
+      },
+      "resources": {
+        "n_qubits": 18,
+        "two_qubit_gates_before": 149,
+        "two_qubit_gates_after": null,
+        "depth": null,
+        "backend_name": "logical (necompilat)",
+        "job_id": null
+      },
+      "details": {
+        "skipped_reason": "codificarea pe poziții ar necesita 18 qubiți; QAOA nu a fost rulat în acest experiment"
+      }
+    },
+    {
+      "instance": {
+        "id": "nanopore",
+        "source": "synthetic",
+        "technology": "nanopore",
+        "profile": "nanopore",
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
         "error_rate": 0.05,
         "seed": 71
       },
       "method": "exact",
-      "encoding": "position",
+      "encoding": "read",
       "transforms": [],
       "metrics": {
-        "pair_cost": 26.0,
-        "mec_cost": 3,
+        "pair_cost": 7.0,
+        "mec_cost": 2,
         "accuracy": 1.0,
         "switch_errors": 0
       },
       "resources": null,
       "details": {
         "haplotypes": {
-          "copy_a": "011101011010",
-          "copy_b": "100010100101",
+          "copy_a": "100111101100001111",
+          "copy_b": "011000010011111000",
           "read_assignment": [
-            1,
             0,
             1,
             0,
             0,
-            1,
             0,
             1,
             0,
             0,
-            1,
             1
           ]
-        }
+        },
+        "exact_backend": "ExactSolver"
       }
     },
     {
       "instance": {
-        "id": "nanopore-small",
+        "id": "nanopore",
         "source": "synthetic",
         "technology": "nanopore",
         "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
         "error_rate": 0.05,
         "seed": 71
       },
       "method": "classical",
-      "encoding": "position",
+      "encoding": "read",
       "transforms": [],
       "metrics": {
-        "pair_cost": 26.0,
-        "mec_cost": 3,
+        "pair_cost": 7.0,
+        "mec_cost": 2,
         "accuracy": 1.0,
         "switch_errors": 0,
         "components": 1
@@ -1175,20 +1016,17 @@
       "resources": null,
       "details": {
         "haplotypes": {
-          "copy_a": "011101011010",
-          "copy_b": "100010100101",
+          "copy_a": "100111101100001111",
+          "copy_b": "011000010011111000",
           "read_assignment": [
-            1,
             0,
             1,
             0,
             0,
-            1,
             0,
             1,
             0,
             0,
-            1,
             1
           ]
         }
@@ -1196,330 +1034,85 @@
     },
     {
       "instance": {
-        "id": "nanopore-small",
+        "id": "nanopore",
         "source": "synthetic",
         "technology": "nanopore",
         "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
         "error_rate": 0.05,
         "seed": 71
       },
       "method": "qaoa",
-      "encoding": "position",
+      "encoding": "read",
       "transforms": [],
       "metrics": {
-        "pair_cost": 26.0,
+        "pair_cost": 7.0,
         "mec_cost": 3,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "mean_sample_cost": 117.17431640625,
-        "optimum_frequency": 0.353515625
+        "accuracy": 0.9444444444444444,
+        "switch_errors": 2,
+        "mean_sample_cost": 64.642578125,
+        "optimum_frequency": 0.021484375,
+        "qaoa_seconds": 0.1
       },
       "resources": {
-        "n_qubits": 12,
-        "two_qubit_gates_before": 66,
-        "two_qubit_gates_after": 66,
-        "depth": 24,
+        "n_qubits": 9,
+        "two_qubit_gates_before": 24,
+        "two_qubit_gates_after": 24,
+        "depth": 15,
         "backend_name": "aer_simulator",
         "job_id": null
       },
       "details": {
         "haplotypes": {
-          "copy_a": "011101011010",
-          "copy_b": "100010100101",
+          "copy_a": "011000010011111000",
+          "copy_b": "100111101100001111",
           "read_assignment": [
             1,
             0,
             1,
-            0,
-            0,
+            1,
             1,
             0,
             1,
-            0,
-            0,
             1,
-            1
+            0
           ]
         },
         "top_samples": [
           {
-            "bitstring": "011101011010",
-            "count": 384
+            "bitstring": "101110010",
+            "count": 88
           },
           {
-            "bitstring": "100010100101",
-            "count": 340
+            "bitstring": "010001101",
+            "count": 73
           },
           {
-            "bitstring": "001101011010",
-            "count": 40
+            "bitstring": "000110101",
+            "count": 48
           },
           {
-            "bitstring": "100010100100",
-            "count": 31
+            "bitstring": "000110001",
+            "count": 45
           },
           {
-            "bitstring": "011101011011",
-            "count": 29
-          }
-        ]
-      }
-    },
-    {
-      "instance": {
-        "id": "nanopore-small",
-        "source": "synthetic",
-        "technology": "nanopore",
-        "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
-        "error_rate": 0.05,
-        "seed": 71
-      },
-      "method": "qaoa",
-      "encoding": "position",
-      "transforms": [
-        "fix_variable"
-      ],
-      "metrics": {
-        "pair_cost": 26.0,
-        "mec_cost": 3,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "mean_sample_cost": 126.46826171875,
-        "optimum_frequency": 0.2490234375
-      },
-      "resources": {
-        "n_qubits": 11,
-        "two_qubit_gates_before": 55,
-        "two_qubit_gates_after": 55,
-        "depth": 23,
-        "backend_name": "aer_simulator",
-        "job_id": null
-      },
-      "details": {
-        "haplotypes": {
-          "copy_a": "011101011010",
-          "copy_b": "100010100101",
-          "read_assignment": [
-            1,
-            0,
-            1,
-            0,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
-            1,
-            1
-          ]
-        },
-        "top_samples": [
-          {
-            "bitstring": "11101011010",
-            "count": 510
-          },
-          {
-            "bitstring": "00010100101",
-            "count": 218
-          },
-          {
-            "bitstring": "01101011010",
-            "count": 41
-          },
-          {
-            "bitstring": "11101011011",
+            "bitstring": "110101010",
             "count": 39
-          },
-          {
-            "bitstring": "10010100101",
-            "count": 25
           }
         ]
       }
     },
     {
       "instance": {
-        "id": "nanopore-small",
+        "id": "nanopore",
         "source": "synthetic",
         "technology": "nanopore",
         "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
-        "error_rate": 0.05,
-        "seed": 71
-      },
-      "method": "exact",
-      "encoding": "read",
-      "transforms": [],
-      "metrics": {
-        "pair_cost": 22.0,
-        "mec_cost": 3,
-        "accuracy": 1.0,
-        "switch_errors": 0
-      },
-      "resources": null,
-      "details": {
-        "haplotypes": {
-          "copy_a": "100010100101",
-          "copy_b": "011101011010",
-          "read_assignment": [
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        }
-      }
-    },
-    {
-      "instance": {
-        "id": "nanopore-small",
-        "source": "synthetic",
-        "technology": "nanopore",
-        "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
-        "error_rate": 0.05,
-        "seed": 71
-      },
-      "method": "classical",
-      "encoding": "read",
-      "transforms": [],
-      "metrics": {
-        "pair_cost": 22.0,
-        "mec_cost": 3,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "components": 1
-      },
-      "resources": null,
-      "details": {
-        "haplotypes": {
-          "copy_a": "100010100101",
-          "copy_b": "011101011010",
-          "read_assignment": [
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        }
-      }
-    },
-    {
-      "instance": {
-        "id": "nanopore-small",
-        "source": "synthetic",
-        "technology": "nanopore",
-        "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
-        "error_rate": 0.05,
-        "seed": 71
-      },
-      "method": "qaoa",
-      "encoding": "read",
-      "transforms": [],
-      "metrics": {
-        "pair_cost": 22.0,
-        "mec_cost": 3,
-        "accuracy": 1.0,
-        "switch_errors": 0,
-        "mean_sample_cost": 110.04931640625,
-        "optimum_frequency": 0.14013671875
-      },
-      "resources": {
-        "n_qubits": 12,
-        "two_qubit_gates_before": 59,
-        "two_qubit_gates_after": 59,
-        "depth": 24,
-        "backend_name": "aer_simulator",
-        "job_id": null
-      },
-      "details": {
-        "haplotypes": {
-          "copy_a": "100010100101",
-          "copy_b": "011101011010",
-          "read_assignment": [
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            0,
-            0
-          ]
-        },
-        "top_samples": [
-          {
-            "bitstring": "010110101100",
-            "count": 152
-          },
-          {
-            "bitstring": "101001010011",
-            "count": 135
-          },
-          {
-            "bitstring": "010110111100",
-            "count": 69
-          },
-          {
-            "bitstring": "010111101100",
-            "count": 64
-          },
-          {
-            "bitstring": "101001000011",
-            "count": 63
-          }
-        ]
-      }
-    },
-    {
-      "instance": {
-        "id": "nanopore-small",
-        "source": "synthetic",
-        "technology": "nanopore",
-        "profile": "nanopore",
-        "first_snp": 10,
-        "n_snps": 12,
-        "n_reads": 12,
-        "downsampled_to": 12,
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
         "error_rate": 0.05,
         "seed": 71
       },
@@ -1529,60 +1122,58 @@
         "fix_variable"
       ],
       "metrics": {
-        "pair_cost": 22.0,
-        "mec_cost": 3,
+        "pair_cost": 7.0,
+        "mec_cost": 2,
         "accuracy": 1.0,
         "switch_errors": 0,
-        "mean_sample_cost": 118.3203125,
-        "optimum_frequency": 0.11962890625
+        "mean_sample_cost": 59.50634765625,
+        "optimum_frequency": 0.0595703125,
+        "qaoa_seconds": 0.09
       },
       "resources": {
-        "n_qubits": 11,
-        "two_qubit_gates_before": 48,
-        "two_qubit_gates_after": 48,
-        "depth": 23,
+        "n_qubits": 8,
+        "two_qubit_gates_before": 19,
+        "two_qubit_gates_after": 19,
+        "depth": 14,
         "backend_name": "aer_simulator",
         "job_id": null
       },
       "details": {
         "haplotypes": {
-          "copy_a": "100010100101",
-          "copy_b": "011101011010",
+          "copy_a": "100111101100001111",
+          "copy_b": "011000010011111000",
           "read_assignment": [
             0,
             1,
             0,
-            1,
-            1,
+            0,
             0,
             1,
             0,
-            1,
-            1,
             0,
-            0
+            1
           ]
         },
         "top_samples": [
           {
-            "bitstring": "10110101100",
-            "count": 245
+            "bitstring": "10001001",
+            "count": 122
           },
           {
-            "bitstring": "10110111100",
+            "bitstring": "00010001",
             "count": 102
           },
           {
-            "bitstring": "10111101100",
-            "count": 86
+            "bitstring": "01110010",
+            "count": 70
           },
           {
-            "bitstring": "01001010011",
-            "count": 84
+            "bitstring": "01110110",
+            "count": 54
           },
           {
-            "bitstring": "10010111100",
-            "count": 35
+            "bitstring": "10011001",
+            "count": 46
           }
         ]
       }
