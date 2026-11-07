@@ -82,3 +82,18 @@ def test_node_can_parse_stages_js(exported):
         pytest.skip("node nu este instalat")
     _, path = exported
     subprocess.run([node, "--check", str(path)], check=True)
+
+
+def test_inputs_round_trip_with_instance_metadata(tmp_path):
+    import numpy as np
+
+    from neuroq.experiments.export_stages import export_inputs
+    from neuroq.experiments.stages import load_case
+    from neuroq.sources import load_source_json
+
+    for path in export_inputs(tmp_path):
+        name = path.stem
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        assert raw["metadata"]["instance"] == name
+        loaded = load_source_json(path)
+        assert np.array_equal(loaded.values, load_case(name).matrix.values)

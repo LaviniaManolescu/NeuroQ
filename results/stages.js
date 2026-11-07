@@ -6,7 +6,7 @@ window.STAGES = {
    "n_qubits": 5,
    "n_reads": 9,
    "n_snps": 5,
-   "qaoa_seconds": 0.089
+   "qaoa_seconds": 0.074
   },
   "evidence": {
    "values": [
@@ -595,7 +595,7 @@ window.STAGES = {
    "n_qubits": 10,
    "n_reads": 24,
    "n_snps": 10,
-   "qaoa_seconds": 0.125
+   "qaoa_seconds": 0.121
   },
   "evidence": {
    "values": [
@@ -1946,7 +1946,7 @@ window.STAGES = {
    "n_qubits": 9,
    "n_reads": 9,
    "n_snps": 18,
-   "qaoa_seconds": 0.116
+   "qaoa_seconds": 0.129
   },
   "evidence": {
    "values": [

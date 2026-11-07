@@ -21,8 +21,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 
-from neuroq.core import MISSING  # noqa: E402
+from neuroq.core import MISSING, ReadMatrix, SourceData  # noqa: E402
 from neuroq.experiments.stages import StagesResult, load_case, run_stages  # noqa: E402
+from neuroq.sources import save_reads_data_json  # noqa: E402
 from neuroq.viz import plot_circuit, save_figure  # noqa: E402
 
 # Instanțele exportate și codificarea care încape pe fiecare (fără fixare).
@@ -149,12 +150,39 @@ def export_stages(out_dir: Path = OUTPUT_DIR) -> Path:
     return write_stages_js(build_stages(out_dir), out_dir / "stages.js")
 
 
+def _source_from_matrix(matrix: ReadMatrix) -> SourceData:
+    """SourceData pentru export, cu pozițiile SNP-urilor luate din snp_ids."""
+    positions = np.array([int(s) for s in matrix.snp_ids])
+    starts = np.array([positions[np.flatnonzero(row != MISSING)[0]] for row in matrix.values])
+    n_snps = len(positions)
+    return SourceData(
+        snp_positions=positions, ref_alleles=["A"] * n_snps, alt_alleles=["G"] * n_snps,
+        read_ids=list(matrix.read_ids), read_starts=starts, values=matrix.values,
+        technology=matrix.technology, special_labels=dict(matrix.special_labels),
+        true_haplotypes=matrix.true_haplotypes,
+    )
+
+
+def export_inputs(out_dir: Path = OUTPUT_DIR) -> list[Path]:
+    """Datele fiecărei instanțe în formatul de intrare al interfeței (results/inputs/)."""
+    paths = []
+    for name, _ in EXPORTS:
+        path = out_dir / "inputs" / f"{name}.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        save_reads_data_json(_source_from_matrix(load_case(name).matrix), path,
+                             description=f"Instanța {name} din NeuroQ",
+                             metadata={"instance": name})
+        paths.append(path)
+    return paths
+
+
 def main() -> None:
     sys.stdout.reconfigure(encoding="utf-8")
     start = time.perf_counter()
     path = export_stages()
-    print(f"scris {path} ({path.stat().st_size / 1024:.1f} KB) în "
-          f"{time.perf_counter() - start:.1f} s")
+    inputs = export_inputs()
+    print(f"scris {path} ({path.stat().st_size / 1024:.1f} KB) și {len(inputs)} fișiere de "
+          f"intrare în {time.perf_counter() - start:.1f} s")
 
 
 if __name__ == "__main__":

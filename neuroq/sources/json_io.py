@@ -148,13 +148,20 @@ def save_source_json(source: SourceData, path: Path, meta: Optional[dict[str, An
     Path(path).write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def save_reads_data_json(source: SourceData, path: Path, description: str = "") -> None:
-    """Scrie doar citirile, în formatul interfeței (reads_data.json, SNP-uri de la 1)."""
+def save_reads_data_json(
+    source: SourceData, path: Path, description: str = "",
+    metadata: Optional[dict[str, Any]] = None,
+) -> None:
+    """Scrie doar citirile, în formatul interfeței (reads_data.json, SNP-uri de la 1).
+
+    `metadata` adaugă chei în plus (de exemplu `instance`); `load_source_json` le ignoră.
+    """
     payload = {
         "metadata": {
             "num_snps": int(source.values.shape[1]),
             "num_reads": int(source.values.shape[0]),
             "description": description or f"Exportat din NeuroQ ({source.technology})",
+            **(metadata or {}),
         },
         "reads": [_snp_dict(row) for row in source.values],
     }
