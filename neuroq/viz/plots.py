@@ -265,7 +265,12 @@ def plot_haplotypes(haps: Haplotypes, truth: tuple[np.ndarray, np.ndarray]) -> F
     ax.set_xticks(range(n), [str(i + 1) for i in range(n)])
     ax.set_xlabel("SNP")
     ax.axhline(1.5, color="#14243A", linewidth=2)
-    verdict = "identice" if wrong == 0 else f"{wrong} poziții diferite (chenar roșu)"
+    if wrong == 0:
+        verdict = "identice"
+    elif wrong == 1:
+        verdict = "1 poziție diferită (chenar roșu)"
+    else:
+        verdict = f"{wrong} poziții diferite (chenar roșu)"
     ax.set_title(f"Copiile găsite față de cele adevărate: {verdict}\n"
                  f"A = {_bit_text(found_a)}   B = {_bit_text(found_b)}")
     fig.tight_layout()

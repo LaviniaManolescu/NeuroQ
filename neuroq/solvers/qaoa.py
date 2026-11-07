@@ -134,3 +134,11 @@ class QAOASolver(Solver):
                 ],
             },
         )
+
+
+def trained_circuit(problem: IsingProblem, angles: list[float], p: int = 1) -> QuantumCircuit:
+    """Circuitul QAOA cu unghiurile antrenate legate și măsurătorile adăugate (pentru desen)."""
+    ansatz, theta, _ = make_qaoa(problem.J, problem.h, p)
+    circuit = ansatz.assign_parameters(dict(zip(theta, angles)))
+    circuit.measure_all()
+    return circuit
