@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GenoMEtric</title>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#eef3f7; --bg2:#dfe9f1; --ink:#0c2233; --muted:#4f6678;
+  --accent:#0a8f87; --accent2:#4b5fd6; --panel:rgba(255,255,255,.72);
+  --line:rgba(12,34,51,.28); --helix-a:#0a8f87; --helix-b:#4b5fd6;
+  --ok:#12804a; --err:#b3261e; --grid:rgba(12,34,51,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#050d18; --bg2:#0a1c30; --ink:#e8f1f8; --muted:#8ba3b8;
+    --accent:#2fe0cf; --accent2:#7b8cff; --panel:rgba(10,24,40,.7);
+    --line:rgba(139,163,184,.4); --helix-a:#2fe0cf; --helix-b:#7b8cff;
+    --ok:#4be39a; --err:#ff8a80; --grid:rgba(139,163,184,.07);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#050d18; --bg2:#0a1c30; --ink:#e8f1f8; --muted:#8ba3b8;
+  --accent:#2fe0cf; --accent2:#7b8cff; --panel:rgba(10,24,40,.7);
+  --line:rgba(139,163,184,.4); --helix-a:#2fe0cf; --helix-b:#7b8cff;
+  --ok:#4be39a; --err:#ff8a80; --grid:rgba(139,163,184,.07);
+}
+*,*::before,*::after{box-sizing:inherit}
+html,body{margin:0}
+body{
+  min-height:100vh; color:var(--ink);
+  font-family:"Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",sans-serif;
+  background:
+    radial-gradient(900px 500px at 50% 0%, var(--bg2), transparent 70%),
+    linear-gradient(var(--grid) 1px, transparent 1px) 0 0/48px 48px,
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px) 0 0/48px 48px,
+    var(--bg);
+  background-color:var(--bg);
+  overflow-x:hidden;
+}
+#helix{position:fixed; inset:0; width:100%; height:100%; z-index:0; opacity:.55; pointer-events:none}
+main{
+  position:relative; z-index:1; min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:48px 20px; gap:44px; text-align:center;
+}
+h1{
+  margin:0; font-size:clamp(3rem,10vw,6.5rem); font-weight:800; letter-spacing:-.03em; line-height:1;
+}
+h1 .me{
+  background:linear-gradient(100deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.upload{width:min(560px,100%); text-align:left}
+.upload label.title{display:block; font-size:1.05rem; font-weight:600; margin-bottom:12px}
+.drop{
+  position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; min-height:210px; padding:28px 20px; text-align:center; cursor:pointer;
+  border:2px dashed var(--line); border-radius:18px; background:var(--panel);
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  transition:border-color .2s, background .2s, transform .2s;
+}
+.drop:hover,.drop.over{border-color:var(--accent); transform:translateY(-2px)}
+.drop.over{background:color-mix(in srgb,var(--accent) 12%, var(--panel))}
+.drop:focus-within{outline:3px solid var(--accent2); outline-offset:3px}
+.drop.ok{border-style:solid; border-color:var(--ok)}
+.drop.bad{border-color:var(--err)}
+.drop input{position:absolute; inset:0; width:100%; height:100%; opacity:0; cursor:pointer}
+.drop svg{width:44px; height:44px; color:var(--accent)}
+.drop .main{font-size:1.05rem; font-weight:600}
+.drop .sub{font-size:.9rem; color:var(--muted)}
+.btnlike{
+  display:inline-block; margin-top:4px; padding:8px 18px; border-radius:999px; font-size:.9rem; font-weight:600;
+  background:linear-gradient(100deg,var(--accent),var(--accent2)); color:#04121f;
+}
+#msg{min-height:1.4em; margin:12px 2px 0; font-size:.92rem}
+#msg.ok{color:var(--ok)} #msg.bad{color:var(--err)}
+#go{
+  display:none; margin-top:14px; width:100%; padding:13px; border:0; border-radius:12px; cursor:pointer;
+  font:inherit; font-weight:700; color:#04121f;
+  background:linear-gradient(100deg,var(--accent),var(--accent2));
+}
+#go:focus-visible{outline:3px solid var(--ink); outline-offset:3px}
+#go.show{display:block}
+</style>
+</head>
+<body>
+<svg id="helix" aria-hidden="true" preserveAspectRatio="xMidYMid slice"></svg>
+<main>
+  <h1>Geno<span class="me">ME</span>tric</h1>
+  <section class="upload">
+    <label class="title" for="file">Introduceti fisierul .json:</label>
+    <div class="drop" id="drop">
+      <input type="file" id="file" accept=".json,application/json">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      <div class="main" id="name">Trageți fișierul aici</div>
+      <div class="sub" id="sub">sau alegeți-l din calculator · doar .json</div>
+      <span class="btnlike" id="pick">Selectați fișier</span>
+    </div>
+    <p id="msg" role="status" aria-live="polite"></p>
+    <button id="go" type="button">Next</button>
+  </section>
+</main>
+<script>
+(function(){
+  // --- Fundal: dublu helix ADN animat ---
+  var svg=document.getElementById('helix'),NS='http://www.w3.org/2000/svg';
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var N=34,W=0,H=0,els=[];
+  function build(){
+    svg.innerHTML='';els=[];
+    W=innerWidth;H=innerHeight;svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    [[.12,0],[.88,Math.PI]].forEach(function(c){
+      var g=document.createElementNS(NS,'g');
+      var a=document.createElementNS(NS,'path'),b=document.createElementNS(NS,'path');
+      [a,b].forEach(function(p,i){p.setAttribute('fill','none');p.setAttribute('stroke-width','2.5');p.setAttribute('stroke',i?'var(--helix-b)':'var(--helix-a)');p.setAttribute('stroke-linecap','round');g.appendChild(p)});
+      var rungs=[];
+      for(var i=0;i<N;i++){var l=document.createElementNS(NS,'line');l.setAttribute('stroke','var(--line)');l.setAttribute('stroke-width','1.5');g.appendChild(l);rungs.push(l)}
+      svg.appendChild(g);els.push({cx:c[0]*W,ph:c[1],a:a,b:b,r:rungs});
+    });
+  }
+  function draw(t){
+    var amp=Math.min(70,W*.07);
+    els.forEach(function(e){
+      var da='',db='';
+      for(var i=0;i<=120;i++){
+        var y=i/120*H,ang=y/110+t+e.ph,s=Math.sin(ang)*amp;
+        da+=(i?'L':'M')+(e.cx+s).toFixed(1)+' '+y.toFixed(1);
+        db+=(i?'L':'M')+(e.cx-s).toFixed(1)+' '+y.toFixed(1);
+      }
+      e.a.setAttribute('d',da);e.b.setAttribute('d',db);
+      e.r.forEach(function(l,i){
+        var y=(i+.5)/N*H,s=Math.sin(y/110+t+e.ph)*amp;
+        l.setAttribute('x1',e.cx+s);l.setAttribute('x2',e.cx-s);l.setAttribute('y1',y);l.setAttribute('y2',y);
+      });
+    });
+  }
+  build();draw(0);
+  addEventListener('resize',function(){build();draw(0)});
+  if(!reduce){var t0=performance.now();(function loop(n){draw((n-t0)/2600);requestAnimationFrame(loop)})(t0)}
+
+  // --- Încărcare fișier .json ---
+  var drop=document.getElementById('drop'),input=document.getElementById('file'),
+      name=document.getElementById('name'),sub=document.getElementById('sub'),
+      pick=document.getElementById('pick'),msg=document.getElementById('msg'),go=document.getElementById('go');
+  var loaded=null;
+  function state(kind,text){
+    drop.classList.remove('ok','bad');msg.className='';
+    if(kind){drop.classList.add(kind);msg.classList.add(kind)}
+    msg.textContent=text||'';
+  }
+  function size(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(1)+' KB':(n/1048576).toFixed(1)+' MB'}
+  function handle(f){
+    loaded=null;go.classList.remove('show');
+    if(!f)return;
+    if(!/\.json$/i.test(f.name)){
+      state('bad','Fișierul „'+f.name+'” nu este acceptat. Alegeți un fișier cu extensia .json.');
+      input.value='';return;
+    }
+    var rd=new FileReader();
+    rd.onload=function(){
+      try{
+        loaded={name:f.name,data:JSON.parse(rd.result)};
+        name.textContent=f.name;sub.textContent=size(f.size);pick.textContent='Schimbați fișierul';
+        state('ok','Fișier JSON valid încărcat.');go.classList.add('show');
+      }catch(e){
+        state('bad','Fișierul nu conține JSON valid. Verificați conținutul și încărcați-l din nou.');
+        input.value='';
+      }
+    };
+    rd.onerror=function(){state('bad','Fișierul nu a putut fi citit. Încercați din nou.')};
+    rd.readAsText(f);
+  }
+  input.addEventListener('change',function(){handle(input.files[0])});
+  ['dragenter','dragover'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add('over')})});
+  ['dragleave','drop'].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.remove('over')})});
+  drop.addEventListener('drop',function(e){handle(e.dataTransfer.files[0])});
+  addEventListener('dragover',function(e){e.preventDefault()});
+  addEventListener('drop',function(e){e.preventDefault()});
+  go.addEventListener('click',function(){
+    // Punct de extindere: aici începe afișarea pașilor de rezolvare.
+    document.dispatchEvent(new CustomEvent('genometric:start',{detail:loaded}));
+  });
+})();
+</script>
+</body>
+</html>
