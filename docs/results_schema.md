@@ -16,7 +16,7 @@
 | câmp | tip | ce înseamnă |
 |---|---|---|
 | `instance` | obiect | ce date s-au folosit (cheile mai jos) |
-| `method` | text | `"exact"`, `"qaoa"`, `"rqaoa"`, `"classical"` (arbore de acoperire, căutare locală, recoacere) sau `"greedy"` |
+| `method` | text | `"exact"`, `"qaoa"`, `"rqaoa"`, `"classical"` (arbore de acoperire, căutare locală, recoacere), `"greedy"` sau `"resources"` (rând fără rezolvare: doar resursele codificării, vezi mai jos) |
 | `encoding` | text sau `null` | `"position"` (un qubit pe SNP), `"read"` (un qubit pe citire); `null` pentru `greedy`, care lucrează direct pe matrice |
 | `transforms` | listă de text | transformările aplicate, în ordine: `"fix_variable"`, `"prune"`, `"stitch"`; listă goală dacă niciuna |
 | `metrics` | obiect | **doar numere** (cheile mai jos); o metrică care nu se aplică lipsește |
@@ -49,6 +49,9 @@
 | `mean_sample_cost` | număr | costul mediu pe eșantioane (doar metode cuantice) |
 | `cis_trans_correct` | 0 sau 1 | dacă verdictul cis/trans e corect (doar instanțe cu V1 și V2) |
 | `components` | întreg | câte grupuri de variabile legate are graful de cuplaje (doar `classical`); faza dintre grupuri nu e determinată de date |
+| `n_variables` | întreg | doar la `resources`: câte variabile (qubiți) ar avea codificarea |
+| `n_couplings` | întreg | doar la `resources`: câte cuplaje J sunt nenule |
+| `rzz_per_layer` | întreg | doar la `resources`: câte porți rzz are un strat QAOA (p = 1), numărate pe circuitul construit |
 | `qaoa_seconds` | număr | durata unei rulări QAOA (antrenare pe statevector + eșantionare), în secunde (doar `qaoa`) |
 
 ### `resources` (`ResourceReport`)
@@ -71,7 +74,13 @@
 | `haplotypes.read_assignment` | listă de întregi | câte o valoare pe citire: `0` = copia A, `1` = copia B, `-1` = suspectă |
 | `top_samples` | listă de `{bitstring, count}` | cele mai frecvente șiruri măsurate, descrescător după `count`, în ordinea proiectului (qubitul 0 în stânga); doar metode cuantice. Lungimea șirului = `resources.n_qubits` (deci mai scurt cu unu după fixare) |
 | `cis_trans_verdict` | text | `"cis"` (V1 și V2 pe aceeași copie) sau `"trans"`; doar instanțe cu V1 și V2 |
+| `skipped_reason` | text | doar la `resources`: de ce codificarea nu a fost rezolvată în această rulare |
+| `previous_measurement` | obiect | doar la `resources`, opțional: o măsurătoare dintr-o rulare anterioară, păstrată separat de `metrics` (`method`, `n_qubits`, `transforms`, `qaoa_seconds`, `status`); nu e un rezultat al rulării curente |
 | `exact_backend` | text | doar la `exact`: `"ExactSolver"` (până la 16 qubiți) sau `"exact_vectorized"` (până la 24) |
+
+## Rândul `resources`
+
+Când o codificare e prea mare ca să fie rezolvată în simulator, experimentul scrie pentru ea un rând `method: "resources"`, fără haplotipuri și fără cost. `metrics` are `n_variables`, `n_couplings` și `rzz_per_layer`. `resources` are `n_qubits` și `two_qubit_gates_before` (porțile rzz logice); circuitul nu e compilat, deci `two_qubit_gates_after` și `depth` sunt `null`, iar `backend_name` este `"logical (necompilat)"`. `details.skipped_reason` spune de ce nu s-a rulat, iar `details.previous_measurement` (opțional) păstrează o valoare măsurată anterior, marcată ca atare.
 
 ## Reguli
 

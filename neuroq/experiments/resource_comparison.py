@@ -1,9 +1,11 @@
-"""Experimentul principal: ambele codificări cu toți solverii pe trei instanțe separate.
+"""Experimentul principal: toți solverii pe codificarea mică, un rând de resurse pe cea mare.
 
 Instanțe (fără ferestre și fără subeșantionare, nicio comparație între ele):
-- exemplul din notebook (5 SNP-uri, 9 citiri);
-- Illumina sintetic: 10 SNP-uri, 24 de citiri;
-- Nanopore sintetic: 18 SNP-uri, 9 citiri.
+- exemplul din notebook (5 SNP-uri, 9 citiri): ambele codificări, complet;
+- Illumina sintetic (10 SNP-uri, 24 de citiri): complet pe poziții (10 qubiți); pe citiri
+  (24 de qubiți) doar rândul de resurse, plus durata QAOA măsurată într-o rulare anterioară;
+- Nanopore sintetic (18 SNP-uri, 9 citiri): complet pe citiri (9 qubiți); pe poziții
+  (18 qubiți) doar rândul de resurse.
 Optimul de referință vine din ExactSolver până la 16 qubiți și din exact_vectorized
 (ClassicalSolver, strategia "exact") până la 24. results.json și results.js se scriu doar
 la final, prin fișiere temporare, ca o întrerupere să nu lase un fișier pe jumătate scris.
@@ -16,17 +18,20 @@ import json
 import os
 import sys
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
-from neuroq.core import Haplotypes, IsingProblem, ReadMatrix, ResultRow, SelectionParams, Solution
+from neuroq.core import (
+    Haplotypes, IsingProblem, ReadMatrix, ResourceReport, ResultRow, SelectionParams, Solution,
+)
 from neuroq.encodings import Encoding, PositionEncoding, ReadEncoding
 from neuroq.evaluation import accuracy, evaluate, mec_cost, switch_errors, top_samples
 from neuroq.execution import IdealSimulator
 from neuroq.experiments.notebook_example import haplotype_text, write_results
 from neuroq.selection import WindowSelector
 from neuroq.solvers import ClassicalSolver, ExactSolver, GreedyPhaser, QAOASolver
+from neuroq.solvers.qaoa import make_qaoa
 from neuroq.sources import SyntheticSource
 from neuroq.sources.synthetic import ILLUMINA, NANOPORE, TechnologyProfile
 from neuroq.transforms import fix_variable
@@ -36,14 +41,31 @@ EXACT_SOLVER_MAX_QUBITS = 16
 ILLUMINA_SNPS, ILLUMINA_READS = 10, 24
 NANOPORE_SNPS, NANOPORE_READS = 18, 9
 OUTPUT_DIR = Path("results")
+ENCODINGS: dict[str, Encoding] = {"position": PositionEncoding(), "read": ReadEncoding()}
+LOGICAL_BACKEND = "logical (necompilat)"
+
+# Singurul punct măsurat pe Illumina, codificarea pe citiri (rulare anterioară, întreruptă).
+ILLUMINA_READS_PREVIOUS_QAOA = {
+    "method": "qaoa",
+    "n_qubits": 24,
+    "transforms": [],
+    "qaoa_seconds": 1246,
+    "status": "rulare anterioară întreruptă; un singur punct măsurat, fără cost sau acuratețe",
+}
 
 
 @dataclass
 class Case:
-    """O matrice de citiri și descrierea ei pentru `instance`."""
+    """O matrice de citiri, descrierea ei și ce se rulează pe fiecare codificare.
+
+    `full` = codificările pe care rulează toți solverii; `resources_only` = codificările
+    pentru care se scrie doar rândul de resurse, cu detaliile lui (motivul și altele).
+    """
 
     matrix: ReadMatrix
     instance: dict
+    full: tuple[str, ...] = ("position", "read")
+    resources_only: dict[str, dict] = field(default_factory=dict)
 
 
 def _whole_matrix(source: SyntheticSource) -> ReadMatrix:
@@ -74,13 +96,22 @@ def notebook_case() -> Case:
 def illumina_case() -> Case:
     source = SyntheticSource.from_profile(ILLUMINA, ILLUMINA_SNPS, SEED, n_reads=ILLUMINA_READS)
     matrix = _whole_matrix(source)
-    return Case(matrix, _instance("illumina", matrix, ILLUMINA))
+    skipped = {
+        "skipped_reason": ("codificarea pe citiri ar necesita 24 de qubiți; QAOA măsurat "
+                           "într-o rulare anterioară a durat 1246 s"),
+        "previous_measurement": ILLUMINA_READS_PREVIOUS_QAOA,
+    }
+    return Case(matrix, _instance("illumina", matrix, ILLUMINA),
+                full=("position",), resources_only={"read": skipped})
 
 
 def nanopore_case() -> Case:
     source = SyntheticSource.from_profile(NANOPORE, NANOPORE_SNPS, SEED, n_reads=NANOPORE_READS)
     matrix = _whole_matrix(source)
-    return Case(matrix, _instance("nanopore", matrix, NANOPORE))
+    skipped = {"skipped_reason": ("codificarea pe poziții ar necesita 18 qubiți; QAOA nu a "
+                                  "fost rulat în acest experiment")}
+    return Case(matrix, _instance("nanopore", matrix, NANOPORE),
+                full=("read",), resources_only={"position": skipped})
 
 
 def _haplotype_details(haps: Haplotypes) -> dict:
@@ -155,14 +186,36 @@ def _encoding_rows(case: Case, encoding: Encoding) -> list[ResultRow]:
     ]
 
 
+def resources_row(case: Case, encoding: Encoding, extra_details: dict) -> ResultRow:
+    """Rândul de resurse: variabile, J nenule și porți rzz ale unui strat QAOA (p=1)."""
+    problem = encoding.encode(case.matrix)
+    circuit, _, _ = make_qaoa(problem.J, problem.h, p=1)
+    rzz = int(circuit.count_ops().get("rzz", 0))
+    metrics = {
+        "n_variables": problem.n_qubits,
+        "n_couplings": int((problem.J != 0).sum()),
+        "rzz_per_layer": rzz,
+    }
+    report = ResourceReport(n_qubits=problem.n_qubits, two_qubit_gates_before=rzz,
+                            backend_name=LOGICAL_BACKEND)
+    print(f"  resurse {case.instance['id']}/{problem.variable_kind}: {problem.n_qubits} "
+          f"qubiți, {rzz} rzz", flush=True)
+    return ResultRow(instance=case.instance, method="resources", encoding=problem.variable_kind,
+                     transforms=[], metrics=metrics, resources=report,
+                     details=dict(extra_details))
+
+
 def run_comparison(cases: list[Case]) -> list[ResultRow]:
     rows: list[ResultRow] = []
     for case in cases:
         print(f"{case.instance['id']}: {case.instance['n_snps']} SNP-uri, "
               f"{case.instance['n_reads']} citiri", flush=True)
         rows.append(_greedy_row(case))
-        for encoding in (PositionEncoding(), ReadEncoding()):
-            rows.extend(_encoding_rows(case, encoding))
+        for kind, encoding in ENCODINGS.items():
+            if kind in case.full:
+                rows.extend(_encoding_rows(case, encoding))
+            elif kind in case.resources_only:
+                rows.append(resources_row(case, encoding, case.resources_only[kind]))
     return rows
 
 
@@ -172,8 +225,9 @@ def write_outputs(rows: list[ResultRow], directory: Path) -> tuple[Path, Path]:
     json_path, js_path = directory / "results.json", directory / "results.js"
     json_tmp, js_tmp = directory / "results.json.tmp", directory / "results.js.tmp"
     write_results(rows, json_tmp, note=(
-        "Faza 2: notebook, Illumina (10 SNP-uri, 24 citiri) și Nanopore (18 SNP-uri, "
-        "9 citiri), ambele codificări, toți solverii, simulator ideal."))
+        "Faza 2: notebook (ambele codificări), Illumina (10 SNP-uri, 24 citiri; solveri pe "
+        "poziții, resurse pe citiri) și Nanopore (18 SNP-uri, 9 citiri; solveri pe citiri, "
+        "resurse pe poziții), simulator ideal."))
     payload = json.loads(json_tmp.read_text(encoding="utf-8"))
     js_tmp.write_text("window.RESULTS = " + json.dumps(payload, indent=2, ensure_ascii=False)
                       + ";\n", encoding="utf-8")

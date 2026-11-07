@@ -18,6 +18,15 @@ def validate_results_file(path: Path, is_sample: bool) -> list[ResultRow]:
         assert all(isinstance(v, (int, float)) and not isinstance(v, bool)
                    for v in row.metrics.values())
 
+        if row.method == "resources":
+            # rând fără rezolvare: doar resurse logice și motivul pentru care nu s-a rulat
+            assert row.encoding in {"position", "read"}
+            assert row.resources is not None and "skipped_reason" in row.details
+            assert {"n_variables", "n_couplings", "rzz_per_layer"} <= set(row.metrics)
+            assert "haplotypes" not in row.details
+            rows.append(row)
+            continue
+
         haps = row.details["haplotypes"]
         assert len(haps["copy_a"]) == len(haps["copy_b"]) == row.instance["n_snps"]
         assert len(haps["read_assignment"]) == row.instance["n_reads"]
