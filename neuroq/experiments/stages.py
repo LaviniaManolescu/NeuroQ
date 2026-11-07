@@ -6,6 +6,7 @@
 
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from typing import Any, Optional
 
@@ -51,6 +52,7 @@ class StagesResult:
     haplotypes: Haplotypes
     metrics: dict[str, float]
     other_encoding: Optional[dict[str, Any]]  # resursele codificării care nu se rulează
+    qaoa_seconds: float = 0.0  # durata apelului QAOASolver.solve (antrenare + eșantionare)
 
     @property
     def cost_history(self) -> list[list[float]]:
@@ -119,7 +121,9 @@ def run_stages(
         problem = ReadEncoding().encode(matrix)
     solved = fix_variable(problem) if fix else problem
     exact = ExactSolver().solve(problem)
+    start = time.perf_counter()
     qaoa = QAOASolver(IdealSimulator(), seed=SEED, callback=callback).solve(solved)
+    qaoa_seconds = time.perf_counter() - start
     haps = solved.decoder(qaoa.bitstring)
     metrics = evaluate(solved, qaoa, haps, matrix.true_haplotypes, exact.energy, matrix.values)
     others = [k for k in ("position", "read") if k != kind and k not in ALLOWED[instance]]
@@ -130,6 +134,7 @@ def run_stages(
         full_bitstring=_with_fixed_bits(qaoa.bitstring, solved.fixed_variables),
         haplotypes=haps, metrics=metrics,
         other_encoding=encoding_resources(matrix, others[0]) if others else None,
+        qaoa_seconds=qaoa_seconds,
     )
 
 
