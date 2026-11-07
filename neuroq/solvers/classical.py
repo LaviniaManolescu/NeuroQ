@@ -8,7 +8,8 @@ from neuroq.core import IsingProblem, Solution
 from neuroq.solvers import _classical_algos as algos
 from neuroq.solvers.base import Solver
 
-STRATEGIES = ("greedy_tree", "greedy_ls", "anneal", "best")
+STRATEGIES = ("greedy_tree", "greedy_ls", "anneal", "best", "exact")
+MAX_EXACT_QUBITS = 24  # exact_vectorized enumeră 2^(n-1) stări în numpy
 
 
 def evidence_from_ising(problem: IsingProblem) -> tuple[np.ndarray, np.ndarray]:
@@ -39,6 +40,10 @@ class ClassicalSolver(Solver):
                 "ClassicalSolver lucrează doar pe probleme fără câmpuri h; "
                 "aplică-l înainte de fix_variable"
             )
+        if self.strategy == "exact" and problem.n_qubits > MAX_EXACT_QUBITS:
+            raise ValueError(
+                f"{problem.n_qubits} qubiți depășesc limita de {MAX_EXACT_QUBITS} pentru enumerare"
+            )
         a, d = evidence_from_ising(problem)
         x, info = self._run(a, d)
         bitstring = "".join(str(int(b)) for b in x)
@@ -49,6 +54,9 @@ class ClassicalSolver(Solver):
         )
 
     def _run(self, a: np.ndarray, d: np.ndarray) -> tuple[np.ndarray, dict]:
+        if self.strategy == "exact":
+            x, _ = algos.exact_vectorized(a, d)
+            return x, {"exact_backend": "exact_vectorized"}
         if self.strategy == "best":
             x, _, info = algos.solve_classical(
                 a, d, restarts=self.restarts, steps=self.steps, seed=self.seed

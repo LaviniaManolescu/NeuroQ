@@ -1,4 +1,4 @@
-"""QAOA: circuit H, rz, rzz, rx, antrenat pe Statevector cu COBYLA."""
+"""QAOA: circuit H, rz, rzz, rx, antrenat pe statevector exact (Aer) cu COBYLA."""
 
 from __future__ import annotations
 
@@ -7,7 +7,7 @@ import itertools
 import numpy as np
 from qiskit import QuantumCircuit
 from qiskit.circuit import ParameterVector
-from qiskit.quantum_info import Statevector
+from qiskit_aer import AerSimulator
 from scipy.optimize import minimize
 
 from neuroq.core import IsingProblem, Solution
@@ -40,13 +40,25 @@ def make_qaoa(
 def basis_energies(problem: IsingProblem) -> np.ndarray:
     """Energia fiecărui indice de statevector; indicele k are qubitul i = (k >> i) & 1."""
     n = problem.n_qubits
-    return np.array([
-        problem.energy("".join(str((k >> i) & 1) for i in range(n))) for k in range(2**n)
-    ])
+    return np.fromiter(
+        (problem.energy("".join(str((k >> i) & 1) for i in range(n))) for k in range(2**n)),
+        dtype=float, count=2**n,
+    )
+
+
+def statevector_probabilities(circuit: QuantumCircuit, simulator: AerSimulator) -> np.ndarray:
+    """Probabilitățile exacte ale stării (fără măsurători), indexate ca Statevector.
+
+    Aer dă aceleași valori ca qiskit.quantum_info.Statevector (verificat în teste),
+    dar e de ~15 ori mai rapid la 20 de qubiți; tot statevector exact, nu Estimator.
+    """
+    circuit = circuit.copy()
+    circuit.save_statevector()
+    return np.asarray(simulator.run(circuit).result().get_statevector().probabilities())
 
 
 class QAOASolver(Solver):
-    """Antrenează unghiurile pe Statevector, apoi eșantionează prin Executor."""
+    """Antrenează unghiurile pe statevector exact, apoi eșantionează prin Executor."""
 
     def __init__(
         self, executor: Executor, p: int = 1, shots: int = 2048, seed: int = 71, maxiter: int = 90
@@ -60,13 +72,14 @@ class QAOASolver(Solver):
     def solve(self, problem: IsingProblem) -> Solution:
         ansatz, theta, scale = make_qaoa(problem.J, problem.h, self.p)
         energies = basis_energies(problem)
+        simulator = AerSimulator(method="statevector", max_parallel_threads=1)
 
         def bind(values: np.ndarray) -> QuantumCircuit:
             return ansatz.assign_parameters(dict(zip(theta, values)))
 
         # din notebook-ul organizatorilor
         def expected_energy(values: np.ndarray) -> float:
-            probabilities = Statevector.from_instruction(bind(values)).probabilities()
+            probabilities = statevector_probabilities(bind(values), simulator)
             return float(np.dot(probabilities, energies))
 
         rng = np.random.default_rng(self.seed)

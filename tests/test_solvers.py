@@ -73,3 +73,15 @@ def test_greedy_is_reproducible_for_the_same_seed():
 def test_greedy_recovers_x_and_y_on_clean_reads(seed):
     haps = GreedyPhaser().phase(xy_matrix(), order_seed=seed)
     assert {_text(haps.copy_a), _text(haps.copy_b)} == {X, Y}
+
+
+def test_aer_statevector_matches_quantum_info():
+    from qiskit.quantum_info import Statevector
+    from qiskit_aer import AerSimulator
+
+    from neuroq.solvers.qaoa import statevector_probabilities
+
+    qc, theta, _ = make_qaoa(notebook_problem().J, notebook_problem().h, p=1)
+    bound = qc.assign_parameters([0.7, 0.4])
+    aer = statevector_probabilities(bound, AerSimulator(method="statevector"))
+    assert np.allclose(aer, Statevector.from_instruction(bound).probabilities())
