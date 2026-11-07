@@ -36,3 +36,38 @@ def test_regularize_clips_to_epsilon():
     assert regularize(np.array([0.0, 0.4, 1.0]), 0.25).tolist() == [0.25, 0.4, 0.75]
     with pytest.raises(ValueError):
         regularize(np.array([0.5]), 0.6)
+
+
+def test_warm_start_circuit_uses_ry_mixer_and_no_hadamard():
+    from neuroq.solvers.qaoa import make_warm_start_qaoa
+
+    problem = notebook_problem()
+    c = regularize(relax(problem, 71))
+    qc, _, _ = make_warm_start_qaoa(problem.J, problem.h, c, p=1)
+    ops = qc.count_ops()
+    assert "h" not in ops and "rx" not in ops
+    assert ops["rzz"] == np.count_nonzero(problem.J) and ops["ry"] == 3 * problem.n_qubits
+
+
+def test_initial_state_matches_relaxed_probabilities():
+    from qiskit.quantum_info import Statevector
+
+    from neuroq.solvers.qaoa import make_warm_start_qaoa
+
+    problem = notebook_problem()
+    c = regularize(relax(problem, 71))
+    qc, theta, _ = make_warm_start_qaoa(problem.J, problem.h, c, p=1)
+    probs = Statevector.from_instruction(qc.assign_parameters([0.0, 0.0])).probabilities()
+    expected = np.array([np.prod([c[i] if (k >> i) & 1 else 1 - c[i] for i in range(len(c))])
+                         for k in range(2 ** len(c))])
+    assert np.allclose(probs, expected)
+
+
+def test_ws_qaoa_finds_cost_one_on_notebook():
+    from neuroq.execution import IdealSimulator
+    from neuroq.solvers import QAOASolver
+
+    solution = QAOASolver(IdealSimulator(), warm_start=True).solve(notebook_problem())
+    assert solution.energy == pytest.approx(1.0)
+    assert solution.metadata["warm_start"]["epsilon"] == 0.25
+    assert len(solution.metadata["warm_start"]["c"]) == 5

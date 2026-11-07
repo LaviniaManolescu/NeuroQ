@@ -1,4 +1,5 @@
-"""QAOA: circuit H, rz, rzz, rx, antrenat pe statevector exact (Aer) cu COBYLA."""
+"""QAOA (H, rz, rzz, rx) și warm-start QAOA (ry, rz, rzz, mixer ry-rz-ry), antrenate pe
+statevector exact (Aer) cu COBYLA."""
 
 from __future__ import annotations
 
@@ -14,6 +15,7 @@ from scipy.optimize import minimize
 from neuroq.core import IsingProblem, Solution
 from neuroq.execution import Executor
 from neuroq.solvers.base import Solver
+from neuroq.solvers.warm_start import DEFAULT_EPSILON, regularize, relax
 
 N_STARTS = 2
 TOP_SAMPLES = 10
@@ -42,6 +44,36 @@ def make_qaoa(
     return qc, theta, scale
 
 
+def make_warm_start_qaoa(
+    j: np.ndarray, h: np.ndarray, c: np.ndarray, p: int = 1
+) -> tuple[QuantumCircuit, ParameterVector, float]:
+    """Warm-start QAOA (Egger et al., 2021): pornește din probabilitățile c ale relaxării.
+
+    Starea inițială e ry(θᵢ)|0⟩ cu θᵢ = 2·arcsin(√cᵢ), deci P(bitul i = 1) = cᵢ. Stratul de
+    cost e același ca la make_qaoa; mixerul ry(−θᵢ) rz(−2β) ry(θᵢ) are starea inițială ca
+    stare proprie.
+    """
+    n = len(j)
+    scale = max(1.0, float(np.abs(j).max(initial=0.0)), float(np.abs(h).max(initial=0.0)))
+    angles = 2 * np.arcsin(np.sqrt(np.asarray(c, dtype=float)))
+    theta = ParameterVector("theta", 2 * p)
+    qc = QuantumCircuit(n)
+    for i in range(n):
+        qc.ry(float(angles[i]), i)
+    for layer in range(p):
+        for i in range(n):
+            if h[i] != 0:
+                qc.rz(2 * theta[layer] * h[i] / scale, i)
+        for i, k in itertools.combinations(range(n), 2):
+            if j[i, k] != 0:
+                qc.rzz(2 * theta[layer] * j[i, k] / scale, i, k)
+        for i in range(n):
+            qc.ry(-float(angles[i]), i)
+            qc.rz(-2 * theta[p + layer], i)
+            qc.ry(float(angles[i]), i)
+    return qc, theta, scale
+
+
 def basis_energies(problem: IsingProblem) -> np.ndarray:
     """Energia fiecărui indice de statevector; indicele k are qubitul i = (k >> i) & 1."""
     n = problem.n_qubits
@@ -67,17 +99,26 @@ class QAOASolver(Solver):
 
     def __init__(
         self, executor: Executor, p: int = 1, shots: int = 2048, seed: int = 71, maxiter: int = 90,
-        callback: Optional[CostCallback] = None,
+        callback: Optional[CostCallback] = None, warm_start: bool = False,
+        epsilon: float = DEFAULT_EPSILON, relax_seed: Optional[int] = None,
     ) -> None:
         self.executor = executor
         self.callback = callback
+        self.warm_start = warm_start
+        self.epsilon = epsilon
+        self.relax_seed = seed if relax_seed is None else relax_seed
         self.p = p
         self.shots = shots
         self.seed = seed
         self.maxiter = maxiter
 
     def solve(self, problem: IsingProblem) -> Solution:
-        ansatz, theta, scale = make_qaoa(problem.J, problem.h, self.p)
+        warm_c = None
+        if self.warm_start:
+            warm_c = regularize(relax(problem, self.relax_seed), self.epsilon)
+            ansatz, theta, scale = make_warm_start_qaoa(problem.J, problem.h, warm_c, self.p)
+        else:
+            ansatz, theta, scale = make_qaoa(problem.J, problem.h, self.p)
         energies = basis_energies(problem)
         simulator = AerSimulator(method="statevector", max_parallel_threads=1)
 
@@ -128,6 +169,8 @@ class QAOASolver(Solver):
                 "scale": scale,
                 "seed": self.seed,
                 "cost_history": histories,
+                "warm_start": (None if warm_c is None
+                               else {"c": warm_c.tolist(), "epsilon": self.epsilon}),
                 "best_start": best_start,
                 "top_samples": [
                     {"bitstring": b, "count": int(counts[b]), "energy": scored[b]} for b in ranked
@@ -136,9 +179,15 @@ class QAOASolver(Solver):
         )
 
 
-def trained_circuit(problem: IsingProblem, angles: list[float], p: int = 1) -> QuantumCircuit:
-    """Circuitul QAOA cu unghiurile antrenate legate și măsurătorile adăugate (pentru desen)."""
-    ansatz, theta, _ = make_qaoa(problem.J, problem.h, p)
+def trained_circuit(
+    problem: IsingProblem, angles: list[float], p: int = 1,
+    warm_c: Optional[list[float]] = None,
+) -> QuantumCircuit:
+    """Circuitul QAOA (sau WS-QAOA, cu `warm_c`) cu unghiurile antrenate și măsurători."""
+    if warm_c is None:
+        ansatz, theta, _ = make_qaoa(problem.J, problem.h, p)
+    else:
+        ansatz, theta, _ = make_warm_start_qaoa(problem.J, problem.h, np.asarray(warm_c), p)
     circuit = ansatz.assign_parameters(dict(zip(theta, angles)))
     circuit.measure_all()
     return circuit
