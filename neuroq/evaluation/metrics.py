@@ -10,14 +10,21 @@ from neuroq.core import Haplotypes, IsingProblem, Solution
 
 
 def accuracy(copy_a: np.ndarray, truth_a: np.ndarray) -> float:
-    """Fracția de SNP-uri corecte; oglinda (A↔B) contează ca soluție corectă."""
-    same = np.asarray(copy_a) == np.asarray(truth_a)
-    return float(max(same.mean(), 1.0 - same.mean()))
+    """Fracția de SNP-uri corecte; oglinda (A↔B) contează ca soluție corectă.
+
+    Un SNP nefazat (-1) contează ca greșeală în ambele orientări.
+    """
+    copy_a, truth_a = np.asarray(copy_a), np.asarray(truth_a)
+    same = copy_a == truth_a
+    mirror = copy_a == 1 - truth_a
+    return float(max(same.mean(), mirror.mean()))
 
 
 def switch_errors(copy_a: np.ndarray, truth_a: np.ndarray) -> int:
-    """De câte ori se schimbă relația de fază (la fel / oglindă) între SNP-uri consecutive."""
-    same = np.asarray(copy_a) == np.asarray(truth_a)
+    """De câte ori se schimbă relația de fază între SNP-uri fazate consecutive (-1 se sare)."""
+    copy_a, truth_a = np.asarray(copy_a), np.asarray(truth_a)
+    phased = copy_a != -1
+    same = (copy_a == truth_a)[phased]
     return int(np.count_nonzero(same[1:] != same[:-1]))
 
 

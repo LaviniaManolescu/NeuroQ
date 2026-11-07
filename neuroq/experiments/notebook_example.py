@@ -18,6 +18,11 @@ SEED = 71
 DEFAULT_OUTPUT = Path("results") / "results.json"
 
 
+def haplotype_text(copy) -> str:
+    """Copia ca text: 0 și 1, iar un SNP nefazat (-1) devine '-'."""
+    return "".join("-" if v == -1 else str(int(v)) for v in copy)
+
+
 def _row(
     instance: dict, method: str, problem: IsingProblem, matrix: ReadMatrix,
     solution: Solution, optimum: float,
@@ -25,8 +30,8 @@ def _row(
     haps = problem.decoder(solution.bitstring)
     details: dict = {
         "haplotypes": {
-            "copy_a": "".join(map(str, haps.copy_a)),
-            "copy_b": "".join(map(str, haps.copy_b)),
+            "copy_a": haplotype_text(haps.copy_a),
+            "copy_b": haplotype_text(haps.copy_b),
             "read_assignment": [int(v) for v in haps.read_assignment],
         }
     }

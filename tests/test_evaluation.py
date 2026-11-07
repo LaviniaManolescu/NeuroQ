@@ -22,3 +22,10 @@ def test_one_switch_in_the_middle():
 def test_top_samples_sorted_by_count():
     top = top_samples({"00": 3, "11": 9, "01": 5}, k=2)
     assert top == [{"bitstring": "11", "count": 9}, {"bitstring": "01", "count": 5}]
+
+
+def test_unphased_snp_counts_as_error_in_both_orientations():
+    copy = np.array([0, 1, -1, 0, 1])
+    assert accuracy(copy, TRUTH) == pytest.approx(0.8)
+    assert accuracy(np.array([1, 0, -1, 1, 0]), TRUTH) == pytest.approx(0.8)
+    assert switch_errors(copy, TRUTH) == 0

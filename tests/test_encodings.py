@@ -5,16 +5,16 @@ import itertools
 import numpy as np
 import pytest
 
-from neuroq.core import ReadMatrix
-from neuroq.encodings import PositionEncoding
+from examples_data import X, Y, notebook_matrix, xy_matrix
+from neuroq.encodings import PositionEncoding, ReadEncoding
 from neuroq.encodings.position import build_evidence, pairwise_cost
+from neuroq.encodings.read import build_read_evidence
+from neuroq.solvers import ExactSolver
 from neuroq.sources.synthetic import NOTEBOOK_READS
 
 
-def notebook_matrix() -> ReadMatrix:
-    n_reads, n_snps = NOTEBOOK_READS.shape
-    return ReadMatrix(values=NOTEBOOK_READS, read_ids=[f"r{i}" for i in range(n_reads)],
-                      snp_ids=[str(i) for i in range(n_snps)], technology="notebook")
+def text(copy) -> str:
+    return "".join(str(int(v)) for v in copy)
 
 
 def test_tiny_evidence_from_notebook():
@@ -42,3 +42,26 @@ def test_decoder_gives_copies_and_flags_contradicting_read():
     assert "".join(map(str, haps.copy_a)) == "01101"
     assert "".join(map(str, haps.copy_b)) == "10010"
     assert haps.read_assignment.tolist() == [0, 1, 0, 1, 0, 1, 0, 1, -1]
+
+
+def test_read_evidence_mirrors_position_evidence_on_transpose():
+    m = notebook_matrix()
+    a_pos, d_pos = build_evidence(m.values.T)
+    a_read, d_read = build_read_evidence(m)
+    assert np.array_equal(a_pos, a_read) and np.array_equal(d_pos, d_read)
+
+
+def test_read_encoding_on_notebook_reconstructs_both_copies():
+    problem = ReadEncoding().encode(notebook_matrix())
+    assert problem.variable_kind == "read" and problem.n_qubits == 9
+    haps = problem.decoder(ExactSolver().solve(problem).bitstring)
+    assert {text(haps.copy_a), text(haps.copy_b)} == {"01101", "10010"}
+
+
+@pytest.mark.parametrize("encoding", [PositionEncoding(), ReadEncoding()])
+def test_both_encodings_recover_x_and_y_with_zero_cost(encoding):
+    problem = encoding.encode(xy_matrix())
+    solution = ExactSolver().solve(problem)
+    assert solution.energy == pytest.approx(0.0)
+    haps = problem.decoder(solution.bitstring)
+    assert {text(haps.copy_a), text(haps.copy_b)} == {X, Y}

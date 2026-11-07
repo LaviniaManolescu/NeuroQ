@@ -63,7 +63,7 @@
 
 | cheie | tip | ce înseamnă |
 |---|---|---|
-| `haplotypes.copy_a` | text de 0 și 1 | copia A, câte un caracter pe SNP, de la stânga la dreapta (SNP-ul 1 primul) |
+| `haplotypes.copy_a` | text de 0, 1 și `-` | copia A, câte un caracter pe SNP, de la stânga la dreapta (SNP-ul 1 primul); `-` = SNP nefazat (nicio citire nu decide coloana), numărat ca greșeală la `accuracy` |
 | `haplotypes.copy_b` | text de 0 și 1 | copia B |
 | `haplotypes.read_assignment` | listă de întregi | câte o valoare pe citire: `0` = copia A, `1` = copia B, `-1` = suspectă |
 | `top_samples` | listă de `{bitstring, count}` | cele mai frecvente șiruri măsurate, descrescător după `count`, în ordinea proiectului (qubitul 0 în stânga); doar metode cuantice. Lungimea șirului = `resources.n_qubits` (deci mai scurt cu unu după fixare) |

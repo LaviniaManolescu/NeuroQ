@@ -2,5 +2,6 @@
 
 from neuroq.encodings.base import Encoding
 from neuroq.encodings.position import PositionEncoding
+from neuroq.encodings.read import ReadEncoding
 
-__all__ = ["Encoding", "PositionEncoding"]
+__all__ = ["Encoding", "PositionEncoding", "ReadEncoding"]
