@@ -16,7 +16,7 @@
 | câmp | tip | ce înseamnă |
 |---|---|---|
 | `instance` | obiect | ce date s-au folosit (cheile mai jos) |
-| `method` | text | `"exact"`, `"qaoa"`, `"rqaoa"`, `"classical"` (arbore de acoperire, căutare locală, recoacere), `"greedy"` sau `"resources"` (rând fără rezolvare: doar resursele codificării, vezi mai jos) |
+| `method` | text | `"exact"`, `"qaoa"`, `"ws_qaoa"` (warm-start QAOA, pornit din relaxarea continuă), `"rqaoa"`, `"classical"` (arbore de acoperire, căutare locală, recoacere), `"greedy"` sau `"resources"` (rând fără rezolvare: doar resursele codificării, vezi mai jos) |
 | `encoding` | text sau `null` | `"position"` (un qubit pe SNP), `"read"` (un qubit pe citire); `null` pentru `greedy`, care lucrează direct pe matrice |
 | `transforms` | listă de text | transformările aplicate, în ordine: `"fix_variable"`, `"prune"`, `"stitch"`; listă goală dacă niciuna |
 | `metrics` | obiect | **doar numere** (cheile mai jos); o metrică care nu se aplică lipsește |
@@ -75,6 +75,7 @@
 | `top_samples` | listă de `{bitstring, count}` | cele mai frecvente șiruri măsurate, descrescător după `count`, în ordinea proiectului (qubitul 0 în stânga); doar metode cuantice. Lungimea șirului = `resources.n_qubits` (deci mai scurt cu unu după fixare) |
 | `cis_trans_verdict` | text | `"cis"` (V1 și V2 pe aceeași copie) sau `"trans"`; doar instanțe cu V1 și V2 |
 | `skipped_reason` | text | doar la `resources`: de ce codificarea nu a fost rezolvată în această rulare |
+| `warm_start` | obiect | doar la `ws_qaoa`: `c` = probabilitățile de start ale fiecărui qubit (relaxarea continuă, regularizată) și `epsilon` = regularizarea |
 | `previous_measurement` | obiect | doar la `resources`, opțional: o măsurătoare dintr-o rulare anterioară, păstrată separat de `metrics` (`method`, `n_qubits`, `transforms`, `qaoa_seconds`, `status`); nu e un rezultat al rulării curente |
 | `exact_backend` | text | doar la `exact`: `"ExactSolver"` (până la 16 qubiți) sau `"exact_vectorized"` (până la 24) |
 

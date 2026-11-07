@@ -3,6 +3,7 @@
 Rulare:
     python -m neuroq.experiments.demo --instance notebook
     python -m neuroq.experiments.demo --instance notebook --encoding citiri --fix --show
+    python -m neuroq.experiments.demo --instance nanopore --warm
 Figurile se salvează în results/figures/demo_<instanță>/. Fără --show se folosește backend-ul
 Agg (doar salvare); cu --show figurile se deschid pe rând și demo-ul așteaptă Enter la final.
 """
@@ -108,7 +109,8 @@ def present(result: StagesResult, sink: FigureSink) -> None:
     qc = result.circuit
     two_qubit = sum(1 for item in qc.data if item.operation.num_qubits == 2)
     _title(5, f"Circuitul QAOA (p = 1): {qc.num_qubits} qubiți, {two_qubit} porți cu doi "
-              f"qubiți, adâncime {qc.depth()}" + (" (un qubit fixat)" if result.fixed else ""))
+              f"qubiți, adâncime {qc.depth()}" + (" (un qubit fixat)" if result.fixed else "")
+              + (" (warm-start)" if result.warm else ""))
     print(f"   porți: {dict(qc.count_ops())}")
     sink.add(5, "circuit", viz.plot_circuit(qc))
 
@@ -154,6 +156,8 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
     parser.add_argument("--encoding", choices=["pozitii", "citiri"], default=None,
                         help="implicit: pozitii (notebook, illumina), citiri (nanopore)")
     parser.add_argument("--fix", action="store_true", help="fixează primul qubit (fix_variable)")
+    parser.add_argument("--warm", action="store_true",
+                        help="warm-start QAOA, pornit din relaxarea continuă")
     parser.add_argument("--show", action="store_true", help="deschide figurile pe rând")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args(argv)
@@ -172,10 +176,11 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
                   f"{other['rzz_per_layer']} porți rzz pe strat (nu se rulează).")
         parser.exit(2, f"eroare: {error}\n")
     print(f"NeuroQ, demonstrație: instanța {args.instance}, codificarea pe {ROMANIAN[kind]}"
-          + (", cu fix_variable" if args.fix else ""))
+          + (", cu fix_variable" if args.fix else "") + (", cu warm-start" if args.warm else ""))
     print("\nQAOA rulează acum (costul live, la fiecare evaluare):", flush=True)
-    result = run_stages(load_case(args.instance), kind, args.fix, callback=live_cost)
-    suffix = ROMANIAN[kind] + ("_fix" if args.fix else "")
+    result = run_stages(load_case(args.instance), kind, args.fix, callback=live_cost,
+                        warm=args.warm)
+    suffix = ROMANIAN[kind] + ("_fix" if args.fix else "") + ("_warm" if args.warm else "")
     sink = FigureSink(args.out / f"demo_{args.instance}", suffix, args.show)
     present(result, sink)
     print(f"\nGata în {time.perf_counter() - start:.1f} s; {len(sink.saved)} figuri în "

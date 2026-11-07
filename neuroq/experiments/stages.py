@@ -53,6 +53,7 @@ class StagesResult:
     metrics: dict[str, float]
     other_encoding: Optional[dict[str, Any]]  # resursele codificării care nu se rulează
     qaoa_seconds: float = 0.0  # durata apelului QAOASolver.solve (antrenare + eșantionare)
+    warm: bool = False  # warm-start QAOA (pornit din relaxarea continuă)
 
     @property
     def cost_history(self) -> list[list[float]]:
@@ -108,6 +109,7 @@ def _with_fixed_bits(bitstring: str, fixed: dict[int, int]) -> str:
 
 def run_stages(
     case: Case, encoding: str, fix: bool = False, callback: Optional[CostCallback] = None,
+    warm: bool = False,
 ) -> StagesResult:
     """Rulează toate etapele pe o instanță și o codificare; nu afișează nimic."""
     instance = case.instance["id"]
@@ -122,7 +124,8 @@ def run_stages(
     solved = fix_variable(problem) if fix else problem
     exact = ExactSolver().solve(problem)
     start = time.perf_counter()
-    qaoa = QAOASolver(IdealSimulator(), seed=SEED, callback=callback).solve(solved)
+    qaoa = QAOASolver(IdealSimulator(), seed=SEED, callback=callback,
+                      warm_start=warm).solve(solved)
     qaoa_seconds = time.perf_counter() - start
     haps = solved.decoder(qaoa.bitstring)
     metrics = evaluate(solved, qaoa, haps, matrix.true_haplotypes, exact.energy, matrix.values)
@@ -130,11 +133,12 @@ def run_stages(
     return StagesResult(
         instance=instance, encoding=kind, fixed=fix, matrix=matrix, labels=_labels(matrix, kind),
         a=a, d=d, problem=problem, solved=solved, exact=exact, qaoa=qaoa,
-        circuit=trained_circuit(solved, qaoa.metadata["angles"], qaoa.metadata["p"]),
+        circuit=trained_circuit(solved, qaoa.metadata["angles"], qaoa.metadata["p"],
+                                (qaoa.metadata["warm_start"] or {}).get("c")),
         full_bitstring=_with_fixed_bits(qaoa.bitstring, solved.fixed_variables),
         haplotypes=haps, metrics=metrics,
         other_encoding=encoding_resources(matrix, others[0]) if others else None,
-        qaoa_seconds=qaoa_seconds,
+        qaoa_seconds=qaoa_seconds, warm=warm,
     )
 
 

@@ -220,7 +220,7 @@
         "switch_errors": 0,
         "mean_sample_cost": 9.35888671875,
         "optimum_frequency": 0.087890625,
-        "qaoa_seconds": 0.09
+        "qaoa_seconds": 0.13
       },
       "resources": {
         "n_qubits": 4,
@@ -266,6 +266,88 @@
           {
             "bitstring": "1010",
             "count": 142
+          }
+        ]
+      }
+    },
+    {
+      "instance": {
+        "id": "notebook",
+        "source": "synthetic",
+        "technology": "notebook",
+        "profile": null,
+        "first_snp": 0,
+        "n_snps": 5,
+        "n_reads": 9,
+        "error_rate": null,
+        "seed": 71
+      },
+      "method": "ws_qaoa",
+      "encoding": "position",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 1.0,
+        "mec_cost": 1,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "mean_sample_cost": 7.041015625,
+        "optimum_frequency": 0.41259765625,
+        "qaoa_seconds": 0.09
+      },
+      "resources": {
+        "n_qubits": 5,
+        "two_qubit_gates_before": 9,
+        "two_qubit_gates_after": 9,
+        "depth": 12,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "10010",
+          "copy_b": "01101",
+          "read_assignment": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            -1
+          ]
+        },
+        "warm_start": {
+          "c": [
+            0.25,
+            0.75,
+            0.75,
+            0.25,
+            0.75
+          ],
+          "epsilon": 0.25
+        },
+        "top_samples": [
+          {
+            "bitstring": "10010",
+            "count": 770
+          },
+          {
+            "bitstring": "10011",
+            "count": 271
+          },
+          {
+            "bitstring": "10101",
+            "count": 129
+          },
+          {
+            "bitstring": "11010",
+            "count": 107
+          },
+          {
+            "bitstring": "00010",
+            "count": 84
           }
         ]
       }
@@ -374,7 +456,7 @@
         "switch_errors": 0,
         "mean_sample_cost": 23.73876953125,
         "optimum_frequency": 0.06689453125,
-        "qaoa_seconds": 0.16
+        "qaoa_seconds": 0.26
       },
       "resources": {
         "n_qubits": 9,
@@ -448,7 +530,7 @@
         "switch_errors": 0,
         "mean_sample_cost": 24.6298828125,
         "optimum_frequency": 0.06201171875,
-        "qaoa_seconds": 0.1
+        "qaoa_seconds": 0.17
       },
       "resources": {
         "n_qubits": 8,
@@ -494,6 +576,92 @@
           {
             "bitstring": "01001010",
             "count": 42
+          }
+        ]
+      }
+    },
+    {
+      "instance": {
+        "id": "notebook",
+        "source": "synthetic",
+        "technology": "notebook",
+        "profile": null,
+        "first_snp": 0,
+        "n_snps": 5,
+        "n_reads": 9,
+        "error_rate": null,
+        "seed": 71
+      },
+      "method": "ws_qaoa",
+      "encoding": "read",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 4.0,
+        "mec_cost": 1,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "mean_sample_cost": 21.8388671875,
+        "optimum_frequency": 0.1240234375,
+        "qaoa_seconds": 0.19
+      },
+      "resources": {
+        "n_qubits": 9,
+        "two_qubit_gates_before": 32,
+        "two_qubit_gates_after": 32,
+        "depth": 20,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "10010",
+          "copy_b": "01101",
+          "read_assignment": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1
+          ]
+        },
+        "warm_start": {
+          "c": [
+            0.75,
+            0.25,
+            0.75,
+            0.25,
+            0.75,
+            0.25,
+            0.75,
+            0.25,
+            0.75
+          ],
+          "epsilon": 0.25
+        },
+        "top_samples": [
+          {
+            "bitstring": "101010101",
+            "count": 204
+          },
+          {
+            "bitstring": "101000101",
+            "count": 56
+          },
+          {
+            "bitstring": "001010101",
+            "count": 55
+          },
+          {
+            "bitstring": "101010100",
+            "count": 50
+          },
+          {
+            "bitstring": "101010001",
+            "count": 47
           }
         ]
       }
@@ -686,7 +854,7 @@
         "switch_errors": 0,
         "mean_sample_cost": 21.47998046875,
         "optimum_frequency": 0.00537109375,
-        "qaoa_seconds": 0.09
+        "qaoa_seconds": 0.1
       },
       "resources": {
         "n_qubits": 10,
@@ -775,7 +943,7 @@
         "switch_errors": 0,
         "mean_sample_cost": 22.3173828125,
         "optimum_frequency": 0.00390625,
-        "qaoa_seconds": 0.09
+        "qaoa_seconds": 0.08
       },
       "resources": {
         "n_qubits": 9,
@@ -836,6 +1004,108 @@
           {
             "bitstring": "100000010",
             "count": 24
+          }
+        ]
+      }
+    },
+    {
+      "instance": {
+        "id": "illumina",
+        "source": "synthetic",
+        "technology": "illumina",
+        "profile": "illumina",
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 24,
+        "error_rate": 0.001,
+        "seed": 71
+      },
+      "method": "ws_qaoa",
+      "encoding": "position",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 0.0,
+        "mec_cost": 0,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "mean_sample_cost": 6.4521484375,
+        "optimum_frequency": 0.408203125,
+        "qaoa_seconds": 0.14
+      },
+      "resources": {
+        "n_qubits": 10,
+        "two_qubit_gates_before": 15,
+        "two_qubit_gates_after": 15,
+        "depth": 20,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "0011001010",
+          "copy_b": "1100110101",
+          "read_assignment": [
+            0,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            1,
+            1,
+            0,
+            0
+          ]
+        },
+        "warm_start": {
+          "c": [
+            0.25,
+            0.25,
+            0.75,
+            0.75,
+            0.25,
+            0.25,
+            0.75,
+            0.25,
+            0.75,
+            0.25
+          ],
+          "epsilon": 0.25
+        },
+        "top_samples": [
+          {
+            "bitstring": "0011001010",
+            "count": 836
+          },
+          {
+            "bitstring": "0011001011",
+            "count": 111
+          },
+          {
+            "bitstring": "1011001010",
+            "count": 110
+          },
+          {
+            "bitstring": "0111001010",
+            "count": 90
+          },
+          {
+            "bitstring": "0010001010",
+            "count": 57
           }
         ]
       }
@@ -1128,7 +1398,7 @@
         "switch_errors": 0,
         "mean_sample_cost": 59.50634765625,
         "optimum_frequency": 0.0595703125,
-        "qaoa_seconds": 0.09
+        "qaoa_seconds": 0.1
       },
       "resources": {
         "n_qubits": 8,
@@ -1174,6 +1444,92 @@
           {
             "bitstring": "10011001",
             "count": 46
+          }
+        ]
+      }
+    },
+    {
+      "instance": {
+        "id": "nanopore",
+        "source": "synthetic",
+        "technology": "nanopore",
+        "profile": "nanopore",
+        "first_snp": 0,
+        "n_snps": 18,
+        "n_reads": 9,
+        "error_rate": 0.05,
+        "seed": 71
+      },
+      "method": "ws_qaoa",
+      "encoding": "read",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 7.0,
+        "mec_cost": 2,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "mean_sample_cost": 25.984375,
+        "optimum_frequency": 0.3740234375,
+        "qaoa_seconds": 0.12
+      },
+      "resources": {
+        "n_qubits": 9,
+        "two_qubit_gates_before": 24,
+        "two_qubit_gates_after": 24,
+        "depth": 17,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "100111101100001111",
+          "copy_b": "011000010011111000",
+          "read_assignment": [
+            0,
+            1,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        },
+        "warm_start": {
+          "c": [
+            0.25,
+            0.75,
+            0.25,
+            0.25,
+            0.25,
+            0.75,
+            0.25,
+            0.25,
+            0.75
+          ],
+          "epsilon": 0.25
+        },
+        "top_samples": [
+          {
+            "bitstring": "010001001",
+            "count": 765
+          },
+          {
+            "bitstring": "000001001",
+            "count": 154
+          },
+          {
+            "bitstring": "010011001",
+            "count": 151
+          },
+          {
+            "bitstring": "010000001",
+            "count": 143
+          },
+          {
+            "bitstring": "010001101",
+            "count": 110
           }
         ]
       }

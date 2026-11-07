@@ -33,7 +33,8 @@ def test_comparison_on_notebook_writes_valid_json_and_js(tmp_path):
     json_path, js_path = write_outputs(rows, tmp_path)
     loaded = validate_results_file(json_path, is_sample=False)
 
-    assert len(loaded) == 9  # greedy + 2 codificări × (exact, classical, qaoa, qaoa fixat)
+    # greedy + 2 codificări × (exact, classical, qaoa, qaoa fixat, ws_qaoa)
+    assert len(loaded) == 11
     greedy = [r for r in loaded if r.method == "greedy"]
     assert len(greedy) == 1 and greedy[0].encoding is None and greedy[0].resources is None
     exact_pos = next(r for r in loaded if r.method == "exact" and r.encoding == "position")
@@ -41,6 +42,10 @@ def test_comparison_on_notebook_writes_valid_json_and_js(tmp_path):
     assert exact_pos.metrics["pair_cost"] == pytest.approx(1.0)
     fixed = [r for r in loaded if r.transforms == ["fix_variable"]]
     assert {r.resources.n_qubits for r in fixed} == {4, 8}
+    warm = [r for r in loaded if r.method == "ws_qaoa"]
+    assert {r.encoding for r in warm} == {"position", "read"}
+    assert all(r.details["warm_start"]["epsilon"] == 0.25 for r in warm)
+    assert all(r.metrics["pair_cost"] >= 1.0 - 1e-9 for r in warm if r.encoding == "position")
 
     js = js_path.read_text(encoding="utf-8")
     assert js.startswith("window.RESULTS = ") and js.rstrip().endswith(";")

@@ -93,7 +93,7 @@
   }
 
   var METHODS = { exact: 'exact', classical: 'clasic', greedy: 'lipire lacomă', qaoa: 'QAOA',
-                  rqaoa: 'RQAOA', resources: 'doar resurse' };
+                  ws_qaoa: 'WS-QAOA', rqaoa: 'RQAOA', resources: 'doar resurse' };
   var ENCODINGS = { position: 'poziții', read: 'citiri' };
 
   function solverTable(container, stage) {
@@ -115,7 +115,8 @@
       var m = r.metrics, tr = S.html('tr', {}, body);
       S.html('td', {}, tr, METHODS[r.method] || r.method);
       S.html('td', {}, tr, r.encoding ? ENCODINGS[r.encoding] : '–');
-      S.html('td', {}, tr, r.transforms.length ? 'qubit fixat' : '–');
+      S.html('td', {}, tr, r.transforms.length ? 'qubit fixat'
+        : r.method === 'ws_qaoa' ? 'start din relaxare' : '–');
       S.html('td', { class: 'num' }, tr, r.method === 'resources'
         ? m.n_variables + ' qubiți, ' + m.rzz_per_layer + ' RZZ'
         : (m.pair_cost !== undefined ? S.fmt(m.pair_cost) : '–'));

@@ -159,11 +159,13 @@ def _exact(problem: IsingProblem) -> tuple[Solution, str]:
     return ClassicalSolver("exact").solve(problem), "exact_vectorized"
 
 
-def _timed_qaoa(problem: IsingProblem, label: str) -> tuple[Solution, float]:
+def _timed_qaoa(problem: IsingProblem, label: str,
+                warm_start: bool = False) -> tuple[Solution, float]:
     start = time.perf_counter()
-    solution = QAOASolver(IdealSimulator(), seed=SEED).solve(problem)
+    solution = QAOASolver(IdealSimulator(), seed=SEED, warm_start=warm_start).solve(problem)
     seconds = time.perf_counter() - start
-    print(f"  QAOA {label}: {problem.n_qubits} qubiți, {seconds:.1f} s", flush=True)
+    name = "WS-QAOA" if warm_start else "QAOA"
+    print(f"  {name} {label}: {problem.n_qubits} qubiți, {seconds:.1f} s", flush=True)
     return solution, seconds
 
 
@@ -174,6 +176,7 @@ def _encoding_rows(case: Case, encoding: Encoding) -> list[ResultRow]:
     fixed = fix_variable(problem)
     qaoa, qaoa_seconds = _timed_qaoa(problem, label)
     qaoa_fixed, fixed_seconds = _timed_qaoa(fixed, label + " fix")
+    warm, warm_seconds = _timed_qaoa(problem, label, warm_start=True)
     return [
         _solver_row(case, "exact", problem, exact, exact.energy, [],
                     extra_details={"exact_backend": backend}),
@@ -183,6 +186,9 @@ def _encoding_rows(case: Case, encoding: Encoding) -> list[ResultRow]:
                     extra_metrics={"qaoa_seconds": round(qaoa_seconds, 2)}),
         _solver_row(case, "qaoa", fixed, qaoa_fixed, exact.energy, ["fix_variable"],
                     extra_metrics={"qaoa_seconds": round(fixed_seconds, 2)}),
+        _solver_row(case, "ws_qaoa", problem, warm, exact.energy, [],
+                    extra_metrics={"qaoa_seconds": round(warm_seconds, 2)},
+                    extra_details={"warm_start": warm.metadata["warm_start"]}),
     ]
 
 

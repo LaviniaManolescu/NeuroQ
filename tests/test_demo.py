@@ -41,3 +41,10 @@ def test_demo_creates_expected_figures(tmp_path):
     names = sorted(p.stem for p in saved)
     assert names == sorted(f"{e}_pozitii" for e in EXPECTED)
     assert all(p.parent == tmp_path / "demo_notebook" and p.stat().st_size > 0 for p in saved)
+
+
+def test_run_stages_with_warm_start_draws_ry_circuit():
+    result = run_stages(load_case("notebook"), "position", warm=True)
+    assert result.warm and not result.fixed
+    assert "ry" in result.circuit.count_ops() and "h" not in result.circuit.count_ops()
+    assert result.problem.energy(result.full_bitstring) == pytest.approx(1.0)
