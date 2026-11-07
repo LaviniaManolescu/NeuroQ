@@ -42,7 +42,7 @@ def _row(
         method=method,
         encoding=problem.variable_kind,
         transforms=[],
-        metrics=evaluate(problem, solution, haps, matrix.true_haplotypes, optimum),
+        metrics=evaluate(problem, solution, haps, matrix.true_haplotypes, optimum, matrix.values),
         resources=solution.resources,
         details=details,
     )

@@ -41,7 +41,7 @@
 | cheie | tip | ce înseamnă |
 |---|---|---|
 | `pair_cost` | număr | energia soluției după offset = numărul de voturi pe perechi încălcate |
-| `mec_cost` | număr | câte litere trebuie corectate ca fiecare citire să se potrivească cu copia ei cea mai apropiată |
+| `mec_cost` | întreg | câte litere trebuie corectate ca fiecare citire să se potrivească cu copia ei cea mai apropiată; o valoare pe un SNP nefazat (`-`) contează ca eroare |
 | `accuracy` | număr între 0 și 1 | fracția de SNP-uri corecte față de adevăr, ținând cont de oglindă |
 | `switch_errors` | întreg | câte salturi greșite între copii sunt față de adevăr |
 | `optimum_frequency` | număr între 0 și 1 | cât de des apare optimul în eșantioane (doar metode cuantice) |

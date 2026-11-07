@@ -29,3 +29,13 @@ def test_unphased_snp_counts_as_error_in_both_orientations():
     assert accuracy(copy, TRUTH) == pytest.approx(0.8)
     assert accuracy(np.array([1, 0, -1, 1, 0]), TRUTH) == pytest.approx(0.8)
     assert switch_errors(copy, TRUTH) == 0
+
+
+def test_mec_cost_on_notebook_and_with_unphased_snp():
+    from neuroq.evaluation import mec_cost
+    from neuroq.sources.synthetic import NOTEBOOK_READS
+
+    assert mec_cost(np.array([0, 1, 1, 0, 1]), NOTEBOOK_READS) == 1  # doar citirea 9
+    assert mec_cost(np.array([1, 0, 0, 1, 0]), NOTEBOOK_READS) == 1  # oglinda
+    reads = np.array([[0, 1, -1], [1, 0, 1]])
+    assert mec_cost(np.array([0, 1, -1]), reads) == 1  # valoarea pe SNP-ul nefazat

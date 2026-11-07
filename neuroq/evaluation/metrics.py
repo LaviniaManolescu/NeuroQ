@@ -28,15 +28,35 @@ def switch_errors(copy_a: np.ndarray, truth_a: np.ndarray) -> int:
     return int(np.count_nonzero(same[1:] != same[:-1]))
 
 
+# după funcția mec_cost a colegei (algoritmii clasici de fazare), extinsă pentru SNP-uri nefazate
+def mec_cost(copy_a: np.ndarray, reads: np.ndarray) -> int:
+    """Minimum Error Correction: câte valori trebuie corectate ca fiecare citire să se
+    potrivească cu copia A sau cu complementul ei. O valoare observată pe un SNP
+    nefazat (-1) se numără mereu ca eroare.
+    """
+    copy_a = np.asarray(copy_a)
+    phased = copy_a != -1
+    total = 0
+    for row in np.asarray(reads):
+        seen = row >= 0
+        known = seen & phased
+        errors = int(np.count_nonzero(row[known] != copy_a[known]))
+        total += min(errors, int(known.sum()) - errors) + int(np.count_nonzero(seen & ~phased))
+    return total
+
+
 def evaluate(
     problem: IsingProblem,
     solution: Solution,
     haplotypes: Haplotypes,
     truth: Optional[tuple[np.ndarray, np.ndarray]],
     optimum_energy: Optional[float],
+    reads: Optional[np.ndarray] = None,
 ) -> dict[str, float]:
-    """Metricile numerice ale unui rând din results.json."""
+    """Metricile numerice ale unui rând din results.json; `reads` adaugă mec_cost."""
     metrics: dict[str, float] = {"pair_cost": problem.energy(solution.bitstring)}
+    if reads is not None:
+        metrics["mec_cost"] = mec_cost(haplotypes.copy_a, reads)
     if truth is not None:
         metrics["accuracy"] = accuracy(haplotypes.copy_a, truth[0])
         metrics["switch_errors"] = switch_errors(haplotypes.copy_a, truth[0])
