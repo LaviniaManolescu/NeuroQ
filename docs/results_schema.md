@@ -36,7 +36,6 @@
 | `error_rate` | număr | rata de erori din citiri (la date reale: estimată sau `null`) |
 | `seed` | întreg | seed-ul folosit pentru generare și downsampling |
 | `profile` | text sau `null` | profilul sintetic (`"illumina"`, `"nanopore"`); `null` pentru exemplul din notebook |
-| `downsampled_to` | întreg sau `null` | numărul țintă de citiri, dacă fereastra a fost subeșantionată |
 
 ### `metrics` (doar numere)
 
@@ -50,6 +49,7 @@
 | `mean_sample_cost` | număr | costul mediu pe eșantioane (doar metode cuantice) |
 | `cis_trans_correct` | 0 sau 1 | dacă verdictul cis/trans e corect (doar instanțe cu V1 și V2) |
 | `components` | întreg | câte grupuri de variabile legate are graful de cuplaje (doar `classical`); faza dintre grupuri nu e determinată de date |
+| `qaoa_seconds` | număr | durata unei rulări QAOA (antrenare pe statevector + eșantionare), în secunde (doar `qaoa`) |
 
 ### `resources` (`ResourceReport`)
 
@@ -71,6 +71,7 @@
 | `haplotypes.read_assignment` | listă de întregi | câte o valoare pe citire: `0` = copia A, `1` = copia B, `-1` = suspectă |
 | `top_samples` | listă de `{bitstring, count}` | cele mai frecvente șiruri măsurate, descrescător după `count`, în ordinea proiectului (qubitul 0 în stânga); doar metode cuantice. Lungimea șirului = `resources.n_qubits` (deci mai scurt cu unu după fixare) |
 | `cis_trans_verdict` | text | `"cis"` (V1 și V2 pe aceeași copie) sau `"trans"`; doar instanțe cu V1 și V2 |
+| `exact_backend` | text | doar la `exact`: `"ExactSolver"` (până la 16 qubiți) sau `"exact_vectorized"` (până la 24) |
 
 ## Reguli
 
