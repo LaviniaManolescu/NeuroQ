@@ -1,0 +1,92 @@
+/* Etapele NeuroQ peste pagina GenoMEtric. Folosește variabilele și fonturile paginii. */
+:root{
+  --nq-same:#2f6fd1;   /* a „la fel” și J < 0 (atrage) */
+  --nq-opp:var(--err); /* d „opus” și J > 0 (respinge) */
+  --nq-bit0:#dde7ef; --nq-bit1:#7f98ad; --nq-bit1-ink:#ffffff;
+  --nq-suspect:#8a96a3;
+  --nq-panel:rgba(255,255,255,.9);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --nq-same:#7fb0ff; --nq-bit0:#1a2f45; --nq-bit1:#5f7f9c; --nq-bit1-ink:#ffffff;
+    --nq-suspect:#6d7c8b; --nq-panel:rgba(8,20,34,.92);
+  }
+}
+:root[data-theme="dark"]{
+  --nq-same:#7fb0ff; --nq-bit0:#1a2f45; --nq-bit1:#5f7f9c; --nq-bit1-ink:#ffffff;
+  --nq-suspect:#6d7c8b; --nq-panel:rgba(8,20,34,.92);
+}
+
+#nq-app{
+  position:relative; z-index:1; min-height:100vh;
+  display:flex; flex-direction:column; gap:20px;
+  padding:28px clamp(16px,3vw,40px) 32px;
+  font-size:18px; line-height:1.5; text-align:left;
+}
+#nq-app[hidden]{display:none}
+#nq-app h2{margin:0; font-size:clamp(1.6rem,2.6vw,2.2rem); font-weight:800; letter-spacing:-.01em}
+#nq-app p{margin:0; max-width:78ch}
+#nq-app button,#nq-app select{
+  font:inherit; font-size:1rem; color:var(--ink); cursor:pointer;
+  background:var(--nq-panel); border:1.5px solid var(--line); border-radius:10px; padding:8px 16px;
+}
+#nq-app button:hover:not(:disabled){border-color:var(--accent)}
+#nq-app button:disabled{opacity:.4; cursor:default}
+#nq-app button:focus-visible,#nq-app select:focus-visible{outline:3px solid var(--accent2); outline-offset:2px}
+#nq-app button.primary{background:var(--accent); border-color:var(--accent); color:#04121f; font-weight:700}
+
+.nq-head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:12px 24px}
+.nq-head .nq-brand{font-size:1.5rem; font-weight:800; letter-spacing:-.02em}
+.nq-head .nq-brand span{color:var(--accent)}
+.nq-head .nq-meta{color:var(--muted); font-size:1rem}
+
+.nq-steps{display:flex; flex-wrap:wrap; gap:8px; margin:0; padding:0; list-style:none}
+.nq-steps button{display:flex; align-items:center; gap:8px; padding:6px 14px 6px 6px; border-radius:999px}
+.nq-steps .num{
+  display:inline-grid; place-items:center; width:30px; height:30px; border-radius:50%;
+  background:var(--bg2); font-weight:700; font-size:.95rem;
+}
+.nq-steps button[aria-current="step"]{border-color:var(--accent); background:color-mix(in srgb,var(--accent) 14%,var(--nq-panel))}
+.nq-steps button[aria-current="step"] .num{background:var(--accent); color:#04121f}
+
+.nq-stage{
+  flex:1; display:flex; flex-direction:column; gap:16px;
+  background:var(--nq-panel); border:1px solid var(--line); border-radius:16px;
+  padding:clamp(16px,2.4vw,32px);
+}
+.nq-lead{color:var(--muted); font-size:1.05rem}
+.nq-row{display:flex; flex-wrap:wrap; gap:28px; align-items:flex-start}
+.nq-col{flex:1 1 420px; min-width:0; display:flex; flex-direction:column; gap:10px}
+.nq-fig{width:100%; height:auto; display:block; overflow:visible}
+.nq-fig text{fill:var(--ink); font-family:inherit}
+.nq-fig .muted{fill:var(--muted)}
+.nq-caption{font-weight:700; font-size:1.1rem}
+.nq-note{color:var(--muted); font-size:.95rem}
+
+.nq-controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
+.nq-controls .nq-progress{color:var(--muted); font-variant-numeric:tabular-nums}
+
+.nq-nav{display:flex; justify-content:space-between; align-items:center; gap:12px}
+.nq-nav .nq-hint{color:var(--muted); font-size:.95rem}
+
+.nq-circuit{width:100%; height:auto; background:#fff; border-radius:10px; border:1px solid var(--line)}
+
+.nq-cards{display:flex; flex-wrap:wrap; gap:14px}
+.nq-card{flex:1 1 150px; padding:14px 18px; border:1px solid var(--line); border-radius:12px; background:var(--bg)}
+.nq-card .v{font-size:2rem; font-weight:800; font-variant-numeric:tabular-nums}
+.nq-card .k{color:var(--muted); font-size:.95rem}
+
+.nq-table{border-collapse:collapse; font-size:1rem; font-variant-numeric:tabular-nums}
+.nq-table th,.nq-table td{padding:6px 14px; border-bottom:1px solid var(--line); text-align:left}
+.nq-table td.num{text-align:right}
+.nq-table th{color:var(--muted); font-weight:600}
+
+.nq-message{
+  max-width:70ch; margin:10vh auto 0; padding:28px 32px; display:flex; flex-direction:column; gap:14px;
+  background:var(--nq-panel); border:2px solid var(--err); border-radius:16px;
+}
+.nq-message code{font-size:.95rem}
+
+@media (prefers-reduced-motion: reduce){
+  #nq-app *{transition:none !important}
+}
