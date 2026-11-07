@@ -41,7 +41,7 @@ main[hidden]{display:none}
 .nq-head{display:flex; flex-wrap:wrap; align-items:baseline; justify-content:space-between; gap:12px 24px}
 .nq-head .nq-brand{font-size:1.5rem; font-weight:800; letter-spacing:-.02em}
 .nq-head .nq-brand span{color:var(--accent)}
-.nq-head .nq-meta{color:var(--muted); font-size:1rem}
+.nq-head .nq-meta{color:var(--muted); font-size:1rem; flex:1; text-align:right}
 
 .nq-steps{display:flex; flex-wrap:wrap; gap:8px; margin:0; padding:0; list-style:none}
 .nq-steps button{display:flex; align-items:center; gap:8px; padding:6px 14px 6px 6px; border-radius:999px}

@@ -50,7 +50,7 @@
         var bit = bits ? bits[i] : null;
         S.el('circle', { cx: p.x, cy: p.y, r: NODE, fill: nodeFill(stage, bit), stroke: C.ink,
                          'stroke-width': 1.5 }, svg);
-        S.text(svg, p.x, p.y + 5, labels[i].length > 4 ? 'S' + (i + 1) : labels[i], {
+        S.text(svg, p.x, p.y + 5, labels[i], {
           'font-size': 14, 'text-anchor': 'middle', 'font-weight': 700,
           fill: bit === 1 && stage.metadata.encoding === 'position' ? C.bit1Ink : C.ink
         });

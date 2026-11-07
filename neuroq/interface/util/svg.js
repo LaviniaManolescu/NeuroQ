@@ -87,19 +87,13 @@
     return points;
   }
 
-  // Exemplul din notebook are poziții implicite (1000, 2000, ...), nu coordonate reale.
-  function usesIndexAxis(stage) {
-    return stage.metadata.instance === 'notebook';
-  }
-
+  // SNP-urile se numerotează de la 1 pe toate instanțele (fără coordonate în bp).
   function snpLabels(stage) {
-    return stage.evidence.snp_positions_bp.map(function (bp, i) {
-      return usesIndexAxis(stage) ? String(i + 1) : String(bp);
-    });
+    return stage.evidence.snp_ids.map(function (_, i) { return String(i + 1); });
   }
 
-  function snpAxisTitle(stage) {
-    return usesIndexAxis(stage) ? 'SNP 1, 2, 3, …' : 'poziția SNP-ului (bp)';
+  function snpAxisTitle() {
+    return 'SNP 1, 2, 3, …';
   }
 
   // Etichetele variabilelor (qubiților): SNP-uri sau citiri, după codificare.
@@ -114,7 +108,7 @@
 
   NeuroQ.svg = {
     el: el, text: text, root: root, html: html, fmt: fmt, heatmap: heatmap,
-    circleLayout: circleLayout, usesIndexAxis: usesIndexAxis, snpLabels: snpLabels,
+    circleLayout: circleLayout, snpLabels: snpLabels,
     snpAxisTitle: snpAxisTitle, variableLabels: variableLabels, readLabels: readLabels
   };
 })();

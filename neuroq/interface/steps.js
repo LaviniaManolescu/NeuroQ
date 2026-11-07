@@ -23,6 +23,16 @@
     app().hidden = visible;
   }
 
+  // Acasă: înapoi la ecranul de încărcare al paginii, ca să se poată alege alt fișier.
+  function goHome() {
+    NeuroQ.player.stopAll();
+    state.stage = null;
+    showUpload(true);
+    window.scrollTo(0, 0);
+    var input = document.getElementById('file');
+    if (input) input.focus();
+  }
+
   function message(title, lines) {
     var root = app();
     root.textContent = '';
@@ -30,7 +40,7 @@
     S.html('h2', {}, box, title);
     lines.forEach(function (line) { S.html('p', {}, box, line); });
     var back = S.html('button', { type: 'button', class: 'primary' }, box, 'Încarcă alt fișier');
-    back.addEventListener('click', function () { showUpload(true); });
+    back.addEventListener('click', goHome);
     showUpload(false);
     back.focus();
   }
@@ -78,6 +88,9 @@
     brand.appendChild(document.createTextNode('tric'));
     S.html('div', { class: 'nq-meta' }, head, 'Instanța ' + stage.metadata.instance + ', codificarea ' +
       ENCODINGS[stage.metadata.encoding] + ', ' + stage.metadata.n_qubits + ' qubiți');
+    var home = S.html('button', { type: 'button', class: 'nq-home',
+                                  title: 'Înapoi la ecranul principal, pentru alt fișier' }, head, 'Acasă');
+    home.addEventListener('click', goHome);
 
     var list = S.html('ol', { class: 'nq-steps', 'aria-label': 'Etapele' }, root);
     STEPS.forEach(function (key, i) {
@@ -102,11 +115,11 @@
     var prev = S.html('button', { type: 'button' }, nav, 'Înapoi');
     S.html('span', { class: 'nq-hint' }, nav, 'Săgețile ← și → schimbă etapa.');
     var next = S.html('button', { type: 'button', class: 'primary' }, nav,
-      state.index === STEPS.length - 1 ? 'Încarcă alt fișier' : 'Înainte');
+      state.index === STEPS.length - 1 ? 'Acasă: încarcă alt fișier' : 'Înainte');
     prev.disabled = state.index === 0;
     prev.addEventListener('click', function () { go(state.index - 1); });
     next.addEventListener('click', function () {
-      if (state.index === STEPS.length - 1) { showUpload(true); return; }
+      if (state.index === STEPS.length - 1) { goHome(); return; }
       go(state.index + 1);
     });
   }
