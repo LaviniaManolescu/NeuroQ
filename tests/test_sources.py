@@ -78,3 +78,14 @@ def test_truth_depends_only_on_n_snps_and_seed():
         assert np.array_equal(x, y)
     assert np.array_equal(illumina.snp_positions, nanopore.snp_positions)
     assert illumina.values.shape != nanopore.values.shape  # citirile diferă
+
+
+@pytest.mark.parametrize("profile, n_snps, n_reads", [(ILLUMINA, 10, 24), (NANOPORE, 18, 9)],
+                         ids=["illumina", "nanopore"])
+def test_n_reads_fixes_the_read_count(profile, n_snps, n_reads):
+    source = SyntheticSource.from_profile(profile, n_snps=n_snps, seed=71, n_reads=n_reads).load()
+    assert source.values.shape == (n_reads, n_snps)
+    assert ((source.values != -1).sum(axis=1) >= 2).all()
+    default = SyntheticSource.from_profile(profile, n_snps=n_snps, seed=71).load()
+    for x, y in zip(source.true_haplotypes, default.true_haplotypes):
+        assert np.array_equal(x, y)

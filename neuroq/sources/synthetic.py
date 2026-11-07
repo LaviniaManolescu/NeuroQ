@@ -90,6 +90,7 @@ class SyntheticSource:
         self.seed = seed
         self._notebook = False
         self._profile: Optional[TechnologyProfile] = None
+        self._target_reads: Optional[int] = None
 
     @classmethod
     def notebook_example(cls) -> SyntheticSource:
@@ -99,12 +100,21 @@ class SyntheticSource:
         return source
 
     @classmethod
-    def from_profile(cls, profile: TechnologyProfile, n_snps: int, seed: int) -> SyntheticSource:
-        """Citiri după un profil de tehnologie; adevărul depinde doar de (n_snps, seed)."""
+    def from_profile(
+        cls, profile: TechnologyProfile, n_snps: int, seed: int, n_reads: Optional[int] = None
+    ) -> SyntheticSource:
+        """Citiri după un profil de tehnologie; adevărul depinde doar de (n_snps, seed).
+
+        Fără `n_reads`, numărul de citiri rezultă din acoperirea profilului. Cu `n_reads`,
+        se trag exact atâtea citiri din profil, fiecare cu cel puțin 2 SNP-uri.
+        """
         if n_snps < 2:
             raise ValueError("n_snps trebuie să fie cel puțin 2")
+        if n_reads is not None and n_reads < 1:
+            raise ValueError("n_reads trebuie să fie cel puțin 1")
         source = cls(n_snps=n_snps, n_reads=2, snps_per_read=2, seed=seed)
         source._profile = profile
+        source._target_reads = n_reads
         return source
 
     def load(self) -> SourceData:
@@ -185,7 +195,7 @@ class SyntheticSource:
     ) -> list[tuple[int, int, int]]:
         """Citiri care acoperă un număr fix de SNP-uri consecutive (Illumina optimist)."""
         low, high = profile.snps_per_read
-        n_reads = math.ceil(profile.coverage * self.n_snps / ((low + high) / 2))
+        n_reads = self._target_reads or math.ceil(profile.coverage * self.n_snps / ((low + high) / 2))
         spans = []
         for _ in range(n_reads):
             k = int(rng.integers(low, high + 1))
@@ -198,7 +208,9 @@ class SyntheticSource:
     ) -> list[tuple[int, int, int]]:
         """Citiri cu lungime în perechi de baze; acoperă SNP-urile din intervalul lor."""
         region = float(positions[-1] - positions[0] + 1)
-        n_reads = max(1, math.ceil(profile.coverage * region / profile.read_length_median_bp))
+        n_reads = self._target_reads or max(
+            1, math.ceil(profile.coverage * region / profile.read_length_median_bp))
+        min_snps = 1 if self._target_reads is None else 2  # cu n_reads fix, toate rămân în matrice
         spans: list[tuple[int, int, int]] = []
         draws = 0
         while len(spans) < n_reads and draws < MAX_DRAWS_PER_READ * n_reads:
@@ -206,8 +218,10 @@ class SyntheticSource:
             length = float(profile.read_lengths(rng, 1)[0])
             start = rng.uniform(positions[0] - length, positions[-1])
             covered = np.flatnonzero((positions >= start) & (positions < start + length))
-            if len(covered):
+            if len(covered) >= min_snps:
                 spans.append((int(covered[0]), int(covered[-1]) + 1, int(start)))
+        if self._target_reads is not None and len(spans) < n_reads:
+            raise ValueError(f"nu am putut trage {n_reads} citiri cu cel puțin 2 SNP-uri")
         return spans
 
     @staticmethod
