@@ -29,7 +29,7 @@
 |---|---|---|
 | `id` | text | identificatorul instanței; același `id` = aceleași date, deci rândurile se pot compara |
 | `source` | text | `"synthetic"` sau `"giab"` |
-| `technology` | text | `"illumina"` sau `"nanopore"` |
+| `technology` | text | `"illumina"`, `"nanopore"`, `"synthetic"` (generatorul simplu) sau `"notebook"` (exemplul fix din notebook) |
 | `first_snp` | întreg | indicele (de la 0) primului SNP din fereastră |
 | `n_snps` | întreg | câte SNP-uri are fereastra |
 | `n_reads` | întreg | câte citiri au rămas după selecție și downsampling |
