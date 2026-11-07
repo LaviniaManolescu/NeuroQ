@@ -1,0 +1,114 @@
+{
+  "schema_version": "0.1",
+  "is_sample": false,
+  "note": "Faza 1: exemplul din notebook, codificare pe poziții, simulator ideal.",
+  "rows": [
+    {
+      "instance": {
+        "id": "notebook-5snp-9reads",
+        "source": "synthetic",
+        "technology": "notebook",
+        "first_snp": 0,
+        "n_snps": 5,
+        "n_reads": 9,
+        "error_rate": null,
+        "seed": 71
+      },
+      "method": "exact",
+      "encoding": "position",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 1.0,
+        "accuracy": 1.0,
+        "switch_errors": 0
+      },
+      "resources": null,
+      "details": {
+        "haplotypes": {
+          "copy_a": "01101",
+          "copy_b": "10010",
+          "read_assignment": [
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            -1
+          ]
+        }
+      }
+    },
+    {
+      "instance": {
+        "id": "notebook-5snp-9reads",
+        "source": "synthetic",
+        "technology": "notebook",
+        "first_snp": 0,
+        "n_snps": 5,
+        "n_reads": 9,
+        "error_rate": null,
+        "seed": 71
+      },
+      "method": "qaoa",
+      "encoding": "position",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 1.0,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "mean_sample_cost": 7.83056640625,
+        "optimum_frequency": 0.42822265625
+      },
+      "resources": {
+        "n_qubits": 5,
+        "two_qubit_gates_before": 9,
+        "two_qubit_gates_after": 9,
+        "depth": 10,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "10010",
+          "copy_b": "01101",
+          "read_assignment": [
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            1,
+            0,
+            -1
+          ]
+        },
+        "top_samples": [
+          {
+            "bitstring": "10010",
+            "count": 453
+          },
+          {
+            "bitstring": "01101",
+            "count": 424
+          },
+          {
+            "bitstring": "01010",
+            "count": 265
+          },
+          {
+            "bitstring": "10101",
+            "count": 221
+          },
+          {
+            "bitstring": "10001",
+            "count": 128
+          }
+        ]
+      }
+    }
+  ]
+}

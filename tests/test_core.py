@@ -1,12 +1,12 @@
 """Teste pentru contractele din neuroq.core."""
 
-import json
 from pathlib import Path
 
 import numpy as np
 import pytest
 
-from neuroq.core import IsingProblem, ReadMatrix, ResultRow
+from neuroq.core import IsingProblem, ReadMatrix
+from schema_check import validate_results_file
 
 SAMPLE_PATH = Path(__file__).resolve().parent.parent / "examples" / "results_sample.json"
 
@@ -76,24 +76,5 @@ def test_read_matrix_rejects_bad_values():
 
 
 def test_sample_results_file_matches_result_row():
-    data = json.loads(SAMPLE_PATH.read_text(encoding="utf-8"))
-    assert data["is_sample"] is True
-    assert data["schema_version"] == "0.1"
-    assert len(data["rows"]) == 3
-
-    for raw in data["rows"]:
-        row = ResultRow.from_dict(raw)
-        assert row.to_dict() == raw
-
-        assert all(isinstance(v, (int, float)) and not isinstance(v, bool)
-                   for v in row.metrics.values())
-
-        haps = row.details["haplotypes"]
-        assert len(haps["copy_a"]) == len(haps["copy_b"]) == row.instance["n_snps"]
-        assert len(haps["read_assignment"]) == row.instance["n_reads"]
-        assert set(haps["read_assignment"]) <= {-1, 0, 1}
-
-        counts = [s["count"] for s in row.details["top_samples"]]
-        assert counts == sorted(counts, reverse=True)
-        for sample in row.details["top_samples"]:
-            assert len(sample["bitstring"]) == row.resources.n_qubits
+    rows = validate_results_file(SAMPLE_PATH, is_sample=True)
+    assert len(rows) == 3
