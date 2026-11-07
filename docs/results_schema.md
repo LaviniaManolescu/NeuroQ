@@ -16,7 +16,7 @@
 | câmp | tip | ce înseamnă |
 |---|---|---|
 | `instance` | obiect | ce date s-au folosit (cheile mai jos) |
-| `method` | text | `"exact"`, `"qaoa"`, `"rqaoa"` sau `"greedy"` |
+| `method` | text | `"exact"`, `"qaoa"`, `"rqaoa"`, `"classical"` (arbore de acoperire, căutare locală, recoacere) sau `"greedy"` |
 | `encoding` | text sau `null` | `"position"` (un qubit pe SNP), `"read"` (un qubit pe citire); `null` pentru `greedy`, care lucrează direct pe matrice |
 | `transforms` | listă de text | transformările aplicate, în ordine: `"fix_variable"`, `"prune"`, `"stitch"`; listă goală dacă niciuna |
 | `metrics` | obiect | **doar numere** (cheile mai jos); o metrică care nu se aplică lipsește |
@@ -35,6 +35,8 @@
 | `n_reads` | întreg | câte citiri au rămas după selecție și downsampling |
 | `error_rate` | număr | rata de erori din citiri (la date reale: estimată sau `null`) |
 | `seed` | întreg | seed-ul folosit pentru generare și downsampling |
+| `profile` | text sau `null` | profilul sintetic (`"illumina"`, `"nanopore"`); `null` pentru exemplul din notebook |
+| `downsampled_to` | întreg sau `null` | numărul țintă de citiri, dacă fereastra a fost subeșantionată |
 
 ### `metrics` (doar numere)
 
@@ -47,6 +49,7 @@
 | `optimum_frequency` | număr între 0 și 1 | cât de des apare optimul în eșantioane (doar metode cuantice) |
 | `mean_sample_cost` | număr | costul mediu pe eșantioane (doar metode cuantice) |
 | `cis_trans_correct` | 0 sau 1 | dacă verdictul cis/trans e corect (doar instanțe cu V1 și V2) |
+| `components` | întreg | câte grupuri de variabile legate are graful de cuplaje (doar `classical`); faza dintre grupuri nu e determinată de date |
 
 ### `resources` (`ResourceReport`)
 
