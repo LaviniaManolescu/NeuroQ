@@ -1,0 +1,144 @@
+{
+  "schema_version": "0.1",
+  "is_sample": true,
+  "note": "DATE DE PROBĂ, INVENTATE. Nu sunt rezultate reale; servesc doar ca interfața să poată fi construită în paralel. Schema: docs/results_schema.md.",
+  "rows": [
+    {
+      "instance": {
+        "id": "SAMPLE-synth-illumina-w10",
+        "source": "synthetic",
+        "technology": "illumina",
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 42,
+        "error_rate": 0.01,
+        "seed": 7
+      },
+      "method": "qaoa",
+      "encoding": "position",
+      "transforms": [],
+      "metrics": {
+        "pair_cost": 3.0,
+        "mec_cost": 2.0,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "optimum_frequency": 0.21,
+        "mean_sample_cost": 6.4,
+        "cis_trans_correct": 1
+      },
+      "resources": {
+        "n_qubits": 10,
+        "two_qubit_gates_before": 18,
+        "two_qubit_gates_after": 64,
+        "depth": 71,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "0110100110",
+          "copy_b": "1001011001",
+          "read_assignment": [0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, -1]
+        },
+        "top_samples": [
+          {"bitstring": "0110100110", "count": 221},
+          {"bitstring": "1001011001", "count": 209},
+          {"bitstring": "0110100111", "count": 88},
+          {"bitstring": "0110110110", "count": 61}
+        ],
+        "cis_trans_verdict": "cis"
+      }
+    },
+    {
+      "instance": {
+        "id": "SAMPLE-synth-nanopore-w10-r12",
+        "source": "synthetic",
+        "technology": "nanopore",
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 12,
+        "error_rate": 0.05,
+        "seed": 7
+      },
+      "method": "qaoa",
+      "encoding": "read",
+      "transforms": ["fix_variable"],
+      "metrics": {
+        "pair_cost": 4.0,
+        "mec_cost": 6.0,
+        "accuracy": 1.0,
+        "switch_errors": 0,
+        "optimum_frequency": 0.37,
+        "mean_sample_cost": 9.1,
+        "cis_trans_correct": 1
+      },
+      "resources": {
+        "n_qubits": 11,
+        "two_qubit_gates_before": 55,
+        "two_qubit_gates_after": 168,
+        "depth": 142,
+        "backend_name": "aer_simulator",
+        "job_id": null
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "0110100110",
+          "copy_b": "1001011001",
+          "read_assignment": [0, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0]
+        },
+        "top_samples": [
+          {"bitstring": "01001011010", "count": 758},
+          {"bitstring": "01001011011", "count": 143},
+          {"bitstring": "01001001010", "count": 97}
+        ],
+        "cis_trans_verdict": "trans"
+      }
+    },
+    {
+      "instance": {
+        "id": "SAMPLE-synth-illumina-w10",
+        "source": "synthetic",
+        "technology": "illumina",
+        "first_snp": 0,
+        "n_snps": 10,
+        "n_reads": 42,
+        "error_rate": 0.01,
+        "seed": 7
+      },
+      "method": "qaoa",
+      "encoding": "position",
+      "transforms": ["fix_variable"],
+      "metrics": {
+        "pair_cost": 3.0,
+        "mec_cost": 2.0,
+        "accuracy": 0.9,
+        "switch_errors": 1,
+        "optimum_frequency": 0.06,
+        "mean_sample_cost": 11.8,
+        "cis_trans_correct": 0
+      },
+      "resources": {
+        "n_qubits": 9,
+        "two_qubit_gates_before": 14,
+        "two_qubit_gates_after": 57,
+        "depth": 88,
+        "backend_name": "SAMPLE-ibm-backend",
+        "job_id": "SAMPLE-JOB-0001"
+      },
+      "details": {
+        "haplotypes": {
+          "copy_a": "0110101001",
+          "copy_b": "1001010110",
+          "read_assignment": [0, 1, 0, 0, 1, 1, 0, 1, -1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, -1, 0, 1, 0, 1, 0, 0, 1, 1]
+        },
+        "top_samples": [
+          {"bitstring": "110100110", "count": 123},
+          {"bitstring": "110101001", "count": 117},
+          {"bitstring": "110100111", "count": 96},
+          {"bitstring": "010100110", "count": 81}
+        ],
+        "cis_trans_verdict": "trans"
+      }
+    }
+  ]
+}

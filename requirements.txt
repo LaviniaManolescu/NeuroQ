@@ -16,3 +16,6 @@ jupyterlab>=4.2,<5
 
 # Doar pentru hardware IBM real si backenduri false (FakeManilaV2); nu e in lista organizatorilor
 qiskit-ibm-runtime
+
+# doar pentru teste
+pytest>=8,<9
