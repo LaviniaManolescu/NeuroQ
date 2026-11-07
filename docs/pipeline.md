@@ -4,7 +4,7 @@ Pipeline-ul pornește din citirile de ADN ale unei persoane și reconstruiește 
 
 ```mermaid
 flowchart LR
-    SRC["SURSĂ<br/>date sintetice cu profil<br/>Illumina sau Nanopore,<br/>sau date reale GIAB HG002<br/>extrase în Colab"]
+    SRC["SURSĂ<br/>date sintetice cu profil<br/>Illumina sau Nanopore"]
     SEL["SELECȚIE<br/>alegem fereastra<br/>de SNP-uri; opțional,<br/>păstrăm aleator 10–15 citiri<br/>(downsampling)"]
     RM["MATRICEA DE CITIRI<br/>citiri × SNP-uri<br/>cu 0, 1 și lipsă;<br/>mutațiile V1 și V2<br/>marcate"]
     POS["CODIFICARE PE POZIȚII<br/>un qubit pe SNP;<br/>citirile votează pe<br/>perechi de poziții;<br/>J = (opus − la fel) / 2"]
@@ -68,7 +68,7 @@ flowchart LR
 
 | pas | ce face |
 |---|---|
-| Sursă | Aduce citirile unei regiuni de genom. Pot fi generate de noi, imitând o tehnologie reală (Illumina: citiri scurte, Nanopore: citiri lungi), sau extrase din datele publice Genome in a Bottle, proba HG002, unde phasing-ul corect este cunoscut. |
+| Sursă | Aduce citirile unei regiuni de genom. Sunt generate de noi, imitând o tehnologie reală (Illumina: citiri scurte, Nanopore: citiri lungi). |
 | Selecție | Alege câte SNP-uri intră în problemă (fereastra) și, opțional, păstrează aleator un număr de citiri (downsampling). Fereastra și numărul de citiri sunt butoanele principale ale experimentelor. Detalii despre downsampling mai jos. |
 | Matricea de citiri | Fiecare rând este o citire, fiecare coloană un SNP. 0 înseamnă litera de referință, 1 litera alternativă, iar lipsa înseamnă că citirea nu acoperă poziția. Mutațiile urmărite (V1, V2) sunt două coloane etichetate. |
 | Codificare pe poziții | Metoda organizatorilor. Fiecare citire votează, pentru fiecare pereche de poziții pe care o acoperă, dacă au aceeași literă (la fel) sau litere diferite (opus). Cu A voturile „la fel" și D voturile „opus" ale unei perechi, cuplajul este J = (D − A) / 2, iar fiecare poziție devine un qubit. |

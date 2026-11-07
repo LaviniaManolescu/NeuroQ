@@ -4,7 +4,7 @@ Codul este împărțit în module, fiecare cu o singură responsabilitate. Un mo
 
 ```mermaid
 flowchart TB
-    SRCM["SOURCES<br/>aduce citirile:<br/>generator sintetic cu profiluri<br/>de tehnologie sau date GIAB"]
+    SRCM["SOURCES<br/>aduce citirile:<br/>generator sintetic cu profiluri<br/>de tehnologie"]
     SELM["SELECTION<br/>alege fereastra de SNP-uri<br/>și, opțional, numărul<br/>de citiri păstrate"]
     ENCM["ENCODINGS<br/>transformă matricea<br/>într-o problemă cuantică:<br/>pe poziții sau pe citiri"]
     TRM["TRANSFORMS<br/>fixarea unui qubit,<br/>pruning, ferestre suprapuse"]
@@ -49,7 +49,7 @@ flowchart TB
 
 | modul | ce face | primește | dă mai departe |
 |---|---|---|---|
-| sources | Aduce citirile unei regiuni. Poate genera date sintetice care imită Illumina (citiri scurte) sau Nanopore (citiri lungi), traduce literele A/C/G/T în 0 și 1 și citește datele reale GIAB. | nimic (începutul lanțului) | citirile și SNP-urile regiunii |
+| sources | Aduce citirile unei regiuni. Poate genera date sintetice care imită Illumina (citiri scurte) sau Nanopore (citiri lungi) și traduce literele A/C/G/T în 0 și 1. | nimic (începutul lanțului) | citirile și SNP-urile regiunii |
 | selection | Alege câte SNP-uri intră în problemă și, opțional, păstrează aleator un număr de citiri (downsampling), de exemplu 10–15 la Nanopore. Fereastra și numărul de citiri sunt butoanele experimentelor. | citirile și SNP-urile | matricea de citiri |
 | encodings | Transformă matricea în problemă cuantică, în două feluri: un qubit pe poziție (metoda organizatorilor) sau un qubit pe citire (metoda noastră). Cele două au funcții de pondere separate. | matricea de citiri | problema Ising |
 | transforms | Simplifică problema: fixează un qubit, elimină legăturile slabe, taie probleme mari în ferestre suprapuse. | problema Ising | aceeași problemă, mai mică |

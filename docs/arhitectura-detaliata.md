@@ -10,7 +10,7 @@ Ce codificare a problemei de phasing folosește mai puține resurse cuantice (qu
 
 Aceeași fereastră de genom, adică aceleași SNP-uri, dă matrice diferite la tehnologii diferite: coloanele sunt aceleași, dar rândurile, adică citirile, diferă. Illumina dă multe rânduri, fiecare cu puține cifre completate, iar Nanopore dă puține rânduri, aproape pline. Pentru o tehnologie dată, ambele codificări pornesc din aceeași matrice, deci comparația dintre codificări se face corect, pe aceleași date. De aici tabelul de două ori două al experimentului: ambele codificări pe matricea Illumina și ambele pe matricea Nanopore.
 
-O precizare de onestitate: în datele reale Illumina o citire de aproximativ 150 de litere acoperă de obicei 0–1 SNP, pentru că SNP-urile sunt la aproximativ o mie de litere distanță. Profilul sintetic cu 2–3 SNP-uri pe citire este deci optimist, ca în notebook-ul organizatorilor, iar datele reale GIAB vor arăta cât de rărite sunt legăturile. Spunem asta când prezentăm profilurile.
+O precizare de onestitate: profilurile sintetice sunt parametrizate după valori publicate: Illumina are citiri de aproximativ 150 de perechi de baze și o eroare de aproximativ 0,1%, Nanopore are citiri de 1–100 kb și o eroare de aproximativ 5%, iar în genomul uman apare un SNP heterozigot la 1.000–2.000 de baze. O citire Illumina reală acoperă deci de obicei 0–1 SNP, iar profilul Illumina cu 2–3 SNP-uri pe citire este deliberat optimist, ca în notebook-ul organizatorilor. Spunem asta când prezentăm profilurile.
 
 ## Cele două codificări
 
@@ -58,9 +58,7 @@ Contractele sunt obiecte simple de date (dataclass-uri în Python) pe care și l
 
 ### sources
 
-`SyntheticSource` generează o pereche ascunsă de haplotipuri pe o regiune și citiri din ea, după un profil de tehnologie. Profilul spune câte SNP-uri acoperă în medie o citire, acoperirea și rata de erori. Avem un profil scurt, de tip Illumina, și unul lung, de tip Nanopore, la care o citire acoperă toată fereastra. Generatorul poate produce și litere A/C/G/T, iar un pas separat le traduce în 0 și 1 (0 este litera de referință, 1 litera alternativă), ca să arătăm drumul complet de la litere la matrice. Tot aici se construiesc cei doi pacienți pentru demonstrația cis/trans, prin alegerea copiei pe care stă fiecare dintre cele două mutații. `GiabSource` citește CSV-urile produse în Colab din datele reale HG002, una pentru Illumina și una pentru Nanopore, pe aceeași regiune.
-
-Extracția din datele reale nu este un modul al pipeline-ului, ci un script separat care rulează în Colab, pentru că biblioteca pysam nu merge nativ pe Windows. Scriptul produce două fișiere CSV: matricea și lista SNP-urilor.
+`SyntheticSource` generează o pereche ascunsă de haplotipuri pe o regiune și citiri din ea, după un profil de tehnologie. Profilul spune câte SNP-uri acoperă în medie o citire, acoperirea și rata de erori. Avem un profil scurt, de tip Illumina, și unul lung, de tip Nanopore, la care o citire acoperă toată fereastra. Generatorul poate produce și litere A/C/G/T, iar un pas separat le traduce în 0 și 1 (0 este litera de referință, 1 litera alternativă), ca să arătăm drumul complet de la litere la matrice. Tot aici se construiesc cei doi pacienți pentru demonstrația cis/trans, prin alegerea copiei pe care stă fiecare dintre cele două mutații.
 
 ### selection
 
@@ -114,11 +112,15 @@ Opțional, dacă rămâne timp: RQAOA, pruning, lipirea pe ferestre suprapuse pe
 
 ## Ordinea de construcție
 
-Faza 0 este scheletul: repo-ul, un fișier `CLAUDE.md` cu arhitectura și regulile de cod, pachetul `core` cu contractele și schema `results.json` cu un fișier de probă. Faza 1 este drumul complet pe exemplul din notebook: sursa sintetică, selecția, `PositionEncoding`, `ExactSolver`, `QAOASolver` pe simulator ideal și evaluarea de bază. Criteriul de reușită este că pipeline-ul reproduce notebook-ul: pe cele 5 SNP-uri și 9 citiri găsește `01101` cu cost 1. În paralel, interfața începe pe fișierul de probă. Faza 2 adaugă `ReadEncoding`, `GreedyStitching`, fixarea qubitului, profilurile Illumina și Nanopore, modul „doar compilare" și rularea experimentului principal pe date sintetice. Criteriul de reușită este că ambele codificări dau aceleași copii pe date curate. Faza 3 aduce datele reale (extracția în Colab și `GiabSource`), rularea pe hardware real, demonstrația cis/trans și experimentul cu numărul de citiri. Faza 4 este opțională: RQAOA, pruning, ferestrele suprapuse și mitigarea.
+Faza 0 este scheletul: repo-ul, un fișier `CLAUDE.md` cu arhitectura și regulile de cod, pachetul `core` cu contractele și schema `results.json` cu un fișier de probă. Faza 1 este drumul complet pe exemplul din notebook: sursa sintetică, selecția, `PositionEncoding`, `ExactSolver`, `QAOASolver` pe simulator ideal și evaluarea de bază. Criteriul de reușită este că pipeline-ul reproduce notebook-ul: pe cele 5 SNP-uri și 9 citiri găsește `01101` cu cost 1. În paralel, interfața începe pe fișierul de probă. Faza 2 adaugă `ReadEncoding`, `GreedyStitching`, fixarea qubitului, profilurile Illumina și Nanopore, modul „doar compilare" și rularea experimentului principal pe date sintetice. Criteriul de reușită este că ambele codificări dau aceleași copii pe date curate. Faza 3 aduce rularea pe hardware real, demonstrația cis/trans și experimentul cu numărul de citiri. Faza 4 este opțională: RQAOA, pruning, ferestrele suprapuse și mitigarea.
 
 ## Împărțirea pe oameni
 
-Propunere pentru cinci oameni. Unul se ocupă de prezentare de la început, pentru că povestea și diagramele sunt deja stabilite. Lavinia face faza 0, apoi `core`, `encodings` și `transforms`, și verifică fiecare merge. Al doilea coleg face `sources` și `selection`, inclusiv extracția din Colab. Al treilea face `solvers` și `execution`, inclusiv contul IBM și hardware-ul. Al patrulea face `evaluation`, `experiments` și interfața, pornind de la fișierul de probă. Lucrăm pe branch-uri, câte unul pe modul, cu câte un test mic pe modul.
+Propunere pentru cinci oameni. Unul se ocupă de prezentare de la început, pentru că povestea și diagramele sunt deja stabilite. Lavinia face faza 0, apoi `core`, `encodings` și `transforms`, și verifică fiecare merge. Al doilea coleg face `sources` și `selection`. Al treilea face `solvers` și `execution`, inclusiv contul IBM și hardware-ul. Al patrulea face `evaluation`, `experiments` și interfața, pornind de la fișierul de probă. Lucrăm pe branch-uri, câte unul pe modul, cu câte un test mic pe modul.
+
+## Limite și direcții viitoare
+
+În acest hackathon lucrăm doar pe date sintetice. Datele reale Genome in a Bottle (proba HG002, Illumina și Nanopore pe aceeași regiune), extrase cu pysam într-un script separat în Colab și citite de o sursă `GiabSource`, rămân o limită declarată și o direcție viitoare.
 
 ## Reguli de cod
 
