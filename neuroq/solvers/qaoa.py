@@ -113,9 +113,10 @@ class QAOASolver(Solver):
         self.maxiter = maxiter
 
     def solve(self, problem: IsingProblem) -> Solution:
-        warm_c = None
+        warm_c = relaxed = None
         if self.warm_start:
-            warm_c = regularize(relax(problem, self.relax_seed), self.epsilon)
+            relaxed = relax(problem, self.relax_seed)
+            warm_c = regularize(relaxed, self.epsilon)
             ansatz, theta, scale = make_warm_start_qaoa(problem.J, problem.h, warm_c, self.p)
         else:
             ansatz, theta, scale = make_qaoa(problem.J, problem.h, self.p)
@@ -169,8 +170,9 @@ class QAOASolver(Solver):
                 "scale": scale,
                 "seed": self.seed,
                 "cost_history": histories,
-                "warm_start": (None if warm_c is None
-                               else {"c": warm_c.tolist(), "epsilon": self.epsilon}),
+                # c = înclinările regularizate (cele din circuit); c_relaxed = relaxarea brută
+                "warm_start": (None if warm_c is None else {
+                    "c": warm_c.tolist(), "c_relaxed": relaxed.tolist(), "epsilon": self.epsilon}),
                 "best_start": best_start,
                 "top_samples": [
                     {"bitstring": b, "count": int(counts[b]), "energy": scored[b]} for b in ranked

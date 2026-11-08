@@ -71,3 +71,14 @@ def test_ws_qaoa_finds_cost_one_on_notebook():
     assert solution.energy == pytest.approx(1.0)
     assert solution.metadata["warm_start"]["epsilon"] == 0.25
     assert len(solution.metadata["warm_start"]["c"]) == 5
+
+
+def test_ws_qaoa_metadata_keeps_raw_relaxation_next_to_regularized_c():
+    from neuroq.execution import IdealSimulator
+    from neuroq.solvers import QAOASolver
+
+    meta = QAOASolver(IdealSimulator(), warm_start=True).solve(notebook_problem()).metadata["warm_start"]
+    raw, regularized, epsilon = np.array(meta["c_relaxed"]), np.array(meta["c"]), meta["epsilon"]
+    assert ((raw >= 0) & (raw <= 1)).all()
+    assert np.allclose(regularized, regularize(raw, epsilon))
+    assert ((regularized >= epsilon) & (regularized <= 1 - epsilon)).all()
