@@ -48,3 +48,24 @@ def test_run_stages_with_warm_start_draws_ry_circuit():
     assert result.warm and not result.fixed
     assert "ry" in result.circuit.count_ops() and "h" not in result.circuit.count_ops()
     assert result.problem.energy(result.full_bitstring) == pytest.approx(1.0)
+
+
+def test_instance_all_runs_the_three_instances_with_a_summary(tmp_path, capsys):
+    from neuroq.experiments.stages import INSTANCES
+
+    saved = main(["--instance", "all", "--out", str(tmp_path)])
+    assert len(saved) == 3 * len(EXPECTED)
+    for name in INSTANCES:
+        folder = tmp_path / f"demo_{name}"
+        assert len(list(folder.glob("*.png"))) == len(EXPECTED), name
+        assert any("_top10_" in p.name for p in folder.iterdir()), name
+    out = capsys.readouterr().out
+    assert "Rezumat: 3 instanțe" in out
+    for name in INSTANCES:
+        assert name in out.split("Rezumat")[1]
+
+
+def test_instance_all_ignores_encoding_with_a_note(tmp_path, capsys):
+    saved = main(["--instance", "all", "--encoding", "citiri", "--out", str(tmp_path)])
+    assert len(saved) == 3 * len(EXPECTED)
+    assert "--encoding se ignoră" in capsys.readouterr().out

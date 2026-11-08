@@ -4,6 +4,7 @@ Rulare:
     python -m neuroq.experiments.demo --instance notebook
     python -m neuroq.experiments.demo --instance notebook --encoding citiri --fix --show
     python -m neuroq.experiments.demo --instance nanopore --warm
+    python -m neuroq.experiments.demo --instance all
 Figurile se salvează în results/figures/demo_<instanță>/. Fără --show se folosește backend-ul
 Agg (doar salvare); cu --show figurile se deschid pe rând și demo-ul așteaptă Enter la final.
 """
@@ -148,11 +149,47 @@ def present(result: StagesResult, sink: FigureSink) -> None:
               f"{other['rzz_per_layer']} porți rzz pe strat.")
 
 
+RUN_ALL = "all"
+
+
+def run_instance(instance: str, kind: str, fix: bool, warm: bool, out: Path, show: bool):
+    """Rulează demonstrația pe o instanță: tipărește etapele și salvează figurile."""
+    start = time.perf_counter()
+    print(f"NeuroQ, demonstrație: instanța {instance}, codificarea pe {ROMANIAN[kind]}"
+          + (", cu fix_variable" if fix else "") + (", cu warm-start" if warm else ""))
+    print("\nQAOA rulează acum (costul live, la fiecare evaluare):", flush=True)
+    result = run_stages(load_case(instance), kind, fix, callback=live_cost, warm=warm)
+    suffix = ROMANIAN[kind] + ("_fix" if fix else "") + ("_warm" if warm else "")
+    sink = FigureSink(out / f"demo_{instance}", suffix, show)
+    present(result, sink)
+    print(f"\nGata în {time.perf_counter() - start:.1f} s; {len(sink.saved)} figuri în "
+          f"{sink.directory}", flush=True)
+    return sink, result
+
+
+def print_summary(runs: list, seconds: float) -> None:
+    """Tabel cu toate instanțele rulate, la finalul lui --instance all."""
+    print(f"\n{'#' * 64}\n Rezumat: {len(runs)} instanțe în {seconds:.1f} s\n{'#' * 64}")
+    print(f"{'instanța':10s}{'codificarea':13s}{'qubiți':>7s}  {'șirul ales':14s}{'E':>6s}"
+          f"{'acuratețe':>11s}{'QAOA':>8s}")
+    for sink, result in runs:
+        accuracy = result.metrics.get("accuracy")
+        print(f"{result.instance:10s}{ROMANIAN[result.encoding]:13s}{result.solved.n_qubits:7d}  "
+              f"{result.full_bitstring:14s}{result.problem.energy(result.full_bitstring):6g}"
+              f"{'-' if accuracy is None else format(accuracy, '.0%'):>11s}"
+              f"{result.qaoa_seconds:7.1f}s")
+    print("\nHistograma măsurătorilor (aceleași date ca la etapa 5 din interfață):")
+    for sink, result in runs:
+        top10 = next(p for p in sink.saved if "_top10_" in p.name)
+        print(f"   {result.instance:10s}{top10}")
+
+
 def main(argv: Optional[list[str]] = None) -> list[Path]:
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
     parser = argparse.ArgumentParser(description="Demonstrația NeuroQ, etapă cu etapă.")
-    parser.add_argument("--instance", choices=sorted(INSTANCES), default="notebook")
+    parser.add_argument("--instance", choices=list(INSTANCES) + [RUN_ALL], default="notebook",
+                        help="o instanță sau all (cele trei, una după alta, cu rezumat la final)")
     parser.add_argument("--encoding", choices=["pozitii", "citiri"], default=None,
                         help="implicit: pozitii (notebook, illumina), citiri (nanopore)")
     parser.add_argument("--fix", action="store_true", help="fixează primul qubit (fix_variable)")
@@ -164,30 +201,34 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
     if not args.show:
         matplotlib.use("Agg")
 
-    start = time.perf_counter()
-    try:
-        kind = resolve_encoding(args.instance, args.encoding)
-    except ValueError as error:
-        if args.encoding in ENCODING_NAMES:
-            other = encoding_resources(load_case(args.instance).matrix,
-                                       ENCODING_NAMES[args.encoding])
-            print(f"Codificarea pe {args.encoding} pentru {args.instance}: {other['n_qubits']} "
-                  f"qubiți, {other['n_couplings']} cuplaje nenule, "
-                  f"{other['rzz_per_layer']} porți rzz pe strat (nu se rulează).")
-        parser.exit(2, f"eroare: {error}\n")
-    print(f"NeuroQ, demonstrație: instanța {args.instance}, codificarea pe {ROMANIAN[kind]}"
-          + (", cu fix_variable" if args.fix else "") + (", cu warm-start" if args.warm else ""))
-    print("\nQAOA rulează acum (costul live, la fiecare evaluare):", flush=True)
-    result = run_stages(load_case(args.instance), kind, args.fix, callback=live_cost,
-                        warm=args.warm)
-    suffix = ROMANIAN[kind] + ("_fix" if args.fix else "") + ("_warm" if args.warm else "")
-    sink = FigureSink(args.out / f"demo_{args.instance}", suffix, args.show)
-    present(result, sink)
-    print(f"\nGata în {time.perf_counter() - start:.1f} s; {len(sink.saved)} figuri în "
-          f"{sink.directory}", flush=True)
+    if args.instance == RUN_ALL:
+        if args.encoding:
+            print("--encoding se ignoră la --instance all: fiecare instanță rulează pe codificarea ei "
+                  "mică.\n")
+        start = time.perf_counter()
+        runs = []
+        for name in INSTANCES:
+            runs.append(run_instance(name, resolve_encoding(name, None), args.fix, args.warm,
+                                     args.out, args.show))
+            print()
+        print_summary(runs, time.perf_counter() - start)
+        saved = [path for sink, _ in runs for path in sink.saved]
+    else:
+        try:
+            kind = resolve_encoding(args.instance, args.encoding)
+        except ValueError as error:
+            if args.encoding in ENCODING_NAMES:
+                other = encoding_resources(load_case(args.instance).matrix,
+                                           ENCODING_NAMES[args.encoding])
+                print(f"Codificarea pe {args.encoding} pentru {args.instance}: {other['n_qubits']} "
+                      f"qubiți, {other['n_couplings']} cuplaje nenule, "
+                      f"{other['rzz_per_layer']} porți rzz pe strat (nu se rulează).")
+            parser.exit(2, f"eroare: {error}\n")
+        sink, _ = run_instance(args.instance, kind, args.fix, args.warm, args.out, args.show)
+        saved = sink.saved
     if args.show:
         input("Apasă Enter ca să închizi figurile...")
-    return sink.saved
+    return saved
 
 
 if __name__ == "__main__":
