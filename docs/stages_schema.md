@@ -29,7 +29,6 @@ Indicii (SNP-uri, citiri, variabile) sunt de la 0 în tot fișierul, iar șiruri
 | `cost_history` | listă de liste | valoarea medie ⟨H⟩ la fiecare evaluare COBYLA, câte o listă pe fiecare start |
 | `best_start` | întreg | indicele startului ales |
 | `top_samples` | listă de `{bitstring, count, energy}` | cele mai frecvente 10 șiruri din 2048 de măsurători, descrescător după `count` |
-| `all_samples` | listă de `{bitstring, count, energy}` | toate șirurile măsurate cel puțin o dată, în ordinea valorii binare a șirului (nu după `count`); suma `count` este numărul de măsurători (2048). Din ea se desenează histograma; `top_samples` este prefixul ei sortat după `count` |
 | `result.bitstring`, `result.energy` | text, număr | șirul QAOA ales (cea mai mică energie observată) și energia lui |
 | `haplotypes.decoded` | `[A, B]` | copiile decodate, câte un caracter pe SNP; `-` = SNP nefazat |
 | `haplotypes.truth` | `[A, B]` sau `null` | perechea adevărată (doar la date sintetice) |
@@ -37,7 +36,6 @@ Indicii (SNP-uri, citiri, variabile) sunt de la 0 în tot fișierul, iar șiruri
 | `metrics.accuracy` | număr între 0 și 1 | fracția de SNP-uri corecte față de adevăr, cu oglinda |
 | `metrics.switch_errors` | număr | schimbările de fază greșite între SNP-uri consecutive |
 | `metrics.mec_cost` | număr | câte valori trebuie corectate ca fiecare citire să se potrivească cu o copie |
-| `histogram_png` | text | calea imaginii cu cele mai probabile șiruri măsurate și energia lor, relativă la folderul `results/` (de exemplu `figures/stages/notebook_top10.png`). Este exact figura `07_top10` pe care o produce `python -m neuroq.experiments.demo` pentru aceeași instanță |
 | `circuit_png` | text sau `null` | calea imaginii circuitului QAOA, relativă la folderul `results/` (de exemplu `figures/stages/notebook_circuit.png`); `null` dacă circuitul are peste 12 qubiți |
 
 ## Exemplu minuscul (2 SNP-uri, 2 citiri, codificare pe poziții)
@@ -57,8 +55,6 @@ window.STAGES = {
   "best_start": 1,
   "top_samples": [{"bitstring": "01", "count": 1030, "energy": 0.0},
                   {"bitstring": "10", "count": 1018, "energy": 0.0}],
-  "all_samples": [{"bitstring": "01", "count": 1030, "energy": 0.0},
-                  {"bitstring": "10", "count": 1018, "energy": 0.0}],
   "result": {"bitstring": "01", "energy": 0.0},
   "haplotypes": {"decoded": ["01", "10"], "truth": ["01", "10"]},
   "read_assignment": [
@@ -66,8 +62,7 @@ window.STAGES = {
    {"read_id": "r2", "team": 1, "snps": [0], "values": [1], "errors": [false]}
   ],
   "metrics": {"accuracy": 1.0, "switch_errors": 0.0, "mec_cost": 0.0},
-  "circuit_png": "figures/stages/mini_circuit.png",
-  "histogram_png": "figures/stages/mini_top10.png"
+  "circuit_png": "figures/stages/mini_circuit.png"
  }
 };
 ```
