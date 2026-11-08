@@ -42,6 +42,7 @@ def test_every_circuit_image_in_stages_exists():
     for name, entry in stages.items():
         if entry["circuit_png"]:
             assert (RESULTS / entry["circuit_png"]).is_file(), name
+        assert (RESULTS / entry["histogram_png"]).is_file(), name
 
 
 def test_committed_stages_js_has_all_samples():

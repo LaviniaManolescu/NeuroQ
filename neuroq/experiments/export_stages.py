@@ -24,7 +24,7 @@ import numpy as np  # noqa: E402
 from neuroq.core import MISSING, ReadMatrix, SourceData  # noqa: E402
 from neuroq.experiments.stages import StagesResult, load_case, run_stages  # noqa: E402
 from neuroq.sources import save_reads_data_json  # noqa: E402
-from neuroq.viz import plot_circuit, save_figure  # noqa: E402
+from neuroq.viz import plot_circuit, plot_top_samples, save_figure  # noqa: E402
 
 # Instanțele exportate și codificarea care încape pe fiecare (fără fixare).
 EXPORTS = (("notebook", "position"), ("illumina", "position"), ("nanopore", "read"))
@@ -91,6 +91,16 @@ def _circuit_png(result: StagesResult, out_dir: Path) -> Optional[str]:
     return relative.as_posix()
 
 
+def _histogram_png(result: StagesResult, out_dir: Path) -> str:
+    """Aceeași figură ca 07_top10 din demo.py (același apel, aceleași date): cele mai probabile
+    șiruri măsurate, cu energia lor. Interfața doar o afișează la etapa 4."""
+    relative = CIRCUIT_DIR / f"{result.instance}_top10.png"
+    fig = plot_top_samples(result.top_samples, result.exact.energy)
+    save_figure(fig, out_dir / relative)
+    plt.close(fig)
+    return relative.as_posix()
+
+
 def stage_entry(result: StagesResult, out_dir: Path) -> dict[str, Any]:
     """Tot ce afișează interfața pentru o instanță, ca JSON simplu."""
     m, problem, haps = result.matrix, result.problem, result.haplotypes
@@ -133,6 +143,7 @@ def stage_entry(result: StagesResult, out_dir: Path) -> dict[str, Any]:
                     for key in ("accuracy", "switch_errors", "mec_cost")
                     if key in result.metrics},
         "circuit_png": _circuit_png(result, out_dir),
+        "histogram_png": _histogram_png(result, out_dir),
     }
 
 

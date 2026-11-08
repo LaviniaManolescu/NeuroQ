@@ -10,7 +10,8 @@ from neuroq.experiments.export_stages import JS_PREFIX, export_stages
 
 INSTANCES = {"notebook", "illumina", "nanopore"}
 FIELDS = {"metadata", "evidence", "a", "d", "ising", "cost_history", "best_start",
-          "top_samples", "all_samples", "result", "haplotypes", "read_assignment", "metrics", "circuit_png"}
+          "top_samples", "all_samples", "result", "haplotypes", "read_assignment", "metrics", "circuit_png",
+          "histogram_png"}
 
 
 def _reject_constant(name):
@@ -81,6 +82,16 @@ def test_circuit_images_exist(exported):
     out, path = exported
     for entry in load_stages(path).values():
         assert entry["circuit_png"] and (out / entry["circuit_png"]).is_file()
+
+
+def test_histogram_picture_is_the_one_from_demo(exported, tmp_path):
+    from neuroq.experiments.demo import main as run_demo
+
+    out, path = exported
+    for name, entry in load_stages(path).items():
+        saved = run_demo(["--instance", name, "--out", str(tmp_path)])
+        demo_picture = next(p for p in saved if "_top10_" in p.name)
+        assert demo_picture.read_bytes() == (out / entry["histogram_png"]).read_bytes(), name
 
 
 def test_export_is_reproducible(exported, tmp_path):

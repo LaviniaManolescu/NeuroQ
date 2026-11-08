@@ -6,7 +6,7 @@ window.STAGES = {
    "n_qubits": 5,
    "n_reads": 9,
    "n_snps": 5,
-   "qaoa_seconds": 0.083
+   "qaoa_seconds": 0.116
   },
   "evidence": {
    "values": [
@@ -738,7 +738,8 @@ window.STAGES = {
    "switch_errors": 0.0,
    "mec_cost": 1.0
   },
-  "circuit_png": "figures/stages/notebook_circuit.png"
+  "circuit_png": "figures/stages/notebook_circuit.png",
+  "histogram_png": "figures/stages/notebook_top10.png"
  },
  "illumina": {
   "metadata": {
@@ -747,7 +748,7 @@ window.STAGES = {
    "n_qubits": 10,
    "n_reads": 24,
    "n_snps": 10,
-   "qaoa_seconds": 0.143
+   "qaoa_seconds": 0.18
   },
   "evidence": {
    "values": [
@@ -5206,7 +5207,8 @@ window.STAGES = {
    "switch_errors": 0.0,
    "mec_cost": 0.0
   },
-  "circuit_png": "figures/stages/illumina_circuit.png"
+  "circuit_png": "figures/stages/illumina_circuit.png",
+  "histogram_png": "figures/stages/illumina_top10.png"
  },
  "nanopore": {
   "metadata": {
@@ -5215,7 +5217,7 @@ window.STAGES = {
    "n_qubits": 9,
    "n_reads": 9,
    "n_snps": 18,
-   "qaoa_seconds": 0.108
+   "qaoa_seconds": 0.128
   },
   "evidence": {
    "values": [
@@ -8082,6 +8084,7 @@ window.STAGES = {
    "switch_errors": 2.0,
    "mec_cost": 3.0
   },
-  "circuit_png": "figures/stages/nanopore_circuit.png"
+  "circuit_png": "figures/stages/nanopore_circuit.png",
+  "histogram_png": "figures/stages/nanopore_top10.png"
  }
 };
