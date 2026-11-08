@@ -86,21 +86,40 @@
   }
 
   function percent(count, total) {
-    return (100 * count / total).toFixed(1).replace('.', ',') + '%';
+    return total ? (100 * count / total).toFixed(1).replace('.', ',') + '%' : '0%';
   }
 
-  function histogram(container, stage, onSelect) {
-    var all = stage.all_samples, chosen = stage.result.bitstring, chosenMirror = mirrorOf(chosen);
+  // Care șiruri apar pe axă. Dacă sunt puține șiruri distincte (cel mult `maxBars`), toate; altfel
+  // doar cele frecvente (cel puțin `rareShare` din măsurători). În ambele cazuri apar și șirul ales
+  // și, pentru fiecare bară afișată, oglinda ei: măsurată (chiar și rară) sau, dacă are 0 măsurători,
+  // un slot gol. Ordinea e cea binară (șiruri de aceeași lungime). Suma barelor plus hiddenShots
+  // este mereu numărul total de măsurători.
+  function selectBars(all, chosen, maxBars, rareShare) {
     var total = all.reduce(function (s, x) { return s + x.count; }, 0), byBits = {};
     all.forEach(function (s) { byBits[s.bitstring] = s; });
-    var shown = all;
-    if (all.length > MAX_BARS) { // șirul ales și oglinda lui rămân mereu, chiar dacă sunt rare
-      shown = all.filter(function (s) {
-        return s.count >= RARE_SHARE * total || s.bitstring === chosen || s.bitstring === chosenMirror;
-      });
-    }
-    var hiddenStrings = all.length - shown.length;
-    var hiddenShots = total - shown.reduce(function (s, x) { return s + x.count; }, 0);
+    var base = all.length <= maxBars ? all : all.filter(function (s) {
+      return s.count >= rareShare * total || s.bitstring === chosen || s.bitstring === mirrorOf(chosen);
+    });
+    var wanted = {};
+    base.forEach(function (s) { wanted[s.bitstring] = true; wanted[mirrorOf(s.bitstring)] = true; });
+    wanted[chosen] = true;
+    wanted[mirrorOf(chosen)] = true;
+    var shown = Object.keys(wanted).sort().map(function (bits) {
+      return byBits[bits] || { bitstring: bits, count: 0, energy: null };
+    });
+    var shownShots = shown.reduce(function (s, x) { return s + x.count; }, 0);
+    var measuredShown = shown.filter(function (s) { return s.count > 0; }).length;
+    return { shown: shown, total: total, byBits: byBits,
+             hiddenStrings: all.length - measuredShown, hiddenShots: total - shownShots };
+  }
+
+  var MIN_LABEL_SLOT = 11; // sub această lățime (în unități SVG) etichetele s-ar suprapune
+
+  function histogram(container, stage, onSelect) {
+    var chosen = stage.result.bitstring;
+    var pick = selectBars(stage.all_samples, chosen, MAX_BARS, RARE_SHARE);
+    var shown = pick.shown, total = pick.total, byBits = pick.byBits;
+    var hiddenStrings = pick.hiddenStrings, hiddenShots = pick.hiddenShots;
 
     // o culoare pe pereche, în ordinea frecvenței
     var best = {};
@@ -112,8 +131,8 @@
     Object.keys(best).sort(function (a, b) { return best[b] - best[a] || (a < b ? -1 : 1); })
       .forEach(function (key, rank) { colorOfPair[key] = C.pair(rank); });
 
-    var maxCount = Math.max.apply(null, shown.map(function (s) { return s.count; }));
-    var step = niceStep(maxCount / 4), yMax = step * Math.ceil(maxCount / step);
+    var maxCount = Math.max(1, Math.max.apply(null, shown.map(function (s) { return s.count; })));
+    var step = Math.max(1, niceStep(maxCount / 4)), yMax = step * Math.ceil(maxCount / step);
     var pw = HW - PAD.l - PAD.r, ph = HH - PAD.t - PAD.b, slot = pw / shown.length;
     var barW = Math.min(56, slot * 0.74), base = PAD.t + ph;
     var y = function (v) { return PAD.t + ph * (1 - v / yMax); };
@@ -134,17 +153,22 @@
 
     var bars = {}, list = [];
     shown.forEach(function (s, i) {
-      var x0 = PAD.l + slot * i, cx = x0 + slot / 2, h = Math.max(1.5, ph * s.count / yMax);
+      var x0 = PAD.l + slot * i, cx = x0 + slot / 2;
+      var h = s.count ? Math.max(1.5, ph * s.count / yMax) : 3; // slotul gol (0 măsurători) rămâne vizibil
       var pairKey = s.bitstring < mirrorOf(s.bitstring) ? s.bitstring : mirrorOf(s.bitstring);
       var g = S.el('g', { class: 'nq-bar', tabindex: 0, role: 'button', 'data-bits': s.bitstring,
-        'data-count': s.count, 'aria-label': 'șirul ' + s.bitstring + ', ' + s.count + ' măsurători' }, svg);
+        'data-count': s.count, 'aria-label': 'șirul ' + s.bitstring + (s.count
+          ? ', ' + s.count + ' măsurători' : ', nemăsurat') }, svg);
       S.el('rect', { class: 'nq-hit', x: x0, y: PAD.t - 6, width: slot, height: ph + 6, fill: 'transparent' }, g);
       var rect = S.el('rect', { x: cx - barW / 2, y: base - h, width: barW, height: h, rx: 2,
                                 fill: colorOfPair[pairKey] }, g);
       var marker = S.el('path', { d: 'M' + cx + ' ' + (base + 4) + ' L' + (cx - 6) + ' ' + (base + 14) +
         ' L' + (cx + 6) + ' ' + (base + 14) + ' Z', fill: C.accent, visibility: 'hidden' }, g);
       var label = S.text(g, cx + 5, base + 22, s.bitstring, { 'font-size': shown.length > 20 ? 12 : 14,
-        'text-anchor': 'end', transform: 'rotate(-90 ' + (cx + 5) + ' ' + (base + 22) + ')', style: MONO });
+        'text-anchor': 'end', transform: 'rotate(-90 ' + (cx + 5) + ' ' + (base + 22) + ')', style: MONO,
+        opacity: s.count ? 1 : 0.6,
+        visibility: slot >= MIN_LABEL_SLOT || s.bitstring === chosen || s.bitstring === mirrorOf(chosen)
+          ? 'visible' : 'hidden' });
       var bar = { bits: s.bitstring, count: s.count, energy: s.energy, g: g, rect: rect,
                   marker: marker, label: label, cx: cx, top: base - h, color: colorOfPair[pairKey] };
       bars[s.bitstring] = bar;
@@ -181,8 +205,10 @@
       var mirror = mirrorOf(bar.bits), mirrorCount = byBits[mirror] ? byBits[mirror].count : 0;
       tip.textContent = '';
       S.html('strong', { style: MONO }, tip, bar.bits);
-      S.html('div', {}, tip, bar.count + ' măsurători (' + percent(bar.count, total) + ')');
-      S.html('div', {}, tip, 'energia E = ' + S.fmt(bar.energy));
+      S.html('div', {}, tip, bar.count ? bar.count + ' măsurători (' + percent(bar.count, total) + ')'
+        : '0 măsurători (șir nemăsurat)');
+      S.html('div', {}, tip, bar.energy === null ? 'energia nu e în date (șir nemăsurat)'
+        : 'energia E = ' + S.fmt(bar.energy));
       S.html('div', { class: 'nq-tip-mirror' }, tip, 'oglinda ' + mirror + ': ' + (mirrorCount
         ? mirrorCount + ' măsurători (' + percent(mirrorCount, total) + ')' : 'nemăsurată'));
       tip.hidden = false;
@@ -219,14 +245,20 @@
     S.html('p', { class: 'nq-note' }, wrap,
       'Înălțimea barei = de câte ori a apărut șirul în ' + total + ' de măsurători. ' +
       'Aceeași culoare = un șir și oglinda lui (aceeași împărțire a citirilor, cu A și B schimbate). ' +
-      'Conturul gros = șirul ales de QAOA. Click pe o bară selectează perechea.');
+      'Conturul gros = șirul ales de QAOA. Un slot gol = oglinda nu a fost măsurată. ' +
+      'Click pe o bară selectează perechea.');
+    // cifrele de control, citite și de teste: suma barelor + hiddenShots = total
+    wrap.setAttribute('data-total', total);
+    wrap.setAttribute('data-hidden-strings', hiddenStrings);
+    wrap.setAttribute('data-hidden-shots', hiddenShots);
     if (hiddenStrings > 0) {
-      S.html('p', { class: 'nq-note' }, wrap, '+' + hiddenStrings + ' șiruri rare (sub 1% fiecare), ' +
-        hiddenShots + ' din ' + total + ' măsurători, nu apar pe axă. Șirul ales și oglinda lui apar mereu.');
+      S.html('p', { class: 'nq-note nq-rare' }, wrap, '+' + hiddenStrings + ' șiruri rare (sub ' +
+        Math.round(RARE_SHARE * 100) + '% fiecare), ' + hiddenShots + ' din ' + total +
+        ' măsurători, nu apar pe axă. Șirul ales și oglinzile barelor afișate apar mereu.');
     }
     paint();
-    return { select: select, sample: function (bits) { return byBits[bits]; }, bars: bars,
-             total: total, shown: shown.length, hidden: hiddenStrings };
+    return { select: select, sample: function (bits) { return bars[bits] || { count: 0, energy: null }; },
+             bars: bars, total: total, shown: shown.length, hidden: hiddenStrings };
   }
 
   // Alege orientarea (A/B) care se potrivește mai bine cu adevărul.
@@ -336,6 +368,10 @@
     },
     pairTeams: pairTeams,
     orient: orient,
+    limits: { maxBars: MAX_BARS, rareShare: RARE_SHARE },
+    selectBars: function (stage) {
+      return selectBars(stage.all_samples, stage.result.bitstring, MAX_BARS, RARE_SHARE);
+    },
     render: function (container, stage) {
       var row = S.html('div', { class: 'nq-row' }, container);
       var left = S.html('div', { class: 'nq-col' }, row);
@@ -364,8 +400,9 @@
         numbers.suspect.textContent = t.suspect;
         sum.textContent = t.a + ' + ' + t.b + ' + ' + t.suspect + ' = ' + stage.metadata.n_reads +
           ' citiri. Copia A este varianta perechii cea mai apropiată de șirul ales de QAOA.';
-        graphCaption.textContent = 'Șirul selectat ' + bits + ', energia ' +
-          S.fmt(hist.sample(bits).energy);
+        var energy = hist.sample(bits).energy;
+        graphCaption.textContent = 'Șirul selectat ' + bits +
+          (energy === null ? ', nemăsurat (energia nu e în date)' : ', energia ' + S.fmt(energy));
         graphBox.textContent = '';
         NeuroQ.views.graph.render(graphBox, stage, { bitstring: bits });
       });
