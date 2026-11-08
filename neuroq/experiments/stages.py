@@ -7,7 +7,7 @@
 from __future__ import annotations
 
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Optional
 
 import numpy as np
@@ -22,7 +22,7 @@ from neuroq.experiments.resource_comparison import (
     SEED, Case, illumina_case, nanopore_case, notebook_case,
 )
 from neuroq.solvers import ExactSolver
-from neuroq.solvers.qaoa import CostCallback, QAOASolver, make_qaoa, trained_circuit
+from neuroq.solvers.qaoa import CostCallback, make_qaoa, train_layers, trained_circuit
 from neuroq.transforms import fix_variable
 
 INSTANCES = {"notebook": notebook_case, "illumina": illumina_case, "nanopore": nanopore_case}
@@ -54,6 +54,8 @@ class StagesResult:
     other_encoding: Optional[dict[str, Any]]  # resursele codificării care nu se rulează
     qaoa_seconds: float = 0.0  # durata apelului QAOASolver.solve (antrenare + eșantionare)
     warm: bool = False  # warm-start QAOA (pornit din relaxarea continuă)
+    p: int = 1  # straturile circuitului final
+    layers: list[Solution] = field(default_factory=list)  # câte o soluție pentru p = 1..p
 
     @property
     def cost_history(self) -> list[list[float]]:
@@ -109,9 +111,13 @@ def _with_fixed_bits(bitstring: str, fixed: dict[int, int]) -> str:
 
 def run_stages(
     case: Case, encoding: str, fix: bool = False, callback: Optional[CostCallback] = None,
-    warm: bool = False,
+    warm: bool = False, p: int = 1,
 ) -> StagesResult:
-    """Rulează toate etapele pe o instanță și o codificare; nu afișează nimic."""
+    """Rulează toate etapele pe o instanță și o codificare; nu afișează nimic.
+
+    La p > 1 antrenează p = 1, 2, ..., p în lanț (INTERP); rezultatul e cel de la ultimul p,
+    iar `layers` păstrează soluția fiecărui p.
+    """
     instance = case.instance["id"]
     kind = resolve_encoding(instance, encoding)
     matrix = case.matrix
@@ -124,8 +130,9 @@ def run_stages(
     solved = fix_variable(problem) if fix else problem
     exact = ExactSolver().solve(problem)
     start = time.perf_counter()
-    qaoa = QAOASolver(IdealSimulator(), seed=SEED, callback=callback,
-                      warm_start=warm).solve(solved)
+    layers = train_layers(solved, IdealSimulator(), p, seed=SEED, callback=callback,
+                          warm_start=warm)
+    qaoa = layers[-1]
     qaoa_seconds = time.perf_counter() - start
     haps = solved.decoder(qaoa.bitstring)
     metrics = evaluate(solved, qaoa, haps, matrix.true_haplotypes, exact.energy, matrix.values)
@@ -138,7 +145,7 @@ def run_stages(
         full_bitstring=_with_fixed_bits(qaoa.bitstring, solved.fixed_variables),
         haplotypes=haps, metrics=metrics,
         other_encoding=encoding_resources(matrix, others[0]) if others else None,
-        qaoa_seconds=qaoa_seconds, warm=warm,
+        qaoa_seconds=qaoa_seconds, warm=warm, p=p, layers=layers,
     )
 
 

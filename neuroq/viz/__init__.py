@@ -2,6 +2,7 @@
 
 from neuroq.viz.plots import (
     plot_circuit,
+    plot_confidence,
     plot_evidence,
     plot_graph,
     plot_haplotypes,
@@ -14,6 +15,7 @@ from neuroq.viz.plots import (
 
 __all__ = [
     "plot_circuit",
+    "plot_confidence",
     "plot_evidence",
     "plot_graph",
     "plot_haplotypes",

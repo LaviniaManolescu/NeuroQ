@@ -2,6 +2,7 @@
 
 from neuroq.execution.base import Executor
 from neuroq.execution.bitorder import qiskit_to_project
+from neuroq.execution.depth import transpiled_depth
 from neuroq.execution.ideal import IdealSimulator
 
-__all__ = ["Executor", "IdealSimulator", "qiskit_to_project"]
+__all__ = ["Executor", "IdealSimulator", "qiskit_to_project", "transpiled_depth"]

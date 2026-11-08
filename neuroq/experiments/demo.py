@@ -5,6 +5,7 @@ Rulare:
     python -m neuroq.experiments.demo --instance notebook --encoding citiri --fix --show
     python -m neuroq.experiments.demo --instance nanopore --warm
     python -m neuroq.experiments.demo --instance all
+    python -m neuroq.experiments.demo --instance illumina --p 3 [--fix] [--warm]
 Figurile se salvează în results/figures/demo_<instanță>/. Fără --show se folosește backend-ul
 Agg (doar salvare); cu --show figurile se deschid pe rând și demo-ul așteaptă Enter la final.
 """
@@ -62,13 +63,13 @@ class FigureSink:
         self.show = show
         self.saved: list[Path] = []
 
-    def add(self, number: int, name: str, fig) -> None:
+    def add(self, number: int, name: str, fig, suffix: Optional[str] = None) -> None:
         from neuroq.viz import save_figure
 
         if fig is None:
             print("   (circuitul e prea mare pentru desen; vezi numerele de mai sus)")
             return
-        path = save_figure(fig, self.directory / f"{number:02d}_{name}_{self.suffix}.png")
+        path = save_figure(fig, self.directory / f"{number:02d}_{name}_{suffix or self.suffix}.png")
         self.saved.append(path)
         print(f"   figura: {path}")
         if self.show:
@@ -109,24 +110,36 @@ def present(result: StagesResult, sink: FigureSink) -> None:
 
     qc = result.circuit
     two_qubit = sum(1 for item in qc.data if item.operation.num_qubits == 2)
-    _title(5, f"Circuitul QAOA (p = 1): {qc.num_qubits} qubiți, {two_qubit} porți cu doi "
+    _title(5, f"Circuitul QAOA (p = {result.p}): {qc.num_qubits} qubiți, {two_qubit} porți cu doi "
               f"qubiți, adâncime {qc.depth()}" + (" (un qubit fixat)" if result.fixed else "")
               + (" (warm-start)" if result.warm else ""))
     print(f"   porți: {dict(qc.count_ops())}")
     sink.add(5, "circuit", viz.plot_circuit(qc))
 
-    history = result.cost_history
-    _title(6, f"Antrenarea: {sum(len(h) for h in history)} evaluări COBYLA "
-              f"(costul a fost afișat live mai sus)")
-    print(f"   cel mai bun start: {result.best_start + 1}, <H> final = "
-          f"{min(history[result.best_start]):.4f}, optim exact = {result.exact.energy:g}")
-    sink.add(6, "cost_qaoa", viz.plot_qaoa_cost(history, result.exact.energy, result.best_start))
+    # fără --p (p = 1) numele figurilor rămân cele de dinainte; cu --p 3 fiecare p are figurile lui
+    steps = result.layers if result.p > 1 else [result.qaoa]
+    base = sink.suffix.removesuffix(f"_p{result.p}") if result.p > 1 else sink.suffix
+    for k, step in enumerate(steps, start=1):
+        tag = f"{base}_p{k}" if result.p > 1 else None
+        label = f" (p = {k})" if result.p > 1 else ""
+        history = step.metadata["cost_history"]
+        best = step.metadata["best_start"]
+        _title(6, f"Antrenarea{label}: {sum(len(h) for h in history)} evaluări COBYLA "
+                  f"(costul a fost afișat live mai sus)")
+        print(f"   cel mai bun start: {best + 1}, <H> final = {min(history[best]):.4f}, "
+              f"optim exact = {result.exact.energy:g}")
+        sink.add(6, "cost_qaoa", viz.plot_qaoa_cost(history, result.exact.energy, best), tag)
 
-    _title(7, "Cele mai probabile 10 șiruri măsurate (2048 de măsurători)")
-    for row in result.top_samples:
-        mark = "  <- optim" if np.isclose(row["energy"], result.exact.energy) else ""
-        print(f"   {row['bitstring']}   {row['count']:5d} apariții   E = {row['energy']:g}{mark}")
-    sink.add(7, "top10", viz.plot_top_samples(result.top_samples, result.exact.energy))
+        _title(7, f"Cele mai probabile 10 șiruri măsurate{label} (2048 de măsurători)")
+        for row in step.metadata["top_samples"]:
+            mark = "  <- optim" if np.isclose(row["energy"], result.exact.energy) else ""
+            print(f"   {row['bitstring']}   {row['count']:5d} apariții   E = {row['energy']:g}{mark}")
+        sink.add(7, "top10", viz.plot_top_samples(step.metadata["top_samples"], result.exact.energy),
+                 tag)
+        if result.p > 1:
+            energies = {b: result.solved.energy(b) for b in step.samples}
+            sink.add(10, "incredere", viz.plot_confidence(
+                step.samples, energies, result.exact.energy, step.bitstring, p=k), tag)
     sink.add(8, "graf_solutie", viz.plot_graph(
         p.J, result.labels, bitstring=result.full_bitstring,
         energy=p.energy(result.full_bitstring), title="Soluția QAOA pe graf"))
@@ -152,14 +165,17 @@ def present(result: StagesResult, sink: FigureSink) -> None:
 RUN_ALL = "all"
 
 
-def run_instance(instance: str, kind: str, fix: bool, warm: bool, out: Path, show: bool):
+def run_instance(instance: str, kind: str, fix: bool, warm: bool, out: Path, show: bool,
+                 p: int = 1):
     """Rulează demonstrația pe o instanță: tipărește etapele și salvează figurile."""
     start = time.perf_counter()
     print(f"NeuroQ, demonstrație: instanța {instance}, codificarea pe {ROMANIAN[kind]}"
-          + (", cu fix_variable" if fix else "") + (", cu warm-start" if warm else ""))
+          + (", cu fix_variable" if fix else "") + (", cu warm-start" if warm else "")
+          + (f", p = 1..{p} (INTERP)" if p > 1 else ""))
     print("\nQAOA rulează acum (costul live, la fiecare evaluare):", flush=True)
-    result = run_stages(load_case(instance), kind, fix, callback=live_cost, warm=warm)
-    suffix = ROMANIAN[kind] + ("_fix" if fix else "") + ("_warm" if warm else "")
+    result = run_stages(load_case(instance), kind, fix, callback=live_cost, warm=warm, p=p)
+    suffix = (ROMANIAN[kind] + ("_fix" if fix else "") + ("_warm" if warm else "")
+              + (f"_p{p}" if p > 1 else ""))
     sink = FigureSink(out / f"demo_{instance}", suffix, show)
     present(result, sink)
     print(f"\nGata în {time.perf_counter() - start:.1f} s; {len(sink.saved)} figuri în "
@@ -170,17 +186,17 @@ def run_instance(instance: str, kind: str, fix: bool, warm: bool, out: Path, sho
 def print_summary(runs: list, seconds: float) -> None:
     """Tabel cu toate instanțele rulate, la finalul lui --instance all."""
     print(f"\n{'#' * 64}\n Rezumat: {len(runs)} instanțe în {seconds:.1f} s\n{'#' * 64}")
-    print(f"{'instanța':10s}{'codificarea':13s}{'qubiți':>7s}  {'șirul ales':14s}{'E':>6s}"
+    print(f"{'instanța':10s}{'codificarea':13s}{'qubiți':>7s}{'p':>3s}  {'șirul ales':14s}{'E':>6s}"
           f"{'acuratețe':>11s}{'QAOA':>8s}")
     for sink, result in runs:
         accuracy = result.metrics.get("accuracy")
-        print(f"{result.instance:10s}{ROMANIAN[result.encoding]:13s}{result.solved.n_qubits:7d}  "
+        print(f"{result.instance:10s}{ROMANIAN[result.encoding]:13s}{result.solved.n_qubits:7d}{result.p:3d}  "
               f"{result.full_bitstring:14s}{result.problem.energy(result.full_bitstring):6g}"
               f"{'-' if accuracy is None else format(accuracy, '.0%'):>11s}"
               f"{result.qaoa_seconds:7.1f}s")
     print("\nHistograma măsurătorilor (aceleași date ca la etapa 5 din interfață):")
     for sink, result in runs:
-        top10 = next(p for p in sink.saved if "_top10_" in p.name)
+        top10 = [path for path in sink.saved if "_top10_" in path.name][-1]  # ultimul p
         print(f"   {result.instance:10s}{top10}")
 
 
@@ -195,6 +211,8 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
     parser.add_argument("--fix", action="store_true", help="fixează primul qubit (fix_variable)")
     parser.add_argument("--warm", action="store_true",
                         help="warm-start QAOA, pornit din relaxarea continuă")
+    parser.add_argument("--p", type=int, choices=[1, 2, 3], default=1,
+                        help="straturile QAOA; la p > 1 antrenează p = 1..p în lanț (INTERP)")
     parser.add_argument("--show", action="store_true", help="deschide figurile pe rând")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args(argv)
@@ -209,7 +227,7 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
         runs = []
         for name in INSTANCES:
             runs.append(run_instance(name, resolve_encoding(name, None), args.fix, args.warm,
-                                     args.out, args.show))
+                                     args.out, args.show, args.p))
             print()
         print_summary(runs, time.perf_counter() - start)
         saved = [path for sink, _ in runs for path in sink.saved]
@@ -224,7 +242,8 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
                       f"qubiți, {other['n_couplings']} cuplaje nenule, "
                       f"{other['rzz_per_layer']} porți rzz pe strat (nu se rulează).")
             parser.exit(2, f"eroare: {error}\n")
-        sink, _ = run_instance(args.instance, kind, args.fix, args.warm, args.out, args.show)
+        sink, _ = run_instance(args.instance, kind, args.fix, args.warm, args.out, args.show,
+                               args.p)
         saved = sink.saved
     if args.show:
         input("Apasă Enter ca să închizi figurile...")

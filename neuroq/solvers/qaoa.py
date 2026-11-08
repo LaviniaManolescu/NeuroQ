@@ -94,14 +94,39 @@ def statevector_probabilities(circuit: QuantumCircuit, simulator: AerSimulator) 
     return np.asarray(simulator.run(circuit).result().get_statevector().probabilities())
 
 
+def interp_angles(angles: np.ndarray, p_old: int) -> np.ndarray:
+    """INTERP (Zhou et al., 2018): unghiurile antrenate la p_old straturi → start pentru p_old + 1.
+
+    Schema e cea din make_qaoa: [γ₁..γp, β₁..βp]. γ și β se interpolează liniar fiecare,
+    x_nou[i] = (i/p)·x[i−1] + ((p−i)/p)·x[i], i = 0..p, cu x[−1] = x[p] = 0.
+    """
+    angles = np.asarray(angles, dtype=float)
+    if p_old < 1 or angles.shape != (2 * p_old,):
+        raise ValueError(f"pentru p = {p_old} trebuie {2 * p_old} unghiuri, nu {angles.shape}")
+    halves = []
+    for part in (angles[:p_old], angles[p_old:]):
+        padded = np.concatenate(([0.0], part, [0.0]))  # padded[i + 1] = part[i]
+        halves.append([(i / p_old) * padded[i] + ((p_old - i) / p_old) * padded[i + 1]
+                       for i in range(p_old + 1)])
+    return np.concatenate(halves)
+
+
 class QAOASolver(Solver):
-    """Antrenează unghiurile pe statevector exact, apoi eșantionează prin Executor."""
+    """Antrenează unghiurile pe statevector exact, apoi eșantionează prin Executor.
+
+    `initial_angles` (2·p valori) înlocuiește primul start aleator (de exemplu cu rezultatul
+    INTERP de la p−1); al doilea start rămâne cel aleator, cu același seed.
+    """
 
     def __init__(
         self, executor: Executor, p: int = 1, shots: int = 2048, seed: int = 71, maxiter: int = 90,
         callback: Optional[CostCallback] = None, warm_start: bool = False,
         epsilon: float = DEFAULT_EPSILON, relax_seed: Optional[int] = None,
+        initial_angles: Optional[np.ndarray] = None,
     ) -> None:
+        if initial_angles is not None and len(initial_angles) != 2 * p:
+            raise ValueError(f"initial_angles trebuie să aibă {2 * p} valori pentru p = {p}")
+        self.initial_angles = initial_angles
         self.executor = executor
         self.callback = callback
         self.warm_start = warm_start
@@ -142,6 +167,8 @@ class QAOASolver(Solver):
 
         rng = np.random.default_rng(self.seed)
         starts = [rng.uniform(0, np.pi, 2 * self.p) for _ in range(N_STARTS)]
+        if self.initial_angles is not None:
+            starts[0] = np.asarray(self.initial_angles, dtype=float)
         trials = []
         for start in starts:
             histories.append([])
@@ -179,6 +206,21 @@ class QAOASolver(Solver):
                 ],
             },
         )
+
+
+def train_layers(
+    problem: IsingProblem, executor: Executor, p_max: int, **options
+) -> list[Solution]:
+    """Antrenează p = 1, 2, ..., p_max în ordine; fiecare pornește INTERP din cel dinainte.
+
+    `options` merg la QAOASolver (seed, maxiter, warm_start, callback...). Întoarce câte o
+    Solution pentru fiecare p.
+    """
+    solutions: list[Solution] = []
+    for p in range(1, p_max + 1):
+        initial = interp_angles(solutions[-1].metadata["angles"], p - 1) if solutions else None
+        solutions.append(QAOASolver(executor, p=p, initial_angles=initial, **options).solve(problem))
+    return solutions
 
 
 def trained_circuit(

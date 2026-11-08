@@ -99,3 +99,45 @@ def test_qaoa_records_cost_history_top_samples_and_calls_back():
     assert len(top) == 10 and [t["count"] for t in top] == sorted((t["count"] for t in top), reverse=True)
     assert all(t["energy"] == pytest.approx(notebook_problem().energy(t["bitstring"])) for t in top)
     assert solution.energy == pytest.approx(1.0)
+
+
+def test_interp_angles_matches_zhou_formula():
+    from neuroq.solvers.qaoa import interp_angles
+
+    assert interp_angles(np.array([1.0, 2.0]), 1).tolist() == [1.0, 1.0, 2.0, 2.0]
+    # p = 2 → 3: γ [1, 3] → [1, 2, 3] și β [10, 30] → [10, 20, 30]
+    out = interp_angles(np.array([1.0, 3.0, 10.0, 30.0]), 2)
+    assert out.tolist() == [1.0, 2.0, 3.0, 10.0, 20.0, 30.0]
+    with pytest.raises(ValueError):
+        interp_angles(np.array([1.0, 2.0, 3.0]), 1)
+
+
+def test_train_layers_chains_p_and_keeps_p1_behaviour():
+    from neuroq.solvers.qaoa import train_layers
+
+    problem = notebook_problem()
+    layers = train_layers(problem, IdealSimulator(), 2)
+    alone = QAOASolver(IdealSimulator()).solve(problem)
+    assert [s.metadata["p"] for s in layers] == [1, 2]
+    assert len(layers[1].metadata["angles"]) == 4
+    assert layers[0].metadata["angles"] == alone.metadata["angles"]
+    assert layers[0].bitstring == alone.bitstring and layers[0].energy == pytest.approx(1.0)
+    assert layers[1].energy == pytest.approx(1.0)
+
+
+def test_initial_angles_replace_only_the_first_start():
+    problem = notebook_problem()
+    default = QAOASolver(IdealSimulator(), maxiter=5).solve(problem)
+    given = QAOASolver(IdealSimulator(), maxiter=5, initial_angles=np.array([0.3, 0.4])).solve(problem)
+    assert given.metadata["cost_history"][1] == default.metadata["cost_history"][1]
+    assert given.metadata["cost_history"][0] != default.metadata["cost_history"][0]
+    with pytest.raises(ValueError):
+        QAOASolver(IdealSimulator(), p=2, initial_angles=np.array([0.1, 0.2]))
+
+
+def test_transpiled_depth_is_positive_and_reproducible():
+    from neuroq.execution import transpiled_depth
+
+    qc, theta, _ = make_qaoa(notebook_problem().J, notebook_problem().h, p=2)
+    bound = qc.assign_parameters(dict(zip(theta, [0.1, 0.2, 0.3, 0.4])))
+    assert transpiled_depth(bound) == transpiled_depth(bound) >= bound.depth()

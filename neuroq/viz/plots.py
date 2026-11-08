@@ -217,6 +217,38 @@ def plot_top_samples(top: Sequence[dict[str, Any]], optimum: Optional[float] = N
     return fig
 
 
+def plot_confidence(
+    samples: dict[str, int], energies: dict[str, float], optimum: float, chosen: str,
+    p: Optional[int] = None,
+) -> Figure:
+    """Încrederea: ce procent din măsurători cade pe fiecare nivel de energie.
+
+    `energies` dă energia fiecărui șir măsurat; nivelul optimului (cu tot cu oglinda lui, care
+    are aceeași energie) e verde, iar nivelul șirului ales are contur.
+    """
+    total = sum(samples.values())
+    by_energy: dict[float, int] = {}
+    for bits, count in samples.items():
+        by_energy[energies[bits]] = by_energy.get(energies[bits], 0) + count
+    levels = sorted(by_energy)
+    fig, ax = plt.subplots(figsize=(10, 4.2))
+    colors = ["#2F8A55" if math.isclose(e, optimum) else COLOR_ZERO for e in levels]
+    bars = ax.bar([f"{e:g}" for e in levels], [100 * by_energy[e] / total for e in levels],
+                  color=colors)
+    for bar, level in zip(bars, levels):
+        if math.isclose(level, energies[chosen]):
+            bar.set_edgecolor("black")
+            bar.set_linewidth(2)
+    hits = 100 * sum(c for b, c in samples.items() if math.isclose(energies[b], optimum)) / total
+    ax.set_xlabel("energia șirului măsurat")
+    ax.set_ylabel("% din măsurători")
+    ax.set_title((f"p = {p}: " if p else "") + f"încrederea = {hits:.1f}% din măsurători pe "
+                 f"energia optimă {optimum:g} (verde, oglinda inclusă); conturul = șirul ales")
+    ax.title.set_fontsize(10)
+    fig.tight_layout()
+    return fig
+
+
 def plot_circuit(circuit: Any, max_qubits: int = MAX_CIRCUIT_QUBITS,
                  title: Optional[str] = None) -> Optional[Figure]:
     """Desenează circuitul QAOA cu H, RZZ și RX vizibile; peste `max_qubits` doar loghează."""
