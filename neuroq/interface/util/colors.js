@@ -23,6 +23,10 @@
     coupling: function (J) {
       return J > 0 ? this.opposite : this.same;
     },
+    // Culoarea unei perechi (șir, oglindă) din histogramă: nuanțe distanțate prin unghiul de aur.
+    pair: function (rank) {
+      return 'hsl(' + Math.round((rank * 137.508) % 360) + ', 58%, 52%)';
+    },
     bit: function (value) {
       return value === 1 ? this.bit1 : this.bit0;
     },
