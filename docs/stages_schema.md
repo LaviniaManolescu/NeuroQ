@@ -38,6 +38,39 @@ Indicii (SNP-uri, citiri, variabile) sunt de la 0 în tot fișierul, iar șiruri
 | `metrics.mec_cost` | număr | câte valori trebuie corectate ca fiecare citire să se potrivească cu o copie |
 | `circuit_png` | text sau `null` | calea imaginii circuitului QAOA, relativă la folderul `results/` (de exemplu `figures/stages/notebook_circuit.png`); `null` dacă circuitul are peste 12 qubiți |
 
+## `variants`: trei variante de QAOA pe aceeași instanță
+
+Câmpurile de la nivelul instanței (`cost_history`, `top_samples`, `result`, `haplotypes`, `circuit_png` etc.) sunt cele ale variantei `qaoa`. `variants` adaugă, pentru comutatorul de la etapele 4 și 5, cheile de mai jos; o variantă care nu se poate calcula pe o instanță lipsește (exportul tipărește motivul).
+
+| cheie | ce este |
+|---|---|
+| `qaoa` | QAOA standard, identică cu câmpurile instanței |
+| `qaoa_fixed` | primul qubit fixat la 0 cu `fix_variable`; problema are un qubit mai puțin, iar oglinda A↔B dispare |
+| `ws_qaoa` | warm-start QAOA: circuitul pornește din relaxarea continuă a problemei |
+
+Fiecare variantă are aceleași câmpuri (rezultatele ei, nu ale instanței):
+
+| câmp | tip | ce înseamnă |
+|---|---|---|
+| `n_qubits` | întreg | qubiții problemei rezolvate (n − 1 la `qaoa_fixed`) |
+| `n_rzz` | întreg | câte perechi au J ≠ 0, adică porțile RZZ ale unui strat |
+| `ising` | `{edges, h, offset}` | J (muchiile nenule, cu indici ai problemei rezolvate), câmpurile locale h și constanta |
+| `cost_history`, `best_start`, `qaoa_seconds` | ca la instanță | curba costului, startul ales și durata variantei |
+| `circuit_png` | text sau `null` | imaginea circuitului variantei (`figures/stages/<instanță>_<variantă>_circuit.png`; `qaoa` păstrează `<instanță>_circuit.png`); `null` peste 12 qubiți |
+| `all_samples` | listă de `{bitstring, count, energy}` | toate șirurile măsurate cel puțin o dată, în ordinea valorii binare a șirului; suma `count` este numărul de măsurători (2048) |
+| `top_samples` | ca la instanță | cele mai frecvente 10 șiruri; prefixul lui `all_samples` sortat după `count` |
+| `result` | `{bitstring, full_bitstring, energy}` | `bitstring` are lungimea problemei rezolvate (ca în `all_samples`); `full_bitstring` are lungimea problemei inițiale, cu bitul fixat reinserat (identic cu `bitstring` la celelalte variante) |
+| `haplotypes`, `metrics` | ca la instanță | copiile decodate și metricile variantei |
+| `read_counts` | `{a, b, suspect}` | câte citiri sunt în copia A, în copia B și suspecte; suma este `metadata.n_reads` |
+| `confidence` | număr între 0 și 1 | frecvența soluției alese în cele 2048 de măsurători; la `qaoa` și `ws_qaoa` se adună și oglinda ei, la `qaoa_fixed` doar șirul ales |
+
+Câmpuri specifice:
+
+| câmp | doar la | ce înseamnă |
+|---|---|---|
+| `fixed_variables` | `qaoa_fixed` | `{indice original: bit}`; șirurile din variantă sunt mai scurte cu atâtea poziții |
+| `c`, `c_regularized`, `epsilon` | `ws_qaoa` | probabilitatea de start a fiecărui qubit (P bit = 1) înainte și după regularizarea în [ε, 1 − ε] |
+
 ## Exemplu minuscul (2 SNP-uri, 2 citiri, codificare pe poziții)
 
 ```js

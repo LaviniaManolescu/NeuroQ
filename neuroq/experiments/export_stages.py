@@ -31,6 +31,12 @@ EXPORTS = (("notebook", "position"), ("illumina", "position"), ("nanopore", "rea
 OUTPUT_DIR = Path("results")
 CIRCUIT_DIR = Path("figures") / "stages"  # relativ la OUTPUT_DIR
 JS_PREFIX = "window.STAGES = "
+# Variantele de QAOA exportate la fiecare instanță: cheie -> argumentele suplimentare pentru run_stages.
+VARIANTS = {
+    "qaoa": {},
+    "qaoa_fixed": {"fix": True},
+    "ws_qaoa": {"warm": True},
+}
 
 
 def _bits(copy) -> str:
@@ -81,8 +87,27 @@ def _read_assignment(result: StagesResult) -> list[dict[str, Any]]:
     return rows
 
 
-def _circuit_png(result: StagesResult, out_dir: Path) -> Optional[str]:
-    relative = CIRCUIT_DIR / f"{result.instance}_circuit.png"
+def _haplotypes(result: StagesResult) -> dict[str, Any]:
+    haps, truth = result.haplotypes, result.matrix.true_haplotypes
+    return {
+        "decoded": [_bits(haps.copy_a), _bits(haps.copy_b)],
+        "truth": [_bits(truth[0]), _bits(truth[1])] if truth is not None else None,
+    }
+
+
+def _metrics(result: StagesResult) -> dict[str, float]:
+    return {key: float(result.metrics[key])
+            for key in ("accuracy", "switch_errors", "mec_cost") if key in result.metrics}
+
+
+def _mirror(bits: str) -> str:
+    return bits.translate(str.maketrans("01", "10"))
+
+
+def _circuit_png(result: StagesResult, out_dir: Path, variant: str = "qaoa") -> Optional[str]:
+    # varianta "qaoa" păstrează numele de dinainte; celelalte primesc numele variantei
+    suffix = "" if variant == "qaoa" else f"_{variant}"
+    relative = CIRCUIT_DIR / f"{result.instance}{suffix}_circuit.png"
     fig = plot_circuit(result.circuit)
     if fig is None:
         return None
@@ -119,21 +144,92 @@ def stage_entry(result: StagesResult, out_dir: Path) -> dict[str, Any]:
                          "energy": float(s["energy"])} for s in result.top_samples],
         "result": {"bitstring": result.full_bitstring,
                    "energy": float(problem.energy(result.full_bitstring))},
-        "haplotypes": {
-            "decoded": [_bits(haps.copy_a), _bits(haps.copy_b)],
-            "truth": [_bits(truth[0]), _bits(truth[1])] if truth is not None else None,
-        },
+        "haplotypes": _haplotypes(result),
         "read_assignment": _read_assignment(result),
-        "metrics": {key: float(result.metrics[key])
-                    for key in ("accuracy", "switch_errors", "mec_cost")
-                    if key in result.metrics},
+        "metrics": _metrics(result),
         "circuit_png": _circuit_png(result, out_dir),
     }
 
 
+def _ising(problem) -> dict[str, Any]:
+    J = problem.J
+    return {
+        "edges": [{"i": int(i), "j": int(j), "J": float(J[i, j])} for i, j in zip(*np.nonzero(J))],
+        "h": [float(v) for v in problem.h],
+        "offset": float(problem.offset),
+    }
+
+
+def variant_entry(result: StagesResult, key: str, out_dir: Path) -> dict[str, Any]:
+    """O variantă de QAOA (standard, cu qubit fixat sau warm-start) pentru o instanță."""
+    solved, samples = result.solved, result.qaoa.samples
+    chosen, total = result.qaoa.bitstring, sum(result.qaoa.samples.values())
+    # încrederea: cât din măsurători cade pe soluția aleasă; la qaoa și ws_qaoa se adună și oglinda
+    # ei (aceeași împărțire, cu A și B schimbate), la qaoa_fixed doar șirul însuși
+    hits = samples.get(chosen, 0)
+    if key != "qaoa_fixed":
+        hits += samples.get(_mirror(chosen), 0)
+    entry: dict[str, Any] = {
+        "n_qubits": int(solved.n_qubits),
+        "n_rzz": int(np.count_nonzero(solved.J)),
+        "ising": _ising(solved),
+        "cost_history": [[float(c) for c in h] for h in result.cost_history],
+        "best_start": int(result.best_start),
+        "circuit_png": _circuit_png(result, out_dir, key),
+        "all_samples": [{"bitstring": bits, "count": int(count),
+                         "energy": float(solved.energy(bits))}
+                        for bits, count in sorted(samples.items(), key=lambda item: int(item[0], 2))],
+        "top_samples": [{"bitstring": s["bitstring"], "count": int(s["count"]),
+                         "energy": float(s["energy"])} for s in result.top_samples],
+        # bitstring: cum apare în all_samples (mai scurt la qaoa_fixed); full_bitstring: problema inițială
+        "result": {"bitstring": chosen, "full_bitstring": result.full_bitstring,
+                   "energy": float(result.qaoa.energy)},
+        "haplotypes": _haplotypes(result),
+        "read_counts": _read_counts(result),
+        "metrics": _metrics(result),
+        "qaoa_seconds": round(float(result.qaoa_seconds), 3),
+        "confidence": hits / total,
+    }
+    if key == "qaoa_fixed":
+        entry["fixed_variables"] = {str(i): int(bit) for i, bit in solved.fixed_variables.items()}
+    if key == "ws_qaoa":
+        warm = result.qaoa.metadata["warm_start"]
+        entry["c"] = [float(v) for v in warm["c_relaxed"]]
+        entry["c_regularized"] = [float(v) for v in warm["c"]]
+        entry["epsilon"] = float(warm["epsilon"])
+    return entry
+
+
+def _read_counts(result: StagesResult) -> dict[str, int]:
+    teams = [int(t) for t in result.haplotypes.read_assignment]
+    return {"a": teams.count(0), "b": teams.count(1),
+            "suspect": sum(1 for t in teams if t not in (0, 1))}
+
+
+def build_variants(
+    name: str, encoding: str, base: StagesResult, out_dir: Path,
+) -> tuple[dict[str, Any], list[tuple[str, str]]]:
+    """Variantele care se pot calcula pe o instanță, plus (variantă, motiv) pentru cele omise."""
+    variants: dict[str, Any] = {}
+    skipped: list[tuple[str, str]] = []
+    for key, options in VARIANTS.items():
+        try:
+            result = base if not options else run_stages(load_case(name), encoding, **options)
+            variants[key] = variant_entry(result, key, out_dir)
+        except ValueError as error:
+            skipped.append((key, str(error)))
+            print(f"variantă omisă pe {name}: {key} ({error})", file=sys.stderr)
+    return variants, skipped
+
+
 def build_stages(out_dir: Path) -> dict[str, Any]:
-    return {name: stage_entry(run_stages(load_case(name), encoding), out_dir)
-            for name, encoding in EXPORTS}
+    stages = {}
+    for name, encoding in EXPORTS:
+        base = run_stages(load_case(name), encoding)
+        entry = stage_entry(base, out_dir)
+        entry["variants"], _ = build_variants(name, encoding, base, out_dir)
+        stages[name] = entry
+    return stages
 
 
 def write_stages_js(stages: dict[str, Any], path: Path) -> Path:
