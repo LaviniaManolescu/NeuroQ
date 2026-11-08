@@ -107,3 +107,6 @@ main[hidden]{display:none}
 .nq-tip strong{display:block; font-size:1.1rem; letter-spacing:.06em}
 .nq-tip .nq-tip-mirror{color:var(--muted); margin-top:4px}
 .nq-pairnums .nq-card{border-top:5px solid var(--nq-card-color,var(--line))}
+
+/* Asamblarea (etapa 7): fără tranziții când starea se aplică direct (?frame=end, încărcare) */
+.nq-instant, .nq-instant *{transition:none !important}

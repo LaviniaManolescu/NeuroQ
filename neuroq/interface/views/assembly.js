@@ -1,12 +1,14 @@
-// Etapa 7: asamblarea, ca într-un browser de cromozom.
-// Citirile intră pe rând pe axa SNP-urilor, colorate după echipă; copiile de jos se
-// completează coloană cu coloană prin votul majoritar al citirilor intrate.
+// Etapa 7: asamblarea. Citirile pornesc amestecate și gri; „Rezolvă” le mută, ca un slide, în două
+// panouri alăturate: copia A și copia B. Citirile suspecte rămân separat, sub panouri.
 // Aceeași animație pentru orice instanță: doar datele diferă.
 (function () {
   var NeuroQ = window.NeuroQ = window.NeuroQ || {};
   NeuroQ.views = NeuroQ.views || {};
   var S = NeuroQ.svg, C = NeuroQ.colors;
-  var LEFT = 120, LANE = 30, GAP = 26;
+  var LANE = 30;                 // înălțimea unei benzi de citire
+  var TITLE_Y = 26, LABEL_Y = 56, HAP_Y = 68;
+  var SLIDE = 'transform 1.5s cubic-bezier(.45,.05,.25,1)';
+  var FADE = 'opacity .6s';
 
   // Citirile ordonate după primul SNP, apoi așezate pe benzi, fără suprapunere.
   function layout(reads) {
@@ -23,118 +25,144 @@
     return { order: order, lanes: laneEnds.length };
   }
 
-  function majority(votes) {
-    return votes[1] > votes[0] ? 1 : votes[0] > votes[1] ? 0 : null;
-  }
+  function plural(n) { return n === 1 ? '1 citire' : n + ' citiri'; }
 
-  // Copiile după primele k citiri: votul echipei A și al echipei B pe fiecare coloană.
-  function votedCopies(order, k, nSnps) {
-    var votes = [[], []];
-    for (var c = 0; c < nSnps; c++) { votes[0].push([0, 0]); votes[1].push([0, 0]); }
-    order.slice(0, k).forEach(function (item) {
-      var team = item.read.team;
-      if (team !== 0 && team !== 1) return; // citirile suspecte nu votează
-      item.read.snps.forEach(function (snp, j) { votes[team][snp][item.read.values[j]] += 1; });
+  function teamName(team) { return team === 0 ? 'A' : team === 1 ? 'B' : 'suspectă'; }
+
+  function draw(container, stage, startSolved) {
+    var reads = stage.read_assignment, nSnps = stage.metadata.n_snps, labels = S.snpLabels(stage);
+    var decoded = stage.haplotypes.decoded;
+
+    // O singură figură SVG (se scalează la lățimea paginii, fără scroll orizontal): două panouri
+    // și, între ele, un gol; blocul amestecat de la început stă centrat.
+    var cw = Math.max(20, Math.min(40, Math.floor(1000 / (2 * nSnps + 3))));
+    var panelW = nSnps * cw, gap = Math.max(48, 3 * cw), pad = 24;
+    var W = 2 * pad + 2 * panelW + gap;
+    var xStart = (W - panelW) / 2, xPanel = [pad, pad + panelW + gap];
+    var hapH = Math.min(cw, 32), lanesTop = HAP_Y + hapH + 14;
+    var digit = cw >= 36 ? 16 : 14;
+
+    var groups = [0, 1, -1].map(function (team) {
+      return reads.filter(function (r) { return team === -1 ? (r.team !== 0 && r.team !== 1) : r.team === team; });
     });
-    var a = [], b = [];
-    for (c = 0; c < nSnps; c++) {
-      var ma = majority(votes[0][c]), mb = majority(votes[1][c]);
-      a.push(ma !== null ? ma : mb !== null ? 1 - mb : null);
-      b.push(mb !== null ? mb : ma !== null ? 1 - ma : null);
+    var all = layout(reads), parts = groups.map(layout);
+    var band = Math.max(all.lanes, parts[0].lanes, parts[1].lanes) * LANE;
+    var suspectTop = lanesTop + band + 70;   // lasă un gol între panouri și chenarul suspectelor
+    var H = (parts[2].lanes ? suspectTop + parts[2].lanes * LANE : lanesTop + band) + 22;
+
+    var pos = {};
+    all.order.forEach(function (it) { pos[it.read.read_id] = { first: it.first, last: it.last, startLane: it.lane }; });
+    parts.forEach(function (part, k) {
+      part.order.forEach(function (it) { pos[it.read.read_id].lane = it.lane; pos[it.read.read_id].group = k; });
+    });
+    function startXY(p) { return [xStart, lanesTop + p.startLane * LANE]; }
+    function solvedXY(p) {
+      return p.group === 2 ? [xStart, suspectTop + p.lane * LANE] : [xPanel[p.group], lanesTop + p.lane * LANE];
     }
-    return [a, b];
-  }
 
-  function draw(container, stage, startAtEnd) {
-    var reads = stage.read_assignment, nSnps = stage.metadata.n_snps;
-    var placed = layout(reads), labels = S.snpLabels(stage);
-    var cw = Math.max(28, Math.min(58, Math.floor(980 / nSnps)));
-    var rotate = labels.some(function (l) { return l.length > 3; });
-    var top = 56 + (rotate ? 26 : 0);
-    var tracksH = placed.lanes * LANE;
-    var copiesY = top + tracksH + GAP;
-    var W = LEFT + nSnps * cw + 20, H = copiesY + 2 * (cw + 6) + 10;
-    var svg = S.root(W, H, 'Asamblarea copiilor din citiri');
-    var x = function (c) { return LEFT + c * cw; };
+    var bar = S.html('div', { class: 'nq-controls' }, container);
+    var solve = S.html('button', { type: 'button', class: 'primary' }, bar, 'Rezolvă');
+    var back = S.html('button', { type: 'button', 'aria-label': 'Înapoi: readu citirile în starea amestecată' },
+      bar, 'Înapoi');
+    var status = S.html('span', { class: 'nq-progress', 'aria-live': 'polite' }, bar);
 
-    S.text(svg, LEFT, 20, S.snpAxisTitle(stage), { 'font-size': 15, class: 'muted' });
-    labels.forEach(function (l, c) {
-      var cx = x(c) + cw / 2, cy = top - 12;
-      S.text(svg, cx, cy, l, rotate ? { 'font-size': 13, transform: 'rotate(-45 ' + cx + ' ' + cy + ')' }
-        : { 'font-size': 16, 'text-anchor': 'middle' });
-      S.el('line', { x1: cx, x2: cx, y1: top - 4, y2: top + tracksH, stroke: C.line,
-                     'stroke-opacity': 0.35 }, svg);
+    var svg = S.root(W, H, 'Asamblarea citirilor în copia A și copia B');
+    var solvedEls = [], startEls = [];   // apar după „Rezolvă” / dispar după „Rezolvă”
+
+    function axisLabels(x0, list) {
+      labels.forEach(function (l, c) {
+        list.push(S.text(svg, x0 + c * cw + cw / 2, LABEL_Y, l, { 'font-size': 15, 'text-anchor': 'middle',
+          class: 'muted' }));
+      });
+    }
+    var startAxis = [];
+    axisLabels(xStart, startAxis);
+    startAxis.forEach(function (el) { startEls.push(el); });
+
+    [0, 1].forEach(function (k) {
+      var color = C.team(k), n = parts[k].order.length;
+      solvedEls.push(S.el('rect', { x: xPanel[k] - 12, y: 4, width: panelW + 24,
+        height: lanesTop + band + 10 - 4, rx: 12, fill: 'none', stroke: color, 'stroke-width': 2,
+        'stroke-dasharray': '7 5' }, svg));
+      solvedEls.push(S.text(svg, xPanel[k], TITLE_Y, 'Copia ' + (k === 0 ? 'A' : 'B') + ': ' + plural(n),
+        { 'font-size': 19, 'font-weight': 800, style: 'fill:' + color }));
+      axisLabels(xPanel[k], solvedEls);
+      decoded[k].split('').forEach(function (ch, c) {
+        var v = ch === '-' ? null : Number(ch);
+        solvedEls.push(S.el('rect', { x: xPanel[k] + c * cw + 1, y: HAP_Y, width: cw - 2, height: hapH,
+          rx: 4, fill: v === null ? 'none' : C.bit(v), stroke: color, 'stroke-width': 1.5 }, svg));
+        solvedEls.push(S.text(svg, xPanel[k] + c * cw + cw / 2, HAP_Y + hapH / 2 + 6, ch,
+          { 'font-size': digit + 1, 'text-anchor': 'middle', 'font-weight': 700 }));
+      });
     });
-    S.text(svg, LEFT - 12, top + 18, 'citiri', { 'font-size': 15, 'text-anchor': 'end', class: 'muted' });
+    if (parts[2].lanes) {
+      solvedEls.push(S.el('rect', { x: xStart - 12, y: suspectTop - 36, width: panelW + 24,
+        height: parts[2].lanes * LANE + 46, rx: 12, fill: 'none', stroke: C.violated, 'stroke-width': 2,
+        'stroke-dasharray': '7 5' }, svg));
+      solvedEls.push(S.text(svg, xStart, suspectTop - 12, 'Citiri suspecte: ' + parts[2].order.length,
+        { 'font-size': 18, 'font-weight': 800, style: 'fill:' + C.violated }));
+    }
+    solvedEls.concat(startEls).forEach(function (el) { el.style.transition = FADE; });
 
-    var groups = placed.order.map(function (item) {
-      var g = S.el('g', {}, svg), y = top + item.lane * LANE;
-      var color = C.team(item.read.team);
-      S.el('rect', { x: x(item.first) + 2, y: y + 4, width: (item.last - item.first + 1) * cw - 4,
-                     height: LANE - 8, rx: 6, fill: color, 'fill-opacity': 0.22, stroke: color,
-                     'stroke-width': 2, class: 'nq-read' }, g);
-      item.read.snps.forEach(function (snp, j) {
-        var bad = item.read.errors[j];
-        S.text(g, x(snp) + cw / 2, y + LANE / 2 + 5, String(item.read.values[j]), {
-          'font-size': 15, 'text-anchor': 'middle', 'font-weight': bad ? 800 : 600,
-          fill: bad ? C.violated : C.ink
+    var drawn = reads.map(function (r) {
+      var p = pos[r.read_id], g = S.el('g', {}, svg);
+      g.style.transition = SLIDE;
+      var outline = S.el('rect', { x: p.first * cw + 1, y: 2, width: (p.last - p.first + 1) * cw - 2,
+        height: LANE - 4, rx: 7, fill: 'none', 'stroke-width': 2 }, g);
+      outline.style.transition = 'stroke .6s';
+      var cells = r.snps.map(function (snp, j) {
+        var rect = S.el('rect', { x: snp * cw + 3, y: 5, width: cw - 6, height: LANE - 10, rx: 4 }, g);
+        rect.style.transition = 'fill .6s, fill-opacity .6s';
+        S.text(g, snp * cw + cw / 2, LANE / 2 + 5, String(r.values[j]),
+          { 'font-size': digit, 'text-anchor': 'middle', 'font-weight': 600 });
+        var ring = S.el('circle', { cx: snp * cw + cw / 2, cy: LANE / 2, r: Math.min(12, cw / 2 - 2),
+          fill: 'none', stroke: C.violated, 'stroke-width': 2.5 }, g);
+        ring.style.transition = FADE;
+        return { rect: rect, ring: ring, value: r.values[j], bad: r.errors[j] };
+      });
+      S.el('title', {}, g).textContent = r.read_id + ': echipa ' + teamName(r.team);
+      return { read: r, pos: p, g: g, outline: outline, cells: cells };
+    });
+
+    var counts = [parts[0].order.length, parts[1].order.length, parts[2].order.length];
+    function apply(solved, animate) {
+      if (!animate) { svg.classList.add('nq-instant'); }
+      drawn.forEach(function (d) {
+        var xy = solved ? solvedXY(d.pos) : startXY(d.pos), team = d.read.team;
+        var suspect = team !== 0 && team !== 1;
+        d.g.style.transform = 'translate(' + xy[0] + 'px,' + xy[1] + 'px)';
+        d.outline.style.stroke = solved ? (suspect ? C.violated : C.team(team)) : C.suspect;
+        d.outline.style.strokeDasharray = solved && suspect ? '6 4' : 'none';
+        d.cells.forEach(function (cell) {
+          cell.rect.style.fill = solved ? C.bit(cell.value) : C.suspect;
+          cell.rect.style.fillOpacity = solved ? 1 : 0.3;
+          cell.ring.style.opacity = solved && cell.bad ? 1 : 0;
         });
-        if (bad) {
-          S.el('circle', { cx: x(snp) + cw / 2, cy: y + LANE / 2, r: Math.min(12, cw / 2 - 2),
-                           fill: 'none', stroke: C.violated, 'stroke-width': 2.5 }, g);
-        }
       });
-      var title = S.el('title', {}, g);
-      title.textContent = item.read.read_id + ': echipa ' +
-        (item.read.team === 0 ? 'A' : item.read.team === 1 ? 'B' : 'suspectă');
-      return g;
-    });
-
-    var copyCells = [0, 1].map(function (row) {
-      var y = copiesY + row * (cw + 6);
-      S.text(svg, LEFT - 12, y + cw / 2 + 6, row === 0 ? 'copia A' : 'copia B', {
-        'font-size': 16, 'text-anchor': 'end', 'font-weight': 700, fill: row === 0 ? C.teamA : C.teamB
-      });
-      var cells = [];
-      for (var c = 0; c < nSnps; c++) {
-        var rect = S.el('rect', { x: x(c) + 2, y: y, width: cw - 4, height: cw, rx: 5,
-                                  stroke: row === 0 ? C.teamA : C.teamB, 'stroke-width': 2 }, svg);
-        var label = S.text(svg, x(c) + cw / 2, y + cw / 2 + 6, '', { 'font-size': 17,
-                           'text-anchor': 'middle', 'font-weight': 700 });
-        cells.push({ rect: rect, label: label });
-      }
-      return cells;
-    });
+      solvedEls.forEach(function (el) { el.style.opacity = solved ? 1 : 0; });
+      startEls.forEach(function (el) { el.style.opacity = solved ? 0 : 1; });
+      solve.disabled = solved;
+      back.disabled = !solved;
+      status.textContent = solved
+        ? counts[0] + ' + ' + counts[1] + ' + ' + counts[2] + ' = ' + stage.metadata.n_reads + ' citiri'
+        : stage.metadata.n_reads + ' citiri amestecate: nu știm din ce copie vine fiecare';
+      if (!animate) { svg.getBoundingClientRect(); svg.classList.remove('nq-instant'); }
+    }
+    solve.addEventListener('click', function () { apply(true, true); });
+    back.addEventListener('click', function () { apply(false, true); });
 
     container.appendChild(svg);
-    var legend = S.html('p', { class: 'nq-note' }, container);
-    legend.textContent = 'Turcoaz = citire pusă în copia A, indigo = copia B, gri = suspectă (nu votează). ' +
-      'Cerc roșu = valoare citită care diferă de copia decodată (eroare de citire). ' +
-      'Bara unei citiri arată SNP-urile acoperite, nu lungimea reală a citirii.';
-
-    NeuroQ.player(container, placed.order.length, function (k) {
-      groups.forEach(function (g, i) {
-        g.setAttribute('opacity', i < k ? 1 : 0);
-        var bar = g.querySelector('.nq-read');
-        bar.setAttribute('stroke-width', i === k - 1 ? 4 : 2);
-      });
-      var copies = votedCopies(placed.order, k, nSnps);
-      copies.forEach(function (copy, row) {
-        copy.forEach(function (v, c) {
-          var cell = copyCells[row][c];
-          cell.rect.setAttribute('fill', v === null ? 'none' : C.bit(v));
-          cell.label.textContent = v === null ? '' : String(v);
-          cell.label.setAttribute('fill', v === null ? C.ink : C.bitInk(v));
-        });
-      });
-    }, { delay: 700, unit: 'citirea', startAtEnd: startAtEnd });
+    S.html('p', { class: 'nq-note' }, container,
+      'Bara unei citiri arată SNP-urile acoperite, nu lungimea reală a citirii.');
+    apply(!!startSolved, false);
   }
 
   NeuroQ.views.assembly = {
     title: 'Asamblarea',
     lead: function (stage) {
-      return 'Citirile intră pe rând, în ordinea poziției. Fiecare votează în copia echipei ei; ' +
-        'sub ele, copiile A și B se completează prin vot majoritar pe fiecare SNP. ' +
+      return 'Citirile sunt amestecate: nu știm din ce copie vine fiecare. Apasă Rezolvă ca să le vezi ' +
+        'trecând în copia A sau în copia B, cu haplotipul reconstruit deasupra fiecărui panou; citirile ' +
+        'care nu se potrivesc clar cu nicio copie rămân separat. ' +
         (stage.metadata.instance === 'nanopore' ? 'Aici sunt puține citiri lungi.'
           : stage.metadata.instance === 'illumina' ? 'Aici sunt multe citiri scurte.' : '');
     },
