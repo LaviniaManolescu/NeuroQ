@@ -125,21 +125,69 @@
     });
   }
 
+  function percent(value) {
+    return (100 * value).toFixed(1).replace('.', ',') + '%';
+  }
+
+  // Câte citiri sunt în copia A, în copia B și suspecte; fără variante, se numără din read_assignment.
+  function readCounts(stage, v) {
+    if (v && v.read_counts) return v.read_counts;
+    var counts = { a: 0, b: 0, suspect: 0 };
+    stage.read_assignment.forEach(function (r) {
+      if (r.team === 0) { counts.a++; } else if (r.team === 1) { counts.b++; } else { counts.suspect++; }
+    });
+    return counts;
+  }
+
+  function assignCards(container, stage, v) {
+    var counts = readCounts(stage, v), nReads = stage.metadata.n_reads;
+    S.html('div', { class: 'nq-caption' }, container, 'Citirile pe copii, pentru soluția aleasă');
+    var box = S.html('div', { class: 'nq-cards nq-assign' }, container);
+    [['a', 'în copia A', C.teamA], ['b', 'în copia B', C.teamB], ['suspect', 'suspecte', C.suspect]]
+      .forEach(function (def) {
+        var card = S.html('div', { class: 'nq-card' }, box);
+        card.style.setProperty('--nq-card-color', def[2]);
+        S.html('div', { class: 'v' }, card, String(counts[def[0]]));
+        S.html('div', { class: 'k' }, card, 'citiri ' + def[1]);
+      });
+    S.html('p', { class: 'nq-note' }, container, counts.a + ' + ' + counts.b + ' + ' + counts.suspect +
+      ' = ' + nReads + ' citiri.');
+  }
+
   NeuroQ.views.top = {
     title: 'Rezultatul',
-    lead: function () {
-      return 'După antrenare măsurăm circuitul de 2048 de ori. Alegem șirul cu energia cea mai mică ' +
+    lead: function (stage, ctx) {
+      var base = 'După antrenare măsurăm circuitul de 2048 de ori. Alegem șirul cu energia cea mai mică ' +
         'dintre cele observate; pe graf, muchiile pe care acest șir le încalcă apar cu roșu.';
+      if (ctx && ctx.variantKey === 'qaoa_fixed') {
+        return base + ' Un qubit e fixat, deci șirurile din histogramă au un bit mai puțin și nu mai au oglindă.';
+      }
+      return base;
     },
-    render: function (container, stage) {
+    render: function (container, stage, ctx) {
+      var v = ctx.variant || stage;  // fără variante în stages.js, rămân câmpurile instanței
+      var fixed = ctx.variantKey === 'qaoa_fixed';
+      var full = ctx.variant ? v.result.full_bitstring : stage.result.bitstring;  // pe problema inițială
       var row = S.html('div', { class: 'nq-row' }, container);
       var left = S.html('div', { class: 'nq-col' }, row);
       S.html('div', { class: 'nq-caption' }, left, 'Cele mai probabile 10 șiruri');
-      topBars(left, stage);
+      topBars(left, v);
+      if (ctx.variant) {
+        S.html('p', { class: 'nq-note' }, left, 'Încrederea variantei: ' + percent(v.confidence) +
+          ' din măsurători cad pe soluția aleasă' + (fixed ? '.'
+            : ' și pe oglinda ei (aceeași împărțire a citirilor, cu A și B schimbate).'));
+      }
+      assignCards(left, stage, ctx.variant);
       var right = S.html('div', { class: 'nq-col' }, row);
-      S.html('div', { class: 'nq-caption' }, right, 'Șirul ales ' + stage.result.bitstring +
-        ', energia ' + S.fmt(stage.result.energy));
-      NeuroQ.views.graph.render(right, stage, { bitstring: stage.result.bitstring });
+      S.html('div', { class: 'nq-caption' }, right, 'Șirul ales ' + full + ', energia ' +
+        S.fmt(ctx.variant ? v.result.energy : stage.result.energy));
+      NeuroQ.views.graph.render(right, stage, { bitstring: full });
+      if (fixed) {
+        var names = S.variableLabels(stage);
+        S.html('p', { class: 'nq-note' }, right, 'Fixat: ' + Object.keys(v.fixed_variables).map(function (i) {
+          return 'qubitul ' + names[Number(i)] + ' la ' + v.fixed_variables[i];
+        }).join(', ') + '. Graful arată toți qubiții problemei inițiale.');
+      }
     }
   };
 

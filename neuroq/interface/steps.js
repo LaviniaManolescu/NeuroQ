@@ -1,6 +1,7 @@
 // Controlul etapelor: pornește la evenimentul 'genometric:start' al paginii GenoMEtric,
 // alege instanța din data.metadata.instance și afișează cele 7 etape, cu bara de pași,
-// Înapoi/Înainte și săgețile de la tastatură. Pentru capturi: ?instance=notebook&step=4&frame=end
+// Înapoi/Înainte și săgețile de la tastatură. La etapele 4 și 5 apare și comutatorul de variante QAOA.
+// Pentru capturi: ?instance=notebook&step=4&frame=end&variant=ws_qaoa
 (function () {
   var NeuroQ = window.NeuroQ = window.NeuroQ || {};
   var S = NeuroQ.svg;
@@ -8,7 +9,14 @@
   var STEPS = ['data', 'evidence', 'ising', 'qaoa', 'top', 'copies', 'assembly'];
   var ENCODINGS = { position: 'pe poziții (un qubit pe SNP)', read: 'pe citiri (un qubit pe citire)' };
 
-  var state = { stage: null, index: 0, frameEnd: false, app: null };
+  // Variantele de QAOA din stages.js (stage.variants), în ordinea afișării.
+  var VARIANT_ORDER = ['qaoa', 'qaoa_fixed', 'ws_qaoa'];
+  var VARIANT_LABELS = { qaoa: 'QAOA standard', qaoa_fixed: 'QAOA cu un qubit fixat',
+                         ws_qaoa: 'Warm-start QAOA' };
+  var VARIANT_STEPS = ['qaoa', 'top'];  // etapele 4 și 5
+
+  // variant: varianta aleasă, păstrată la trecerea între etape; settled: curbele apar deja complete
+  var state = { stage: null, index: 0, frameEnd: false, variant: 'qaoa', settled: false, app: null };
 
   function app() {
     if (!state.app) {
@@ -49,6 +57,48 @@
     return window.STAGES ? Object.keys(window.STAGES) : [];
   }
 
+  function variantKeys(stage) {
+    var all = stage.variants || {};
+    return VARIANT_ORDER.filter(function (key) { return all[key]; });
+  }
+
+  function currentVariant(stage) {
+    var keys = variantKeys(stage);
+    if (!keys.length) return null;
+    var key = keys.indexOf(state.variant) !== -1 ? state.variant : keys[0];
+    state.variant = key;
+    return { key: key, data: stage.variants[key] };
+  }
+
+  function percent(value) {
+    return (100 * value).toFixed(1).replace('.', ',') + '%';
+  }
+
+  // Comutatorul și rândul de sub el; apar doar dacă sunt cel puțin două variante.
+  function variantBar(section, stage, current) {
+    if (variantKeys(stage).length < 2) return;
+    var group = S.html('div', { class: 'nq-variants', role: 'group', 'aria-label': 'Varianta de QAOA' },
+      section);
+    variantKeys(stage).forEach(function (key) {
+      var button = S.html('button', { type: 'button', 'aria-pressed': String(key === current.key) },
+        group, VARIANT_LABELS[key]);
+      button.addEventListener('click', function () {
+        if (key === state.variant) return;
+        state.variant = key;
+        go(state.index, true);
+      });
+    });
+    var v = current.data, stats = S.html('div', { class: 'nq-vstats' }, section);
+    [[Math.round(100 * v.metrics.accuracy) + '%', 'acuratețe'],
+     [String(v.n_qubits), 'qubiți'],
+     [String(v.n_rzz), 'porți RZZ pe strat'],
+     [percent(v.confidence), 'încrederea variantei']].forEach(function (item) {
+      var cell = S.html('div', {}, stats);
+      S.html('span', { class: 'v' }, cell, item[0]);
+      S.html('span', { class: 'k' }, cell, item[1]);
+    });
+  }
+
   function start(detail) {
     var data = detail && detail.data;
     var instance = data && data.metadata && data.metadata.instance;
@@ -76,10 +126,15 @@
     go(state.index);
   }
 
-  function go(index) {
+  // settled: la schimbarea variantei etapa se redesenează cu curbele deja complete
+  function go(index, settled) {
     NeuroQ.player.stopAll();
+    state.settled = !!settled;
     state.index = Math.max(0, Math.min(STEPS.length - 1, index));
     var stage = state.stage, view = NeuroQ.views[STEPS[state.index]], root = app();
+    var current = currentVariant(stage);
+    var ctx = { resultsBase: RESULTS_BASE, frameEnd: state.frameEnd || state.settled,
+                variant: current ? current.data : null, variantKey: current ? current.key : null };
     root.textContent = '';
 
     var head = S.html('header', { class: 'nq-head' }, root);
@@ -103,9 +158,10 @@
 
     var section = S.html('section', { class: 'nq-stage', 'aria-live': 'polite' }, root);
     S.html('h2', {}, section, (state.index + 1) + '. ' + view.title);
-    S.html('p', { class: 'nq-lead' }, section, view.lead(stage));
+    S.html('p', { class: 'nq-lead' }, section, view.lead(stage, ctx));
+    if (current && VARIANT_STEPS.indexOf(STEPS[state.index]) !== -1) variantBar(section, stage, current);
     try {
-      view.render(section, stage, { resultsBase: RESULTS_BASE, frameEnd: state.frameEnd });
+      view.render(section, stage, ctx);
     } catch (error) {
       S.html('p', { class: 'nq-note' }, section,
         'Etapa nu a putut fi desenată: datele din stages.js nu au forma așteptată (' + error.message + ').');
@@ -122,10 +178,13 @@
       if (state.index === STEPS.length - 1) { goHome(); return; }
       go(state.index + 1);
     });
+    var pressed = root.querySelector('.nq-variants [aria-pressed="true"]');
+    if (settled && pressed) pressed.focus();   // după o schimbare de variantă, focusul rămâne pe comutator
   }
 
   document.addEventListener('genometric:start', function (event) {
     state.index = 0;
+    state.variant = 'qaoa';
     start(event.detail);
   });
 
@@ -142,6 +201,7 @@
   if (params.has('instance')) {
     state.index = Math.max(0, (Number(params.get('step')) || 1) - 1);
     state.frameEnd = params.get('frame') === 'end';
+    if (params.has('variant')) state.variant = params.get('variant');
     start({ name: 'link', data: { metadata: { instance: params.get('instance') } } });
   }
 })();

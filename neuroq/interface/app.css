@@ -69,6 +69,20 @@ main[hidden]{display:none}
 .nq-controls{display:flex; flex-wrap:wrap; align-items:center; gap:10px}
 .nq-controls .nq-progress{color:var(--muted); font-variant-numeric:tabular-nums}
 
+/* Comutatorul de variante QAOA (etapele 4 și 5) */
+#nq-app .nq-variants{
+  display:flex; flex-wrap:wrap; width:fit-content; max-width:100%;
+  border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:var(--nq-panel);
+}
+#nq-app .nq-variants button{border:0; border-radius:0; padding:10px 20px; background:transparent}
+#nq-app .nq-variants button + button{border-left:1.5px solid var(--line)}
+#nq-app .nq-variants button[aria-pressed="true"]{background:var(--accent); color:#04121f; font-weight:700}
+.nq-vstats{display:flex; flex-wrap:wrap; gap:8px 36px}
+.nq-vstats > div{display:flex; flex-direction:column}
+.nq-vstats .v{font-size:1.6rem; font-weight:800; font-variant-numeric:tabular-nums; line-height:1.2}
+.nq-vstats .k{color:var(--muted); font-size:.92rem}
+.nq-assign .nq-card{border-top:5px solid var(--nq-card-color,var(--line))}
+
 .nq-nav{display:flex; justify-content:space-between; align-items:center; gap:12px}
 .nq-nav .nq-hint{color:var(--muted); font-size:.95rem}
 

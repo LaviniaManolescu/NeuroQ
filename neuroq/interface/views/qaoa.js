@@ -53,33 +53,93 @@
     }, { delay: 120, unit: 'evaluarea', step: true, startAtEnd: startAtEnd });
   }
 
+  // Warm-start: înclinarea de start a fiecărui qubit (probabilitatea ca bitul să fie 1), înainte de
+  // regularizare (relaxarea continuă) și după ea (tăiată în [ε, 1 − ε]); linia 0,5 = fără preferință.
+  var TW = 640, TH = 250, TPAD = { l: 52, r: 16, t: 24, b: 66 };
+
+  function tiltBars(container, stage, v) {
+    var labels = S.variableLabels(stage), n = v.c.length;
+    var slot = (TW - TPAD.l - TPAD.r) / n, bw = Math.min(22, slot * 0.38);
+    var y = function (p) { return TPAD.t + (TH - TPAD.t - TPAD.b) * (1 - p); };
+    var svg = S.root(TW, TH, 'Înclinarea de start a qubiților');
+    [0, 0.5, 1].forEach(function (p) {
+      S.el('line', { x1: TPAD.l, x2: TW - TPAD.r, y1: y(p), y2: y(p), stroke: C.line,
+                     'stroke-opacity': p === 0.5 ? 0.95 : 0.4,
+                     'stroke-dasharray': p === 0.5 ? '6 5' : 'none' }, svg);
+      S.text(svg, TPAD.l - 8, y(p) + 5, S.fmt(p), { 'font-size': 14, 'text-anchor': 'end' });
+    });
+    S.text(svg, TW - TPAD.r, y(0.5) - 6, 'linia 0,5: fără preferință',
+           { 'font-size': 13, 'text-anchor': 'end', class: 'muted' });
+    labels.forEach(function (label, i) {
+      var cx = TPAD.l + slot * (i + 0.5);
+      [[v.c[i], -bw - 1, C.bit1, 0.65, 'relaxarea'], [v.c_regularized[i], 1, C.accent, 0.95, 'după ε']]
+        .forEach(function (bar) {
+          var top = y(bar[0]);
+          var rect = S.el('rect', { x: cx + bar[1], y: top, width: bw, height: Math.max(1.5, y(0) - top),
+                                    rx: 2, fill: bar[2], 'fill-opacity': bar[3] }, svg);
+          S.el('title', {}, rect).textContent = 'qubitul ' + label + ', ' + bar[4] + ': ' + S.fmt(bar[0]);
+        });
+      S.text(svg, cx, y(0) + 20, label, { 'font-size': n > 12 ? 12 : 14, 'text-anchor': 'middle' });
+    });
+    [[C.bit1, 0.65, 'relaxarea continuă, înainte de ε'],
+     [C.accent, 0.95, 'după regularizare, ε = ' + S.fmt(v.epsilon)]].forEach(function (item, k) {
+      var x0 = TPAD.l + k * 270;
+      S.el('rect', { x: x0, y: TH - 20, width: 14, height: 14, rx: 2, fill: item[0],
+                     'fill-opacity': item[1] }, svg);
+      S.text(svg, x0 + 20, TH - 8, item[2], { 'font-size': 13 });
+    });
+    container.appendChild(svg);
+  }
+
   NeuroQ.views.qaoa = {
     title: 'QAOA',
-    lead: function (stage) {
-      return 'Circuitul are un strat: H pe toți cei ' + stage.metadata.n_qubits + ' qubiți, o poartă ' +
-        'RZZ pentru fiecare cuplaj nenul și RX pe fiecare qubit. COBYLA ajustează cele două unghiuri ' +
-        'ca energia medie ⟨H⟩ să scadă, din două puncte de pornire.';
+    lead: function (stage, ctx) {
+      var key = ctx && ctx.variantKey, v = ctx && ctx.variant;
+      var n = v ? v.n_qubits : stage.metadata.n_qubits;
+      var train = 'COBYLA ajustează cele două unghiuri ca energia medie ⟨H⟩ să scadă, din două puncte ' +
+        'de pornire.';
+      if (key === 'qaoa_fixed') {
+        return 'Primul qubit este fixat la 0, deci circuitul are ' + n + ' qubiți, unul mai puțin. Cuplajele ' +
+          'lui cu ceilalți devin câmpuri locale, adică porți RZ pe un singur qubit, iar oglinda A↔B dispare: ' +
+          'soluția nu se mai împarte în două șiruri echivalente. ' + train;
+      }
+      if (key === 'ws_qaoa') {
+        return 'Warm-start: nu pornim din suprapunerea uniformă. Rezolvăm întâi o variantă „moale” a ' +
+          'problemei, în care biții pot fi între 0 și 1, iar fiecare qubit pornește înclinat spre valoarea ' +
+          'găsită, printr-o rotație RY. Cele ' + v.n_rzz + ' porți RZZ rămân, iar mixerul RY-RZ-RY păstrează ' +
+          'starea de start. ' + train;
+      }
+      return 'Circuitul are un strat: H pe toți cei ' + n + ' qubiți, o poartă RZZ pentru fiecare cuplaj ' +
+        'nenul și RX pe fiecare qubit. ' + train;
     },
     render: function (container, stage, ctx) {
+      var v = ctx.variant || stage;  // fără variante în stages.js, rămân câmpurile instanței
+      var nQubits = ctx.variant ? v.n_qubits : stage.metadata.n_qubits;
+      var nRzz = ctx.variant ? v.n_rzz : stage.ising.edges.length;
+      var seconds = ctx.variant ? v.qaoa_seconds : stage.metadata.qaoa_seconds;
       var row = S.html('div', { class: 'nq-row' }, container);
       var left = S.html('div', { class: 'nq-col' }, row);
       S.html('div', { class: 'nq-caption' }, left, 'Circuitul cu unghiurile antrenate');
-      if (stage.circuit_png) {
-        var img = S.html('img', { class: 'nq-circuit', src: ctx.resultsBase + stage.circuit_png,
-          alt: 'Circuitul QAOA cu ' + stage.metadata.n_qubits + ' qubiți' }, left);
+      if (v.circuit_png) {
+        var img = S.html('img', { class: 'nq-circuit', src: ctx.resultsBase + v.circuit_png,
+          alt: 'Circuitul QAOA cu ' + nQubits + ' qubiți' }, left);
         img.addEventListener('error', function () {
           img.replaceWith(S.html('p', { class: 'nq-note' }, null,
-            'Imaginea circuitului lipsește (' + stage.circuit_png + '). Rulează export_stages.'));
+            'Imaginea circuitului lipsește (' + v.circuit_png + '). Rulează export_stages.'));
         });
       } else {
-        S.html('p', {}, left, stage.metadata.n_qubits + ' qubiți, ' + stage.ising.edges.length +
+        S.html('p', {}, left, nQubits + ' qubiți, ' + nRzz +
           ' porți RZZ (cu doi qubiți) pe strat; circuitul e prea mare pentru desen.');
       }
       S.html('p', { class: 'nq-note' }, left, 'Timpul QAOA (antrenare + 2048 de măsurători): ' +
-        S.fmt(stage.metadata.qaoa_seconds) + ' s pe simulator.');
+        S.fmt(seconds) + ' s pe simulator.');
       var right = S.html('div', { class: 'nq-col' }, row);
       S.html('div', { class: 'nq-caption' }, right, 'Costul pe iterații');
-      costChart(right, stage, ctx.frameEnd);
+      costChart(right, v, ctx.frameEnd);
+      if (ctx.variantKey === 'ws_qaoa') {
+        S.html('div', { class: 'nq-caption' }, right, 'Înclinarea de start a fiecărui qubit (P bit = 1)');
+        tiltBars(right, stage, v);
+      }
     }
   };
 })();
