@@ -6,6 +6,7 @@ Rulare:
     python -m neuroq.experiments.demo --instance nanopore --warm
     python -m neuroq.experiments.demo --instance all
     python -m neuroq.experiments.demo --instance illumina --p 3 [--fix] [--warm]
+    python -m neuroq.experiments.demo --all-variants [--p 3]
 Figurile se salvează în results/figures/demo_<instanță>/. Fără --show se folosește backend-ul
 Agg (doar salvare); cu --show figurile se deschid pe rând și demo-ul așteaptă Enter la final.
 """
@@ -57,9 +58,12 @@ def live_cost(start: int, iteration: int, cost: float) -> None:
 class FigureSink:
     """Salvează figurile numerotate și, cu --show, le deschide pe rând."""
 
-    def __init__(self, directory: Path, suffix: str, show: bool) -> None:
+    def __init__(self, directory: Path, suffix: str, show: bool, base: Optional[str] = None,
+                 always_p: bool = False) -> None:
         self.directory = directory
         self.suffix = suffix
+        self.base = base  # sufixul fără p; None = se deduce din sufix (cazul --p)
+        self.always_p = always_p  # --all-variants: figurile pe p au mereu p în nume
         self.show = show
         self.saved: list[Path] = []
 
@@ -117,11 +121,12 @@ def present(result: StagesResult, sink: FigureSink) -> None:
     sink.add(5, "circuit", viz.plot_circuit(qc))
 
     # fără --p (p = 1) numele figurilor rămân cele de dinainte; cu --p 3 fiecare p are figurile lui
-    steps = result.layers if result.p > 1 else [result.qaoa]
-    base = sink.suffix.removesuffix(f"_p{result.p}") if result.p > 1 else sink.suffix
+    per_p = result.p > 1 or sink.always_p
+    steps = result.layers if per_p else [result.qaoa]
+    base = sink.base if sink.base is not None else sink.suffix.removesuffix(f"_p{result.p}")
     for k, step in enumerate(steps, start=1):
-        tag = f"{base}_p{k}" if result.p > 1 else None
-        label = f" (p = {k})" if result.p > 1 else ""
+        tag = "_".join(part for part in (base, f"p{k}") if part) if per_p else None
+        label = f" (p = {k})" if per_p else ""
         history = step.metadata["cost_history"]
         best = step.metadata["best_start"]
         _title(6, f"Antrenarea{label}: {sum(len(h) for h in history)} evaluări COBYLA "
@@ -136,7 +141,7 @@ def present(result: StagesResult, sink: FigureSink) -> None:
             print(f"   {row['bitstring']}   {row['count']:5d} apariții   E = {row['energy']:g}{mark}")
         sink.add(7, "top10", viz.plot_top_samples(step.metadata["top_samples"], result.exact.energy),
                  tag)
-        if result.p > 1:
+        if per_p:
             energies = {b: result.solved.energy(b) for b in step.samples}
             sink.add(10, "incredere", viz.plot_confidence(
                 step.samples, energies, result.exact.energy, step.bitstring, p=k), tag)
@@ -200,6 +205,105 @@ def print_summary(runs: list, seconds: float) -> None:
         print(f"   {result.instance:10s}{top10}")
 
 
+VARIANTS = {"qaoa": {}, "qaoa_fixed": {"fix": True}, "ws_qaoa": {"warm": True}}
+COMPARISON_FILE = "comparatie_variante.png"
+TABLE_FILE = "demo_variante.md"
+
+
+def _mirror(bits: str) -> str:
+    return bits.translate(str.maketrans("01", "10"))
+
+
+def _optimum_frequency(result: StagesResult, step) -> float:
+    shots = sum(step.samples.values())
+    hits = sum(c for b, c in step.samples.items()
+               if np.isclose(result.solved.energy(b), result.exact.energy))
+    return hits / shots
+
+
+def _status(result: StagesResult, full: str) -> str:
+    if full == result.exact.bitstring:
+        return "optimul"
+    if full == _mirror(result.exact.bitstring):
+        return "oglinda optimului"
+    if np.isclose(result.problem.energy(full), result.exact.energy):
+        return "alt optim (degenerat)"
+    return "nu"
+
+
+def variant_rows(result: StagesResult, variant: str) -> list[tuple]:
+    """Un rând pe p: șirul ales (complet), energia lui, dacă e optimul, frecvența optimului."""
+    from neuroq.experiments.stages import _with_fixed_bits
+
+    rows = []
+    for p, step in enumerate(result.layers, start=1):
+        full = _with_fixed_bits(step.bitstring, result.solved.fixed_variables)
+        rows.append((result.instance, variant, p, full, result.problem.energy(full),
+                     _status(result, full), _optimum_frequency(result, step)))
+    return rows
+
+
+def table_text(rows: list[tuple], markdown: bool) -> str:
+    head = ("instanța", "varianta", "p", "șirul ales", "energia", "este", "frecvența optimului")
+    cells = [(i, v, str(p), s, f"{e:g}", st, f"{100 * f:.2f}%") for i, v, p, s, e, st, f in rows]
+    if markdown:
+        lines = ["| " + " | ".join(head) + " |", "|" + "---|" * len(head)]
+        return "\n".join(lines + ["| " + " | ".join(c) + " |" for c in cells]) + "\n"
+    widths = [max(len(h), *(len(c[k]) for c in cells)) for k, h in enumerate(head)]
+    fmt = "  ".join(f"{{:{w}s}}" for w in widths)
+    return "\n".join([fmt.format(*head)] + [fmt.format(*c) for c in cells])
+
+
+def run_all_variants(out: Path, p: int) -> tuple[list[Path], Path]:
+    """Cele 3 instanțe × cele 3 variante (× p = 1..p): figuri separate pe variantă, o figură
+    comparativă pe instanță, un tabel final."""
+    import contextlib
+    import io
+
+    import matplotlib.pyplot as plt
+
+    from neuroq import viz
+    from neuroq.viz import save_figure
+
+    start = time.perf_counter()
+    saved: list[Path] = []
+    rows: list[tuple] = []
+    for instance in INSTANCES:
+        kind = resolve_encoding(instance, None)
+        columns, optimum = [], 0.0
+        for variant, options in VARIANTS.items():
+            began = time.perf_counter()
+            result = run_stages(load_case(instance), kind, p=p, **options)
+            sink = FigureSink(out / f"demo_{instance}" / variant, f"p{p}", False, base="",
+                              always_p=True)
+            with contextlib.redirect_stdout(io.StringIO()):  # detaliile etapelor: un rând mai jos
+                present(result, sink)
+            saved += sink.saved
+            rows += variant_rows(result, variant)
+            final, last = result.layers[-1], rows[-1]
+            optimum = result.exact.energy
+            columns.append({
+                "title": f"{variant}\nales {last[3]}, E = {last[4]:g}\n"
+                         f"optimul apare în {100 * last[6]:.1f}% din măsurători",
+                "top": final.metadata["top_samples"], "histories": final.metadata["cost_history"],
+                "best_start": final.metadata["best_start"]})
+            print(f"{instance:9s} {variant:11s} p = 1..{p}: {len(sink.saved)} figuri în "
+                  f"{sink.directory} ({time.perf_counter() - began:.1f} s)", flush=True)
+        fig = viz.plot_variant_comparison(
+            columns, optimum, f"{instance}: cele trei variante QAOA (p = {p})")
+        path = save_figure(fig, out / f"demo_{instance}" / COMPARISON_FILE)
+        saved.append(path)
+        plt.close(fig)
+        print(f"{instance:9s} figura comparativă: {path}", flush=True)
+    print(f"\n{table_text(rows, markdown=False)}")
+    table_path = out.parent / TABLE_FILE
+    table_path.write_text(
+        f"# Variantele QAOA pe cele trei instanțe (p = 1..{p})\n\n"
+        + table_text(rows, markdown=True), encoding="utf-8")
+    print(f"\nTabel: {table_path}; {len(saved)} figuri; {time.perf_counter() - start:.0f} s")
+    return saved, table_path
+
+
 def main(argv: Optional[list[str]] = None) -> list[Path]:
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
@@ -213,12 +317,21 @@ def main(argv: Optional[list[str]] = None) -> list[Path]:
                         help="warm-start QAOA, pornit din relaxarea continuă")
     parser.add_argument("--p", type=int, choices=[1, 2, 3], default=1,
                         help="straturile QAOA; la p > 1 antrenează p = 1..p în lanț (INTERP)")
+    parser.add_argument("--all-variants", action="store_true",
+                        help="cele 3 instanțe × qaoa, qaoa_fixed, ws_qaoa (× p = 1..--p), "
+                             "figurile pe variantă în demo_<instanță>/<variantă>/")
     parser.add_argument("--show", action="store_true", help="deschide figurile pe rând")
     parser.add_argument("--out", type=Path, default=DEFAULT_OUTPUT)
     args = parser.parse_args(argv)
     if not args.show:
         matplotlib.use("Agg")
 
+    if args.all_variants:
+        if args.fix or args.warm or args.encoding or args.instance != "notebook":
+            print("--all-variants rulează toate instanțele și variantele; --instance, --encoding, "
+                  "--fix și --warm se ignoră.\n")
+        run_all_variants(args.out, args.p)
+        return []
     if args.instance == RUN_ALL:
         if args.encoding:
             print("--encoding se ignoră la --instance all: fiecare instanță rulează pe codificarea ei "

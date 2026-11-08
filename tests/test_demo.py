@@ -69,3 +69,27 @@ def test_instance_all_ignores_encoding_with_a_note(tmp_path, capsys):
     saved = main(["--instance", "all", "--encoding", "citiri", "--out", str(tmp_path)])
     assert len(saved) == 3 * len(EXPECTED)
     assert "--encoding se ignoră" in capsys.readouterr().out
+
+
+def test_all_variants_writes_separate_dirs_comparison_and_table(tmp_path, monkeypatch):
+    from neuroq.experiments import demo
+
+    # o singură instanță, ca testul să fie rapid; restul codului e cel real
+    monkeypatch.setattr(demo, "INSTANCES", {"notebook": demo.INSTANCES["notebook"]})
+    out = tmp_path / "figures"
+    main(["--all-variants", "--p", "2", "--out", str(out)])
+    for variant in ("qaoa", "qaoa_fixed", "ws_qaoa"):
+        folder = out / "demo_notebook" / variant
+        for name in ("05_circuit_p2", "06_cost_qaoa_p1", "06_cost_qaoa_p2", "07_top10_p2",
+                     "10_incredere_p1", "10_incredere_p2"):
+            assert (folder / f"{name}.png").is_file(), (variant, name)
+    assert (out / "demo_notebook" / "comparatie_variante.png").is_file()
+    table = (tmp_path / "demo_variante.md").read_text(encoding="utf-8")
+    assert table.count("| notebook |") == 6  # 3 variante × p = 1, 2
+    fixed = [line for line in table.splitlines() if "qaoa_fixed" in line]
+    assert all("| 01101 |" in line and "optimul" in line for line in fixed)
+
+
+def test_default_run_keeps_the_old_file_names(tmp_path):
+    saved = main(["--instance", "notebook", "--out", str(tmp_path)])
+    assert any(path.name == "07_top10_pozitii.png" for path in saved)

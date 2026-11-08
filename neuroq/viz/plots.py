@@ -249,6 +249,51 @@ def plot_confidence(
     return fig
 
 
+def plot_variant_comparison(columns: Sequence[dict[str, Any]], optimum: float,
+                            title: str = "") -> Figure:
+    """Variantele una lângă alta: sus histograma top-10, jos curba de cost; fonturi mari, pentru slide.
+
+    Fiecare coloană: {"title", "top" (top_samples), "histories", "best_start"}.
+    """
+    big = FONT_SIZE + 4
+    fig, axes = plt.subplots(2, len(columns), figsize=(7.4 * len(columns), 12), squeeze=False)
+    low = min(min(min(h) for h in col["histories"]) for col in columns)
+    high = max(max(max(h) for h in col["histories"]) for col in columns)
+    for k, col in enumerate(columns):
+        ax = axes[0][k]
+        top = list(col["top"])[:10][::-1]
+        colors = ["#2F8A55" if math.isclose(t["energy"], optimum) else COLOR_ZERO for t in top]
+        bars = ax.barh([t["bitstring"] for t in top], [t["count"] for t in top], color=colors)
+        for bar, t in zip(bars, top):
+            ax.text(bar.get_width(), bar.get_y() + bar.get_height() / 2, f"  E = {t['energy']:g}",
+                    va="center", fontsize=big - 4)
+        ax.set_xlim(0, max(t["count"] for t in top) * 1.4)
+        ax.set_title(col["title"], fontsize=big, fontweight="bold")
+        ax.set_xlabel("apariții (din 2048)", fontsize=big - 2)
+        for label in ax.get_yticklabels():
+            label.set_family("monospace")
+            label.set_fontsize(big - 4)
+        ax.tick_params(axis="x", labelsize=big - 4)
+
+        ax = axes[1][k]
+        for s, history in enumerate(col["histories"]):
+            ax.plot(range(1, len(history) + 1), history, linewidth=4 if s == col["best_start"] else 2,
+                    label=f"start {s + 1}" + (" (ales)" if s == col["best_start"] else ""))
+        ax.axhline(optimum, color="#14243A", linestyle="--", linewidth=2.5,
+                   label=f"optim exact = {optimum:g}")
+        span = (high - low) or 1.0
+        ax.set_ylim(min(low, optimum) - 0.05 * span, high + 0.05 * span)
+        ax.set_xlabel("evaluare COBYLA", fontsize=big - 2)
+        ax.set_ylabel("energia medie ⟨H⟩" if k == 0 else "", fontsize=big - 2)
+        ax.tick_params(labelsize=big - 4)
+        ax.grid(alpha=0.3)
+        ax.legend(fontsize=big - 5)
+    if title:
+        fig.suptitle(title, fontsize=big + 4, fontweight="bold")
+    fig.tight_layout()
+    return fig
+
+
 def plot_circuit(circuit: Any, max_qubits: int = MAX_CIRCUIT_QUBITS,
                  title: Optional[str] = None) -> Optional[Figure]:
     """Desenează circuitul QAOA cu H, RZZ și RX vizibile; peste `max_qubits` doar loghează."""
