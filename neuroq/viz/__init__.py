@@ -10,6 +10,7 @@ from neuroq.viz.plots import (
     plot_qaoa_cost,
     plot_reads_matrix,
     plot_top_samples,
+    plot_variant_comparison,
     save_figure,
 )
 
@@ -23,5 +24,6 @@ __all__ = [
     "plot_qaoa_cost",
     "plot_reads_matrix",
     "plot_top_samples",
+    "plot_variant_comparison",
     "save_figure",
 ]
