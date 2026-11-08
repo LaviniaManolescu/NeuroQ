@@ -117,6 +117,11 @@ def stage_entry(result: StagesResult, out_dir: Path) -> dict[str, Any]:
         "best_start": int(result.best_start),
         "top_samples": [{"bitstring": s["bitstring"], "count": int(s["count"]),
                          "energy": float(s["energy"])} for s in result.top_samples],
+        # distribuția completă din QAOASolver (samples), fără nicio rulare nouă; ordine binară
+        "all_samples": [{"bitstring": bits, "count": int(count),
+                         "energy": float(result.solved.energy(bits))}
+                        for bits, count in sorted(result.qaoa.samples.items(),
+                                                  key=lambda item: int(item[0], 2))],
         "result": {"bitstring": result.full_bitstring,
                    "energy": float(problem.energy(result.full_bitstring))},
         "haplotypes": {

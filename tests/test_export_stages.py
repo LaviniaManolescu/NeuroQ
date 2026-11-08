@@ -10,7 +10,7 @@ from neuroq.experiments.export_stages import JS_PREFIX, export_stages
 
 INSTANCES = {"notebook", "illumina", "nanopore"}
 FIELDS = {"metadata", "evidence", "a", "d", "ising", "cost_history", "best_start",
-          "top_samples", "result", "haplotypes", "read_assignment", "metrics", "circuit_png"}
+          "top_samples", "all_samples", "result", "haplotypes", "read_assignment", "metrics", "circuit_png"}
 
 
 def _reject_constant(name):
@@ -55,6 +55,26 @@ def test_notebook_entry_matches_the_lab(exported):
     assert nb["result"]["energy"] == pytest.approx(1.0)
     assert set(nb["haplotypes"]["decoded"]) == {"01101", "10010"}
     assert nb["ising"]["offset"] == pytest.approx(12.5) and len(nb["ising"]["edges"]) == 9
+
+
+def test_all_samples_is_the_full_distribution(exported):
+    import inspect
+
+    from neuroq.solvers import QAOASolver
+
+    shots = inspect.signature(QAOASolver.__init__).parameters["shots"].default
+    _, path = exported
+    for name, entry in load_stages(path).items():
+        samples = entry["all_samples"]
+        assert sum(s["count"] for s in samples) == shots, name
+        values = [int(s["bitstring"], 2) for s in samples]
+        assert values == sorted(set(values)), f"{name}: ordine binară"
+        assert all(s["count"] >= 1 and len(s["bitstring"]) == entry["metadata"]["n_qubits"]
+                   for s in samples)
+        by_count = sorted(samples, key=lambda s: (-s["count"], s["bitstring"]))
+        assert entry["top_samples"] == by_count[:len(entry["top_samples"])], name
+        chosen = next(s for s in samples if s["bitstring"] == entry["result"]["bitstring"])
+        assert chosen["energy"] == pytest.approx(entry["result"]["energy"])
 
 
 def test_circuit_images_exist(exported):

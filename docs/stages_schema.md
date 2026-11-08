@@ -29,6 +29,7 @@ Indicii (SNP-uri, citiri, variabile) sunt de la 0 în tot fișierul, iar șiruri
 | `cost_history` | listă de liste | valoarea medie ⟨H⟩ la fiecare evaluare COBYLA, câte o listă pe fiecare start |
 | `best_start` | întreg | indicele startului ales |
 | `top_samples` | listă de `{bitstring, count, energy}` | cele mai frecvente 10 șiruri din 2048 de măsurători, descrescător după `count` |
+| `all_samples` | listă de `{bitstring, count, energy}` | toate șirurile măsurate cel puțin o dată, în ordinea valorii binare a șirului (nu după `count`); suma `count` este numărul de măsurători (2048). Din ea se desenează histograma; `top_samples` este prefixul ei sortat după `count` |
 | `result.bitstring`, `result.energy` | text, număr | șirul QAOA ales (cea mai mică energie observată) și energia lui |
 | `haplotypes.decoded` | `[A, B]` | copiile decodate, câte un caracter pe SNP; `-` = SNP nefazat |
 | `haplotypes.truth` | `[A, B]` sau `null` | perechea adevărată (doar la date sintetice) |
@@ -54,6 +55,8 @@ window.STAGES = {
   "cost_history": [[0.4, 0.1, 0.0], [0.3, 0.0]],
   "best_start": 1,
   "top_samples": [{"bitstring": "01", "count": 1030, "energy": 0.0},
+                  {"bitstring": "10", "count": 1018, "energy": 0.0}],
+  "all_samples": [{"bitstring": "01", "count": 1030, "energy": 0.0},
                   {"bitstring": "10", "count": 1018, "energy": 0.0}],
   "result": {"bitstring": "01", "energy": 0.0},
   "haplotypes": {"decoded": ["01", "10"], "truth": ["01", "10"]},

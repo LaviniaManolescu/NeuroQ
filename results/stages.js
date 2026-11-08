@@ -6,7 +6,7 @@ window.STAGES = {
    "n_qubits": 5,
    "n_reads": 9,
    "n_snps": 5,
-   "qaoa_seconds": 0.074
+   "qaoa_seconds": 0.083
   },
   "evidence": {
    "values": [
@@ -397,6 +397,158 @@ window.STAGES = {
     "energy": 17.0
    }
   ],
+  "all_samples": [
+   {
+    "bitstring": "00000",
+    "count": 1,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "00001",
+    "count": 13,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "00010",
+    "count": 13,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "00011",
+    "count": 2,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "00100",
+    "count": 14,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "00101",
+    "count": 10,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "00110",
+    "count": 10,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "00111",
+    "count": 1,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "01000",
+    "count": 20,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "01001",
+    "count": 21,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "01010",
+    "count": 265,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "01011",
+    "count": 54,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "01100",
+    "count": 71,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "01101",
+    "count": 424,
+    "energy": 1.0
+   },
+   {
+    "bitstring": "01110",
+    "count": 91,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "01111",
+    "count": 6,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "10000",
+    "count": 8,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "10001",
+    "count": 128,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "10010",
+    "count": 453,
+    "energy": 1.0
+   },
+   {
+    "bitstring": "10011",
+    "count": 81,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "10100",
+    "count": 51,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "10101",
+    "count": 221,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "10110",
+    "count": 17,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "10111",
+    "count": 18,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "11001",
+    "count": 13,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "11010",
+    "count": 8,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "11011",
+    "count": 18,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "11101",
+    "count": 7,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "11110",
+    "count": 5,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "11111",
+    "count": 4,
+    "energy": 16.0
+   }
+  ],
   "result": {
    "bitstring": "10010",
    "energy": 1.0
@@ -595,7 +747,7 @@ window.STAGES = {
    "n_qubits": 10,
    "n_reads": 24,
    "n_snps": 10,
-   "qaoa_seconds": 0.121
+   "qaoa_seconds": 0.143
   },
   "evidence": {
    "values": [
@@ -1496,6 +1648,3123 @@ window.STAGES = {
     "energy": 22.0
    }
   ],
+  "all_samples": [
+   {
+    "bitstring": "0000000000",
+    "count": 2,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "0000000010",
+    "count": 4,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0000000100",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0000000101",
+    "count": 2,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0000000110",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0000000111",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0000001000",
+    "count": 4,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0000001001",
+    "count": 2,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0000001011",
+    "count": 1,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0000001111",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0000010000",
+    "count": 4,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "0000010001",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0000010010",
+    "count": 3,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0000010110",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0000010111",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0000011000",
+    "count": 3,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "0000011001",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0000011010",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0000011011",
+    "count": 3,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0000011100",
+    "count": 3,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0000011101",
+    "count": 3,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0000011111",
+    "count": 3,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "0000100000",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0000100010",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0000100011",
+    "count": 2,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0000101010",
+    "count": 1,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0000101100",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0000101101",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0000101110",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0000101111",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0000110000",
+    "count": 9,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0000110001",
+    "count": 7,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0000110010",
+    "count": 2,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "0000110101",
+    "count": 1,
+    "energy": 5.0
+   },
+   {
+    "bitstring": "0000110110",
+    "count": 11,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0000110111",
+    "count": 7,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0000111001",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0000111010",
+    "count": 7,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "0000111011",
+    "count": 5,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0000111100",
+    "count": 8,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0000111101",
+    "count": 9,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0001000000",
+    "count": 2,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0001000010",
+    "count": 6,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0001000011",
+    "count": 4,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0001000100",
+    "count": 6,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0001000101",
+    "count": 9,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0001000110",
+    "count": 5,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0001000111",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0001001000",
+    "count": 19,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0001001001",
+    "count": 13,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0001001010",
+    "count": 3,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "0001001011",
+    "count": 2,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0001001100",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0001001101",
+    "count": 5,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0001001110",
+    "count": 8,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0001001111",
+    "count": 15,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0001010000",
+    "count": 8,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0001010010",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0001010100",
+    "count": 3,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0001010101",
+    "count": 3,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0001010110",
+    "count": 3,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0001010111",
+    "count": 3,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0001011000",
+    "count": 3,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0001011001",
+    "count": 3,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0001011101",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0001011111",
+    "count": 3,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0001100000",
+    "count": 1,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "0001100001",
+    "count": 2,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0001100010",
+    "count": 4,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0001100100",
+    "count": 4,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0001100101",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0001100110",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0001100111",
+    "count": 3,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "0001101000",
+    "count": 2,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0001101001",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0001101010",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0001101110",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0001101111",
+    "count": 4,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "0001110000",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0001110001",
+    "count": 5,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0001110010",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0001110011",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0001110110",
+    "count": 4,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0001110111",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0001111000",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0001111001",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0001111010",
+    "count": 2,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0001111011",
+    "count": 6,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0001111100",
+    "count": 2,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0001111101",
+    "count": 5,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0001111111",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "0010000000",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0010000001",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0010000010",
+    "count": 9,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0010000011",
+    "count": 3,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0010000100",
+    "count": 8,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0010000101",
+    "count": 8,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0010001000",
+    "count": 13,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0010001001",
+    "count": 9,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0010001010",
+    "count": 7,
+    "energy": 7.0
+   },
+   {
+    "bitstring": "0010001011",
+    "count": 2,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "0010001101",
+    "count": 1,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0010001110",
+    "count": 9,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0010001111",
+    "count": 18,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0010010000",
+    "count": 3,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0010010001",
+    "count": 5,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0010010010",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0010010100",
+    "count": 8,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0010010101",
+    "count": 4,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0010010111",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0010011000",
+    "count": 7,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0010011001",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0010011010",
+    "count": 10,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0010011011",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0010011101",
+    "count": 3,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0010011110",
+    "count": 4,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0010011111",
+    "count": 9,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0010100000",
+    "count": 4,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0010100001",
+    "count": 5,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0010100010",
+    "count": 9,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0010100011",
+    "count": 5,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0010100100",
+    "count": 2,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0010100101",
+    "count": 2,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0010100110",
+    "count": 7,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0010100111",
+    "count": 4,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0010101000",
+    "count": 9,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0010101001",
+    "count": 3,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0010101010",
+    "count": 5,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0010101011",
+    "count": 5,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0010101100",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0010101101",
+    "count": 11,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0010101110",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0010101111",
+    "count": 5,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0010110000",
+    "count": 16,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0010110001",
+    "count": 17,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0010110010",
+    "count": 11,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "0010110011",
+    "count": 2,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0010110100",
+    "count": 9,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "0010110101",
+    "count": 3,
+    "energy": 4.0
+   },
+   {
+    "bitstring": "0010110110",
+    "count": 14,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "0010110111",
+    "count": 28,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0010111000",
+    "count": 3,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0010111001",
+    "count": 8,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0010111010",
+    "count": 10,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "0010111011",
+    "count": 6,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0010111100",
+    "count": 6,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0010111101",
+    "count": 6,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0010111111",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0011000000",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0011000010",
+    "count": 2,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0011000011",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0011000110",
+    "count": 2,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0011000111",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0011001000",
+    "count": 5,
+    "energy": 10.0
+   },
+   {
+    "bitstring": "0011001001",
+    "count": 4,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "0011001010",
+    "count": 3,
+    "energy": 0.0
+   },
+   {
+    "bitstring": "0011001101",
+    "count": 4,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "0011001110",
+    "count": 3,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "0011001111",
+    "count": 6,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0011010000",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0011010010",
+    "count": 4,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0011010011",
+    "count": 2,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0011010101",
+    "count": 4,
+    "energy": 10.0
+   },
+   {
+    "bitstring": "0011010110",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0011010111",
+    "count": 3,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0011011000",
+    "count": 7,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0011011001",
+    "count": 2,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0011011010",
+    "count": 2,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "0011011011",
+    "count": 1,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0011011101",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0011011110",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0011011111",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0011100000",
+    "count": 4,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0011100001",
+    "count": 3,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0011100010",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0011100011",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0011100100",
+    "count": 4,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0011100101",
+    "count": 3,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0011100110",
+    "count": 8,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0011100111",
+    "count": 7,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0011101010",
+    "count": 4,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0011101011",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0011101101",
+    "count": 2,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0011101110",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0011110000",
+    "count": 3,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0011110001",
+    "count": 3,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0011110010",
+    "count": 3,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0011110100",
+    "count": 4,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "0011110101",
+    "count": 3,
+    "energy": 7.0
+   },
+   {
+    "bitstring": "0011110110",
+    "count": 4,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0011110111",
+    "count": 4,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0011111010",
+    "count": 2,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0011111100",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0011111101",
+    "count": 2,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0011111110",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0100000101",
+    "count": 3,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0100001001",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0100001110",
+    "count": 2,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0100001111",
+    "count": 3,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0100010010",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0100010101",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0100011000",
+    "count": 5,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0100011010",
+    "count": 2,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0100011011",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0100011101",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0100011111",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0100100001",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0100100010",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0100100100",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0100100101",
+    "count": 1,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0100100110",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0100100111",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0100101001",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0100101011",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0100101101",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0100110000",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0100110001",
+    "count": 3,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0100110010",
+    "count": 2,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "0100110100",
+    "count": 1,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "0100110110",
+    "count": 2,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "0100110111",
+    "count": 1,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0100111001",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0100111100",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0100111101",
+    "count": 2,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0101000010",
+    "count": 2,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0101000011",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0101000100",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0101000101",
+    "count": 1,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0101000111",
+    "count": 1,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0101001000",
+    "count": 2,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0101001001",
+    "count": 1,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0101001010",
+    "count": 2,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "0101001101",
+    "count": 1,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0101001110",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0101001111",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0101010000",
+    "count": 2,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "0101010001",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0101010101",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0101010110",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0101010111",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0101011000",
+    "count": 3,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0101011100",
+    "count": 2,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0101011101",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0101100100",
+    "count": 1,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0101100101",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0101100111",
+    "count": 3,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0101101010",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0101101100",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "0101101101",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0101101111",
+    "count": 2,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0101110000",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0101110001",
+    "count": 4,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0101110100",
+    "count": 2,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "0101110110",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0101110111",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0101111010",
+    "count": 2,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0101111011",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "0101111100",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "0101111101",
+    "count": 3,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0101111111",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0110000101",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0110001001",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0110001110",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0110001111",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "0110010000",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "0110011010",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0110011011",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0110011100",
+    "count": 2,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0110011101",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0110100010",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0110100110",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0110101001",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "0110110000",
+    "count": 2,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0110110001",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0110110010",
+    "count": 1,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0110110100",
+    "count": 2,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "0110110101",
+    "count": 1,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "0110110111",
+    "count": 4,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0110111000",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0110111010",
+    "count": 5,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "0110111100",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0110111101",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "0110111111",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0111000010",
+    "count": 2,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "0111000111",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "0111001000",
+    "count": 2,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0111001011",
+    "count": 1,
+    "energy": 10.0
+   },
+   {
+    "bitstring": "0111001101",
+    "count": 1,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "0111001110",
+    "count": 3,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "0111001111",
+    "count": 3,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "0111010100",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0111010101",
+    "count": 2,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "0111011000",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0111011111",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "0111100001",
+    "count": 3,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0111100010",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "0111100011",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "0111100100",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "0111100101",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "0111101001",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "0111101100",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0111101110",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "0111101111",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "0111111010",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "0111111011",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1000000001",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1000000010",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1000000011",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1000000100",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1000000111",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1000001100",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1000010001",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1000010110",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1000010111",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1000011000",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1000011001",
+    "count": 4,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1000011011",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1000011101",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1000011110",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1000011111",
+    "count": 1,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "1000100110",
+    "count": 1,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1000100111",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1000101010",
+    "count": 1,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1000101101",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1000101111",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1000110000",
+    "count": 2,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1000110001",
+    "count": 3,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1000110100",
+    "count": 1,
+    "energy": 10.0
+   },
+   {
+    "bitstring": "1000110101",
+    "count": 1,
+    "energy": 5.0
+   },
+   {
+    "bitstring": "1000110110",
+    "count": 1,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1000110111",
+    "count": 2,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1000111010",
+    "count": 1,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "1000111011",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1000111100",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1000111101",
+    "count": 3,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1001000000",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1001000001",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1001000010",
+    "count": 3,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1001000100",
+    "count": 3,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1001000101",
+    "count": 4,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1001000111",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1001001000",
+    "count": 6,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1001001001",
+    "count": 3,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1001001100",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1001001110",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1001001111",
+    "count": 4,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1001010111",
+    "count": 4,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1001011001",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1001011101",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1001100010",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1001100101",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1001101000",
+    "count": 2,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1001101110",
+    "count": 3,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1001110000",
+    "count": 1,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1001110001",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1001110110",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1001110111",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1001111010",
+    "count": 3,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1001111011",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1001111101",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1010000001",
+    "count": 2,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1010000010",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1010000011",
+    "count": 2,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1010000100",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1010000101",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1010001000",
+    "count": 4,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1010001001",
+    "count": 3,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1010001010",
+    "count": 1,
+    "energy": 11.0
+   },
+   {
+    "bitstring": "1010001011",
+    "count": 1,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1010001111",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1010010001",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1010010010",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1010010100",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1010010101",
+    "count": 2,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1010011010",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1010011011",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1010011111",
+    "count": 2,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1010100000",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1010100100",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1010100101",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1010100110",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1010100111",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1010101000",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1010101010",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1010101100",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1010110000",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1010110010",
+    "count": 4,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1010110100",
+    "count": 2,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "1010110101",
+    "count": 1,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "1010110111",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1010111000",
+    "count": 2,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1010111010",
+    "count": 5,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1010111100",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1010111111",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1011000010",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1011000011",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1011000110",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1011001000",
+    "count": 1,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1011001001",
+    "count": 1,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "1011001010",
+    "count": 3,
+    "energy": 4.0
+   },
+   {
+    "bitstring": "1011001100",
+    "count": 2,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1011001101",
+    "count": 1,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "1011001111",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1011010000",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1011010010",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1011010011",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1011010101",
+    "count": 1,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1011010111",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1011011000",
+    "count": 1,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1011011001",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1011011100",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1011011101",
+    "count": 2,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1011011110",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1011011111",
+    "count": 3,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1011100000",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1011100001",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1011100101",
+    "count": 3,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1011100111",
+    "count": 2,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1011101011",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1011101101",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1011110000",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1011110001",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1011110100",
+    "count": 2,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1011110111",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1011111000",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1011111010",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1011111011",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1011111100",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1100000010",
+    "count": 3,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1100000011",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1100000101",
+    "count": 2,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1100001000",
+    "count": 8,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1100001001",
+    "count": 2,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1100001010",
+    "count": 6,
+    "energy": 7.0
+   },
+   {
+    "bitstring": "1100001101",
+    "count": 1,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1100001110",
+    "count": 5,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1100001111",
+    "count": 4,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1100010010",
+    "count": 3,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1100010011",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1100010100",
+    "count": 2,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1100010101",
+    "count": 6,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1100011000",
+    "count": 7,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1100011001",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1100011010",
+    "count": 2,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1100011011",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1100011100",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1100011101",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1100011110",
+    "count": 4,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1100011111",
+    "count": 6,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1100100000",
+    "count": 4,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1100100001",
+    "count": 5,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1100100011",
+    "count": 3,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1100100100",
+    "count": 1,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1100100101",
+    "count": 1,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "1100100110",
+    "count": 4,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1100100111",
+    "count": 6,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1100101001",
+    "count": 4,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1100101010",
+    "count": 1,
+    "energy": 10.0
+   },
+   {
+    "bitstring": "1100101100",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1100101101",
+    "count": 5,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1100110000",
+    "count": 4,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1100110001",
+    "count": 1,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "1100110010",
+    "count": 3,
+    "energy": 8.0
+   },
+   {
+    "bitstring": "1100110100",
+    "count": 4,
+    "energy": 5.0
+   },
+   {
+    "bitstring": "1100110101",
+    "count": 8,
+    "energy": 0.0
+   },
+   {
+    "bitstring": "1100110111",
+    "count": 5,
+    "energy": 10.0
+   },
+   {
+    "bitstring": "1100111000",
+    "count": 5,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1100111100",
+    "count": 4,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1100111101",
+    "count": 3,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1100111110",
+    "count": 2,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1101000000",
+    "count": 4,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1101000001",
+    "count": 5,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1101000010",
+    "count": 21,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1101000011",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1101000100",
+    "count": 4,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1101000101",
+    "count": 12,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "1101000110",
+    "count": 8,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1101000111",
+    "count": 10,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1101001000",
+    "count": 22,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1101001001",
+    "count": 12,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "1101001010",
+    "count": 6,
+    "energy": 4.0
+   },
+   {
+    "bitstring": "1101001011",
+    "count": 3,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "1101001100",
+    "count": 4,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1101001101",
+    "count": 10,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "1101001110",
+    "count": 6,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1101001111",
+    "count": 19,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1101010000",
+    "count": 6,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1101010001",
+    "count": 4,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1101010010",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1101010011",
+    "count": 5,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1101010100",
+    "count": 4,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1101010101",
+    "count": 5,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1101010110",
+    "count": 3,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1101010111",
+    "count": 6,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1101011000",
+    "count": 4,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1101011001",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1101011010",
+    "count": 7,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1101011011",
+    "count": 1,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1101011100",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1101011101",
+    "count": 6,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1101011110",
+    "count": 3,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1101011111",
+    "count": 7,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1101100000",
+    "count": 9,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1101100001",
+    "count": 6,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1101100010",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1101100100",
+    "count": 8,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1101100101",
+    "count": 8,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1101100110",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1101100111",
+    "count": 3,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1101101000",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1101101010",
+    "count": 11,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1101101011",
+    "count": 6,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1101101100",
+    "count": 3,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1101101101",
+    "count": 2,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1101101110",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1101101111",
+    "count": 2,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1101110000",
+    "count": 20,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1101110001",
+    "count": 6,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1101110010",
+    "count": 1,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1101110011",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1101110100",
+    "count": 2,
+    "energy": 12.0
+   },
+   {
+    "bitstring": "1101110101",
+    "count": 4,
+    "energy": 7.0
+   },
+   {
+    "bitstring": "1101110110",
+    "count": 9,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "1101110111",
+    "count": 12,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1101111000",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1101111010",
+    "count": 10,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1101111011",
+    "count": 7,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1101111100",
+    "count": 3,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1101111101",
+    "count": 4,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1101111110",
+    "count": 1,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1101111111",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1110000000",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1110000001",
+    "count": 5,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1110000010",
+    "count": 4,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1110000011",
+    "count": 2,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1110000100",
+    "count": 6,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1110000101",
+    "count": 5,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1110000111",
+    "count": 4,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1110001000",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1110001001",
+    "count": 5,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1110001100",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1110001110",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1110001111",
+    "count": 5,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1110010000",
+    "count": 5,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1110010001",
+    "count": 2,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1110010011",
+    "count": 3,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1110010100",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1110010101",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1110010111",
+    "count": 7,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1110011000",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1110011010",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1110011011",
+    "count": 2,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1110011101",
+    "count": 3,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1110011110",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1110100000",
+    "count": 4,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1110100001",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1110100010",
+    "count": 4,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1110100011",
+    "count": 1,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1110100110",
+    "count": 2,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1110100111",
+    "count": 1,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "1110101000",
+    "count": 4,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1110101001",
+    "count": 2,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1110101010",
+    "count": 1,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1110101011",
+    "count": 1,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1110101100",
+    "count": 1,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1110101101",
+    "count": 3,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1110101110",
+    "count": 2,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1110101111",
+    "count": 4,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1110110000",
+    "count": 11,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1110110001",
+    "count": 17,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1110110010",
+    "count": 4,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1110110011",
+    "count": 3,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1110110100",
+    "count": 8,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1110110101",
+    "count": 3,
+    "energy": 9.0
+   },
+   {
+    "bitstring": "1110110110",
+    "count": 13,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1110110111",
+    "count": 18,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1110111000",
+    "count": 4,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1110111001",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1110111010",
+    "count": 11,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "1110111011",
+    "count": 5,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1110111100",
+    "count": 6,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1110111101",
+    "count": 14,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1110111110",
+    "count": 2,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1111000000",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1111000010",
+    "count": 3,
+    "energy": 21.0
+   },
+   {
+    "bitstring": "1111000011",
+    "count": 4,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1111000100",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1111000101",
+    "count": 4,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "1111000110",
+    "count": 1,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1111000111",
+    "count": 1,
+    "energy": 23.0
+   },
+   {
+    "bitstring": "1111001000",
+    "count": 7,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1111001001",
+    "count": 5,
+    "energy": 14.0
+   },
+   {
+    "bitstring": "1111001010",
+    "count": 1,
+    "energy": 5.0
+   },
+   {
+    "bitstring": "1111001110",
+    "count": 6,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "1111001111",
+    "count": 9,
+    "energy": 19.0
+   },
+   {
+    "bitstring": "1111010100",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1111010101",
+    "count": 1,
+    "energy": 15.0
+   },
+   {
+    "bitstring": "1111010110",
+    "count": 2,
+    "energy": 24.0
+   },
+   {
+    "bitstring": "1111010111",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1111011000",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1111100001",
+    "count": 2,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1111100010",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1111100011",
+    "count": 2,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "1111100100",
+    "count": 1,
+    "energy": 27.0
+   },
+   {
+    "bitstring": "1111100101",
+    "count": 2,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1111100111",
+    "count": 2,
+    "energy": 32.0
+   },
+   {
+    "bitstring": "1111101000",
+    "count": 1,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1111101001",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1111101011",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1111101110",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1111101111",
+    "count": 7,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "1111110000",
+    "count": 3,
+    "energy": 26.0
+   },
+   {
+    "bitstring": "1111110010",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1111110011",
+    "count": 1,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1111110111",
+    "count": 4,
+    "energy": 22.0
+   },
+   {
+    "bitstring": "1111111000",
+    "count": 2,
+    "energy": 30.0
+   },
+   {
+    "bitstring": "1111111001",
+    "count": 1,
+    "energy": 29.0
+   },
+   {
+    "bitstring": "1111111010",
+    "count": 4,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "1111111011",
+    "count": 2,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "1111111100",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1111111101",
+    "count": 3,
+    "energy": 28.0
+   },
+   {
+    "bitstring": "1111111110",
+    "count": 1,
+    "energy": 33.0
+   },
+   {
+    "bitstring": "1111111111",
+    "count": 4,
+    "energy": 34.0
+   }
+  ],
   "result": {
    "bitstring": "1100110101",
    "energy": 0.0
@@ -1946,7 +5215,7 @@ window.STAGES = {
    "n_qubits": 9,
    "n_reads": 9,
    "n_snps": 18,
-   "qaoa_seconds": 0.129
+   "qaoa_seconds": 0.108
   },
   "evidence": {
    "values": [
@@ -2685,6 +5954,1778 @@ window.STAGES = {
     "bitstring": "001010010",
     "count": 27,
     "energy": 89.0
+   }
+  ],
+  "all_samples": [
+   {
+    "bitstring": "000000000",
+    "count": 2,
+    "energy": 68.0
+   },
+   {
+    "bitstring": "000000001",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "000000011",
+    "count": 1,
+    "energy": 69.0
+   },
+   {
+    "bitstring": "000000101",
+    "count": 3,
+    "energy": 38.0
+   },
+   {
+    "bitstring": "000000111",
+    "count": 3,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "000001001",
+    "count": 3,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "000001011",
+    "count": 1,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "000001110",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "000001111",
+    "count": 1,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "000010000",
+    "count": 6,
+    "energy": 66.0
+   },
+   {
+    "bitstring": "000010001",
+    "count": 17,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "000010010",
+    "count": 2,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "000010011",
+    "count": 2,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "000010100",
+    "count": 3,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "000010101",
+    "count": 6,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "000010110",
+    "count": 5,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "000010111",
+    "count": 13,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "000011000",
+    "count": 1,
+    "energy": 68.0
+   },
+   {
+    "bitstring": "000011101",
+    "count": 3,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "000011111",
+    "count": 1,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "000100001",
+    "count": 3,
+    "energy": 59.0
+   },
+   {
+    "bitstring": "000100100",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "000100101",
+    "count": 12,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "000100110",
+    "count": 3,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "000101000",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "000101001",
+    "count": 3,
+    "energy": 61.0
+   },
+   {
+    "bitstring": "000101010",
+    "count": 1,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "000101101",
+    "count": 4,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "000101111",
+    "count": 2,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "000110001",
+    "count": 45,
+    "energy": 53.0
+   },
+   {
+    "bitstring": "000110010",
+    "count": 2,
+    "energy": 70.0
+   },
+   {
+    "bitstring": "000110011",
+    "count": 8,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "000110100",
+    "count": 5,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "000110101",
+    "count": 48,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "000110110",
+    "count": 18,
+    "energy": 68.0
+   },
+   {
+    "bitstring": "000110111",
+    "count": 17,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "000111000",
+    "count": 1,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "000111001",
+    "count": 3,
+    "energy": 59.0
+   },
+   {
+    "bitstring": "000111010",
+    "count": 1,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "000111011",
+    "count": 1,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "000111100",
+    "count": 2,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "000111101",
+    "count": 8,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "000111110",
+    "count": 1,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "000111111",
+    "count": 1,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "001000000",
+    "count": 1,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "001000001",
+    "count": 10,
+    "energy": 50.0
+   },
+   {
+    "bitstring": "001000010",
+    "count": 6,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "001000011",
+    "count": 6,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "001000100",
+    "count": 5,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "001000101",
+    "count": 9,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "001000110",
+    "count": 1,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "001000111",
+    "count": 2,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "001001001",
+    "count": 1,
+    "energy": 46.0
+   },
+   {
+    "bitstring": "001001010",
+    "count": 2,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "001001111",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "001010000",
+    "count": 2,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "001010001",
+    "count": 25,
+    "energy": 48.0
+   },
+   {
+    "bitstring": "001010010",
+    "count": 27,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "001010011",
+    "count": 6,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "001010100",
+    "count": 7,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "001010101",
+    "count": 28,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "001010110",
+    "count": 13,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "001010111",
+    "count": 9,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "001011000",
+    "count": 4,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "001011001",
+    "count": 4,
+    "energy": 48.0
+   },
+   {
+    "bitstring": "001011010",
+    "count": 3,
+    "energy": 93.0
+   },
+   {
+    "bitstring": "001011011",
+    "count": 4,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "001011101",
+    "count": 5,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "001011111",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "001100000",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "001100001",
+    "count": 2,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "001100010",
+    "count": 6,
+    "energy": 68.0
+   },
+   {
+    "bitstring": "001100011",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "001100100",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "001100110",
+    "count": 1,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "001100111",
+    "count": 3,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "001101000",
+    "count": 1,
+    "energy": 93.0
+   },
+   {
+    "bitstring": "001101010",
+    "count": 3,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "001101011",
+    "count": 2,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "001101101",
+    "count": 5,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "001110001",
+    "count": 5,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "001110010",
+    "count": 27,
+    "energy": 62.0
+   },
+   {
+    "bitstring": "001110100",
+    "count": 1,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "001110101",
+    "count": 3,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "001110110",
+    "count": 7,
+    "energy": 52.0
+   },
+   {
+    "bitstring": "001110111",
+    "count": 14,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "001111001",
+    "count": 3,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "001111010",
+    "count": 1,
+    "energy": 72.0
+   },
+   {
+    "bitstring": "001111100",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "001111111",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "010000000",
+    "count": 1,
+    "energy": 65.0
+   },
+   {
+    "bitstring": "010000001",
+    "count": 8,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "010000101",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "010000110",
+    "count": 1,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "010000111",
+    "count": 1,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "010001000",
+    "count": 1,
+    "energy": 57.0
+   },
+   {
+    "bitstring": "010001001",
+    "count": 20,
+    "energy": 7.0
+   },
+   {
+    "bitstring": "010001010",
+    "count": 2,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "010001011",
+    "count": 3,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "010001100",
+    "count": 5,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "010001101",
+    "count": 73,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "010001110",
+    "count": 10,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "010001111",
+    "count": 3,
+    "energy": 70.0
+   },
+   {
+    "bitstring": "010010000",
+    "count": 2,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "010010011",
+    "count": 1,
+    "energy": 70.0
+   },
+   {
+    "bitstring": "010010100",
+    "count": 2,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "010010101",
+    "count": 2,
+    "energy": 37.0
+   },
+   {
+    "bitstring": "010011001",
+    "count": 2,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "010011101",
+    "count": 17,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "010011110",
+    "count": 1,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "010011111",
+    "count": 1,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "010100000",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "010100010",
+    "count": 3,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "010100100",
+    "count": 1,
+    "energy": 92.0
+   },
+   {
+    "bitstring": "010100101",
+    "count": 4,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "010100110",
+    "count": 1,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "010100111",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "010101000",
+    "count": 5,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "010101001",
+    "count": 3,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "010101010",
+    "count": 7,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "010101011",
+    "count": 4,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "010101110",
+    "count": 2,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "010101111",
+    "count": 7,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "010110001",
+    "count": 1,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "010110011",
+    "count": 1,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "010110101",
+    "count": 3,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "010110111",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "010111000",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "010111001",
+    "count": 5,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "010111010",
+    "count": 1,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "010111101",
+    "count": 1,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "010111110",
+    "count": 1,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "010111111",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "011000001",
+    "count": 3,
+    "energy": 47.0
+   },
+   {
+    "bitstring": "011000010",
+    "count": 6,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "011000100",
+    "count": 2,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "011000101",
+    "count": 2,
+    "energy": 57.0
+   },
+   {
+    "bitstring": "011000110",
+    "count": 1,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "011000111",
+    "count": 2,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "011001000",
+    "count": 5,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "011001001",
+    "count": 15,
+    "energy": 37.0
+   },
+   {
+    "bitstring": "011001010",
+    "count": 2,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "011001011",
+    "count": 25,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "011001100",
+    "count": 7,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "011001101",
+    "count": 3,
+    "energy": 47.0
+   },
+   {
+    "bitstring": "011001110",
+    "count": 3,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "011001111",
+    "count": 22,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "011010000",
+    "count": 2,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "011010001",
+    "count": 4,
+    "energy": 49.0
+   },
+   {
+    "bitstring": "011010010",
+    "count": 1,
+    "energy": 92.0
+   },
+   {
+    "bitstring": "011010011",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "011010100",
+    "count": 1,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "011010101",
+    "count": 2,
+    "energy": 59.0
+   },
+   {
+    "bitstring": "011011000",
+    "count": 2,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "011011001",
+    "count": 5,
+    "energy": 43.0
+   },
+   {
+    "bitstring": "011011011",
+    "count": 5,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "011011101",
+    "count": 1,
+    "energy": 53.0
+   },
+   {
+    "bitstring": "011100010",
+    "count": 2,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "011100011",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "011100101",
+    "count": 4,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "011101000",
+    "count": 8,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "011101001",
+    "count": 5,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "011101010",
+    "count": 20,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "011101011",
+    "count": 19,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "011101100",
+    "count": 1,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "011101101",
+    "count": 28,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "011101110",
+    "count": 9,
+    "energy": 63.0
+   },
+   {
+    "bitstring": "011101111",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "011110001",
+    "count": 4,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "011110111",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "011111000",
+    "count": 1,
+    "energy": 92.0
+   },
+   {
+    "bitstring": "011111001",
+    "count": 2,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "011111010",
+    "count": 14,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "011111011",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "011111100",
+    "count": 1,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "011111101",
+    "count": 5,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "011111110",
+    "count": 2,
+    "energy": 65.0
+   },
+   {
+    "bitstring": "100000000",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "100000010",
+    "count": 6,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "100000101",
+    "count": 8,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "100000110",
+    "count": 3,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "100001000",
+    "count": 4,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "100001010",
+    "count": 3,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "100001100",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "100001110",
+    "count": 4,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "100010000",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "100010001",
+    "count": 12,
+    "energy": 63.0
+   },
+   {
+    "bitstring": "100010010",
+    "count": 24,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "100010011",
+    "count": 2,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "100010100",
+    "count": 18,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "100010101",
+    "count": 26,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "100010110",
+    "count": 7,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "100010111",
+    "count": 12,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "100011001",
+    "count": 3,
+    "energy": 63.0
+   },
+   {
+    "bitstring": "100011010",
+    "count": 2,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "100011100",
+    "count": 4,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "100011101",
+    "count": 3,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "100011111",
+    "count": 2,
+    "energy": 92.0
+   },
+   {
+    "bitstring": "100100000",
+    "count": 2,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "100100001",
+    "count": 1,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "100100010",
+    "count": 2,
+    "energy": 53.0
+   },
+   {
+    "bitstring": "100100011",
+    "count": 1,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "100100100",
+    "count": 2,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "100100101",
+    "count": 2,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "100100110",
+    "count": 5,
+    "energy": 43.0
+   },
+   {
+    "bitstring": "100100111",
+    "count": 2,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "100101010",
+    "count": 1,
+    "energy": 59.0
+   },
+   {
+    "bitstring": "100101011",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "100101100",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "100101101",
+    "count": 1,
+    "energy": 92.0
+   },
+   {
+    "bitstring": "100101110",
+    "count": 3,
+    "energy": 49.0
+   },
+   {
+    "bitstring": "100110000",
+    "count": 17,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "100110001",
+    "count": 5,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "100110010",
+    "count": 8,
+    "energy": 47.0
+   },
+   {
+    "bitstring": "100110011",
+    "count": 10,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "100110100",
+    "count": 22,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "100110101",
+    "count": 8,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "100110110",
+    "count": 22,
+    "energy": 37.0
+   },
+   {
+    "bitstring": "100110111",
+    "count": 8,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "100111000",
+    "count": 3,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "100111001",
+    "count": 1,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "100111011",
+    "count": 1,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "100111101",
+    "count": 3,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "100111110",
+    "count": 2,
+    "energy": 47.0
+   },
+   {
+    "bitstring": "100111111",
+    "count": 1,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "101000000",
+    "count": 3,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "101000010",
+    "count": 1,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "101000100",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "101000110",
+    "count": 8,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "101000111",
+    "count": 2,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "101001000",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "101001010",
+    "count": 4,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "101001100",
+    "count": 2,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "101001110",
+    "count": 1,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "101001111",
+    "count": 2,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "101010000",
+    "count": 4,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "101010001",
+    "count": 1,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "101010010",
+    "count": 4,
+    "energy": 72.0
+   },
+   {
+    "bitstring": "101010100",
+    "count": 6,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "101010101",
+    "count": 7,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "101010110",
+    "count": 4,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "101010111",
+    "count": 7,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "101011010",
+    "count": 9,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "101011100",
+    "count": 1,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "101011101",
+    "count": 2,
+    "energy": 81.0
+   },
+   {
+    "bitstring": "101100000",
+    "count": 2,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "101100001",
+    "count": 2,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "101100010",
+    "count": 15,
+    "energy": 31.0
+   },
+   {
+    "bitstring": "101100110",
+    "count": 2,
+    "energy": 13.0
+   },
+   {
+    "bitstring": "101101001",
+    "count": 1,
+    "energy": 92.0
+   },
+   {
+    "bitstring": "101101010",
+    "count": 6,
+    "energy": 37.0
+   },
+   {
+    "bitstring": "101101011",
+    "count": 1,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "101110000",
+    "count": 8,
+    "energy": 70.0
+   },
+   {
+    "bitstring": "101110001",
+    "count": 17,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "101110010",
+    "count": 88,
+    "energy": 25.0
+   },
+   {
+    "bitstring": "101110011",
+    "count": 4,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "101110101",
+    "count": 2,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "101110110",
+    "count": 24,
+    "energy": 7.0
+   },
+   {
+    "bitstring": "101110111",
+    "count": 4,
+    "energy": 57.0
+   },
+   {
+    "bitstring": "101111000",
+    "count": 3,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "101111010",
+    "count": 1,
+    "energy": 35.0
+   },
+   {
+    "bitstring": "101111011",
+    "count": 1,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "101111110",
+    "count": 2,
+    "energy": 17.0
+   },
+   {
+    "bitstring": "110000001",
+    "count": 1,
+    "energy": 62.0
+   },
+   {
+    "bitstring": "110000010",
+    "count": 1,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110000110",
+    "count": 1,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "110000111",
+    "count": 3,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "110001000",
+    "count": 18,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "110001001",
+    "count": 8,
+    "energy": 52.0
+   },
+   {
+    "bitstring": "110001010",
+    "count": 9,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "110001101",
+    "count": 22,
+    "energy": 62.0
+   },
+   {
+    "bitstring": "110001110",
+    "count": 9,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "110010000",
+    "count": 1,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "110010010",
+    "count": 4,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "110010100",
+    "count": 2,
+    "energy": 90.0
+   },
+   {
+    "bitstring": "110010101",
+    "count": 2,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "110010111",
+    "count": 1,
+    "energy": 93.0
+   },
+   {
+    "bitstring": "110011000",
+    "count": 3,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "110011011",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "110011100",
+    "count": 2,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "110011101",
+    "count": 4,
+    "energy": 68.0
+   },
+   {
+    "bitstring": "110100001",
+    "count": 2,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "110100010",
+    "count": 3,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "110100011",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "110100100",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110100101",
+    "count": 2,
+    "energy": 93.0
+   },
+   {
+    "bitstring": "110100110",
+    "count": 4,
+    "energy": 48.0
+   },
+   {
+    "bitstring": "110100111",
+    "count": 2,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "110101000",
+    "count": 4,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110101001",
+    "count": 11,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "110101010",
+    "count": 39,
+    "energy": 58.0
+   },
+   {
+    "bitstring": "110101011",
+    "count": 4,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "110101100",
+    "count": 9,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "110101101",
+    "count": 18,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "110101110",
+    "count": 15,
+    "energy": 48.0
+   },
+   {
+    "bitstring": "110101111",
+    "count": 1,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "110110000",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110110001",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110110010",
+    "count": 1,
+    "energy": 56.0
+   },
+   {
+    "bitstring": "110110101",
+    "count": 3,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "110110110",
+    "count": 1,
+    "energy": 46.0
+   },
+   {
+    "bitstring": "110110111",
+    "count": 2,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "110111000",
+    "count": 4,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "110111001",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110111010",
+    "count": 10,
+    "energy": 60.0
+   },
+   {
+    "bitstring": "110111011",
+    "count": 1,
+    "energy": 86.0
+   },
+   {
+    "bitstring": "110111100",
+    "count": 3,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "110111101",
+    "count": 9,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "110111110",
+    "count": 4,
+    "energy": 50.0
+   },
+   {
+    "bitstring": "110111111",
+    "count": 1,
+    "energy": 84.0
+   },
+   {
+    "bitstring": "111000000",
+    "count": 1,
+    "energy": 88.0
+   },
+   {
+    "bitstring": "111000001",
+    "count": 2,
+    "energy": 78.0
+   },
+   {
+    "bitstring": "111000010",
+    "count": 2,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "111000011",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "111000110",
+    "count": 6,
+    "energy": 59.0
+   },
+   {
+    "bitstring": "111000111",
+    "count": 4,
+    "energy": 85.0
+   },
+   {
+    "bitstring": "111001000",
+    "count": 15,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "111001001",
+    "count": 13,
+    "energy": 68.0
+   },
+   {
+    "bitstring": "111001010",
+    "count": 39,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "111001011",
+    "count": 9,
+    "energy": 83.0
+   },
+   {
+    "bitstring": "111001100",
+    "count": 5,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "111001110",
+    "count": 35,
+    "energy": 53.0
+   },
+   {
+    "bitstring": "111001111",
+    "count": 3,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "111010010",
+    "count": 10,
+    "energy": 75.0
+   },
+   {
+    "bitstring": "111010101",
+    "count": 2,
+    "energy": 82.0
+   },
+   {
+    "bitstring": "111010110",
+    "count": 2,
+    "energy": 61.0
+   },
+   {
+    "bitstring": "111010111",
+    "count": 1,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "111011001",
+    "count": 2,
+    "energy": 74.0
+   },
+   {
+    "bitstring": "111011010",
+    "count": 7,
+    "energy": 73.0
+   },
+   {
+    "bitstring": "111011100",
+    "count": 1,
+    "energy": 80.0
+   },
+   {
+    "bitstring": "111011101",
+    "count": 1,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "111011110",
+    "count": 1,
+    "energy": 59.0
+   },
+   {
+    "bitstring": "111100010",
+    "count": 8,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "111100100",
+    "count": 1,
+    "energy": 69.0
+   },
+   {
+    "bitstring": "111100110",
+    "count": 1,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "111101000",
+    "count": 12,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "111101001",
+    "count": 2,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "111101010",
+    "count": 6,
+    "energy": 36.0
+   },
+   {
+    "bitstring": "111101011",
+    "count": 2,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "111101100",
+    "count": 3,
+    "energy": 67.0
+   },
+   {
+    "bitstring": "111101101",
+    "count": 2,
+    "energy": 87.0
+   },
+   {
+    "bitstring": "111101110",
+    "count": 16,
+    "energy": 18.0
+   },
+   {
+    "bitstring": "111101111",
+    "count": 9,
+    "energy": 66.0
+   },
+   {
+    "bitstring": "111110000",
+    "count": 2,
+    "energy": 77.0
+   },
+   {
+    "bitstring": "111110010",
+    "count": 3,
+    "energy": 34.0
+   },
+   {
+    "bitstring": "111110011",
+    "count": 1,
+    "energy": 76.0
+   },
+   {
+    "bitstring": "111110110",
+    "count": 2,
+    "energy": 16.0
+   },
+   {
+    "bitstring": "111111000",
+    "count": 4,
+    "energy": 79.0
+   },
+   {
+    "bitstring": "111111001",
+    "count": 1,
+    "energy": 91.0
+   },
+   {
+    "bitstring": "111111010",
+    "count": 4,
+    "energy": 38.0
+   },
+   {
+    "bitstring": "111111100",
+    "count": 2,
+    "energy": 69.0
+   },
+   {
+    "bitstring": "111111101",
+    "count": 1,
+    "energy": 89.0
+   },
+   {
+    "bitstring": "111111110",
+    "count": 1,
+    "energy": 20.0
+   },
+   {
+    "bitstring": "111111111",
+    "count": 5,
+    "energy": 68.0
    }
   ],
   "result": {

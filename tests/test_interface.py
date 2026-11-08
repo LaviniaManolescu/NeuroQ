@@ -44,6 +44,13 @@ def test_every_circuit_image_in_stages_exists():
             assert (RESULTS / entry["circuit_png"]).is_file(), name
 
 
+def test_committed_stages_js_has_all_samples():
+    text = (RESULTS / "stages.js").read_text(encoding="utf-8")
+    stages = json.loads(text[len("window.STAGES = "):].rstrip().rstrip(";"))
+    for name, entry in stages.items():
+        assert sum(s["count"] for s in entry["all_samples"]) == 2048, name
+
+
 def test_scripts_work_from_file_urls():
     # fără fetch și fără resurse externe: pagina trebuie să meargă deschisă din fișier
     for script in own_scripts():
